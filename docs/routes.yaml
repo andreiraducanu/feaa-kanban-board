@@ -1,0 +1,741 @@
+openapi: 3.0.0
+info:
+  title: Kanban Board API
+  description: This is a description.
+  version: 0.0.1
+tags:
+  - name: user
+  - name: projects
+  - name: issues
+
+paths:
+  # User
+  /user/login:
+    post:
+      summary: Logins an user
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+
+      responses:
+        200:
+          description: Returns a user response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+
+        401:
+          description: Username/password wrong
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  /user/register:
+    post:
+      summary: Registers an user
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                username:
+                  type: string
+                password:
+                  type: string
+
+      responses:
+        201:
+          description: Succesfully register
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+
+        409:
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  # Projects
+  /projects/user:
+    get:
+      summary: Return all user's projects
+      tags:
+        - projects
+      responses:
+        200:
+          description: Return all user's projects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectList"
+
+        404:
+          description: No project found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  /projects/{id}:
+    get:
+      summary: Get all info about a specified project
+      tags:
+        - projects
+
+      parameters:
+        - $ref: "#/components/parameters/IdParameter"
+
+      responses:
+        200:
+          description: Return all info about a project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+        404:
+          description: No project found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+    put:
+      summary: The owner updates data about a project
+      tags:
+        - projects
+
+      parameters:
+        - $ref: "#/components/parameters/IdParameter"
+
+      responses:
+        200:
+          description: Member added with success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectDescription"
+
+        404:
+          description: No project found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+    delete:
+      summary: Deletes a project
+      tags:
+        - projects
+
+      parameters:
+        - $ref: "#/components/parameters/IdParameter"
+
+      responses:
+        200:
+          description: Deletes a project with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        404:
+          description: No project found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  /projects/add:
+    post:
+      summary: User creates a project
+      tags:
+        - projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectDescription"
+
+      responses:
+        201:
+          description: Project created with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        422:
+          description: Project couldn't be created
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  /projects/{id}/members/add:
+    post:
+      summary: User adds a member to a project
+      tags:
+        - projects
+
+      parameters:
+        - $ref: "#/components/parameters/IdParameter"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+
+      responses:
+        201:
+          description: User added with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  # Issues
+  /issues/add:
+    post:
+      summary: Creates an new issue
+      tags:
+        - issues
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueDescription"
+
+      responses:
+        201:
+          description: Issue created with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        422:
+          description: Issue couldn't be created
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  /issues/{id}:
+    get:
+      summary: Gets an issue
+      tags:
+        - issues
+
+      parameters:
+        - $ref: "#/components/parameters/IdParameter"
+
+      responses:
+        200:
+          description: Issue returned with success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Issue"
+
+        404:
+          description: Issue couldn't be returned
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+    put:
+      summary: Edits an issue
+      tags:
+        - issues
+
+      parameters:
+        - $ref: "#/components/parameters/IdParameter"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueDescription"
+
+      responses:
+        200:
+          description: Issue modified with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        404:
+          description: Issue couldn't be modified
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+    delete:
+      summary: Delete an issue
+      tags:
+        - issues
+
+      parameters:
+        - $ref: "#/components/parameters/IdParameter"
+
+      responses:
+        200:
+          description: Issue modified with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        404:
+          description: Issue couldn't be modified
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  /issues/{id}/comments/add:
+    post:
+      summary: Adds a comment
+      tags:
+        - issues
+
+      parameters:
+        - $ref: "#/components/parameters/IdParameter"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentDescription"
+
+      responses:
+        201:
+          description: Comment created with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        422:
+          description: Comment couldn't be created
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  /issues/{idIssue}/comments/{idComment}:
+    put:
+      summary: Updates a comment
+      tags:
+        - issues
+
+      parameters:
+        - $ref: "#/components/parameters/IdIssueParameter"
+        - $ref: "#/components/parameters/IdCommentParameter"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentDescription"
+
+      responses:
+        201:
+          description: Comment updated with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        422:
+          description: Comment couldn't be updated
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+    delete:
+      summary: Deletes a comment
+      tags:
+        - issues
+      responses:
+        201:
+          description: Comment deleted with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        422:
+          description: Comment couldn't be deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  /issues/{id}/children/add:
+    post:
+      summary: Adds a child issue
+      tags:
+        - issues
+
+      parameters:
+        - $ref: "#/components/parameters/IdParameter"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                issue:
+                  type: string
+
+      responses:
+        201:
+          description: Children added with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        422:
+          description: Children couldn't be added
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  /issues/{id}/worklog/add:
+    post:
+      summary: Logs a work log time
+      tags:
+        - issues
+
+      parameters:
+        - $ref: "#/components/parameters/IdParameter"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkLogEntryDescription"
+
+      responses:
+        201:
+          description: WorkLog added with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        422:
+          description: WorkLog couldn't be added
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  /issues/{idIssue}/worklog/{idWorkLog}:
+    put:
+      summary: Updates a comment
+      tags:
+        - issues
+
+      parameters:
+        - $ref: "#/components/parameters/IdIssueParameter"
+        - $ref: "#/components/parameters/IdWorkLogParameter"
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkLogEntryDescription"
+
+      responses:
+        201:
+          description: WorkLog deleted with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        422:
+          description: WorkLog couldn't be deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+    delete:
+      summary: Deletes a worklog
+      tags:
+        - issues
+
+      parameters:
+        - $ref: "#/components/parameters/IdIssueParameter"
+        - $ref: "#/components/parameters/IdWorkLogParameter"
+
+      responses:
+        201:
+          description: WorkLog deleted with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        422:
+          description: WorkLog couldn't be deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        username:
+          type: string
+
+    UserResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        token:
+          type: string
+
+    ProjectDescription:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        creationDate:
+          type: string
+
+    ProjectItem:
+      allOf:
+        - $ref: "#/components/schemas/ProjectDescription"
+        - type: object
+          properties:
+            id:
+              type: string
+            owner:
+              $ref: "#/components/schemas/User"
+
+    ProjectList:
+      type: array
+      items:
+        $ref: "#/components/schemas/ProjectItem"
+
+    Project:
+      allOf:
+        - $ref: "#/components/schemas/ProjectItem"
+        - type: object
+          properties:
+            members:
+              type: array
+              items:
+                $ref: "#/components/schemas/User"
+            columns:
+              type: array
+              items:
+                $ref: "#/components/schemas/Column"
+
+    Column:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        issues:
+          type: array
+          items:
+            $ref: "#/components/schemas/IssueItem"
+
+    IssueDescription:
+      type: object
+      properties:
+        project:
+          type: string
+        type:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        priority:
+          type: string
+        reporter:
+          type: string
+        assignee:
+          type: string
+        epicLink:
+          type: string
+        timeEstimate:
+          type: integer
+        parent:
+          type: string
+        creationDate:
+          type: string
+        column:
+          type: string
+
+    IssueItem:
+      allOf:
+        - $ref: "#/components/schemas/IssueDescription"
+        - type: object
+          properties:
+            id:
+              type: string
+
+    Issue:
+      allOf:
+        - $ref: "#/components/schemas/IssueItem"
+        - type: object
+          properties:
+            id:
+              type: string
+            timeTracking:
+              type: integer
+            workLog:
+              type: array
+              items:
+                $ref: "#/components/schemas/WorkLogEntryItem"
+            comments:
+              type: array
+              items:
+                $ref: "#/components/schemas/CommentsItem"
+            children:
+              type: array
+              items:
+                $ref: "#/components/schemas/IssueItem"
+
+    WorkLogEntryDescription:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        amount:
+          type: integer
+        creationDate:
+          type: string
+
+    WorkLogEntryItem:
+      allOf:
+        - $ref: "#/components/schemas/WorkLogEntryDescription"
+        - type: object
+          properties:
+            id:
+              type: string
+
+    CommentDescription:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        text:
+          type: string
+        creationDate:
+          type: string
+
+    CommentsItem:
+      allOf:
+        - $ref: "#/components/schemas/CommentDescription"
+        - type: object
+          properties:
+            id:
+              type: string
+
+    ResponseMessage:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+
+  parameters:
+    IdParameter:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+
+    IdIssueParameter:
+      in: path
+      name: idIssue
+      required: true
+      schema:
+        type: string
+
+    IdCommentParameter:
+      in: path
+      name: idComment
+      required: true
+      schema:
+        type: string
+
+    IdWorkLogParameter:
+      in: path
+      name: idWorkLog
+      required: true
+      schema:
+        type: string
