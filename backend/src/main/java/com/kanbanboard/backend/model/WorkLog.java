@@ -1,6 +1,7 @@
 package com.kanbanboard.backend.model;
 
 import com.kanbanboard.backend.model.base.AbstractDocument;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,37 +9,40 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Calendar;
 import java.util.Date;
 
-@Document(collection = "comments")
-public class Comment extends AbstractDocument {
+@Document(collection = "work-logs")
+public class WorkLog extends AbstractDocument {
+
+    @Id
+    private String id;
 
     @DBRef
     private final User user;
 
-    private String text;
+    private int amount;
 
     private final Date creationDate;
 
     @PersistenceConstructor
-    Comment(User user, String text, Date creationDate) {
+    WorkLog(User user, int amount, Date creationDate) {
         this.user = user;
-        this.text = text;
+        this.amount = amount;
         this.creationDate = creationDate;
     }
 
-    public Comment(User user, String text) {
-        this(user, text, Calendar.getInstance().getTime());
+    public WorkLog(User user, int amount) {
+        this(user, amount, Calendar.getInstance().getTime());
     }
 
     public User getUser() {
         return user;
     }
 
-    public String getText() {
-        return text;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public Date getCreationDate() {
