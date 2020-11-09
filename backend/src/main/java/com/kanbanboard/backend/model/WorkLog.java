@@ -8,37 +8,37 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Calendar;
 import java.util.Date;
 
-@Document(collection = "comments")
-public class Comment extends AbstractDocument {
+@Document(collection = "work-logs")
+public class WorkLog extends AbstractDocument {
 
     @DBRef
     private final User user;
 
-    private String text;
+    private int time;
 
     private final Date creationDate;
 
     @PersistenceConstructor
-    Comment(User user, String text, Date creationDate) {
+    WorkLog(User user, int time, Date creationDate) {
         this.user = user;
-        this.text = text;
+        this.time = time;
         this.creationDate = creationDate;
     }
 
-    public Comment(User user, String text) {
-        this(user, text, Calendar.getInstance().getTime());
+    public WorkLog(User user, int time) {
+        this(user, time, Calendar.getInstance().getTime());
     }
 
     public User getUser() {
         return user;
     }
 
-    public String getText() {
-        return text;
+    public int getTime() {
+        return time;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setTime(int time) {
+        this.time = time;
     }
 
     public Date getCreationDate() {
