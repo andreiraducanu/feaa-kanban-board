@@ -1,14 +1,13 @@
-package com.kanbanboard.backend.model;
+package com.kanbanboard.backend.model.embedded;
 
-import com.kanbanboard.backend.model.base.AbstractDocument;
+import com.kanbanboard.backend.model.WorkLog;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class WorkTracker extends AbstractDocument {
+public class WorkTracker {
 
     private int totalTime;
 

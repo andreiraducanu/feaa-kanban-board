@@ -1,6 +1,7 @@
 package com.kanbanboard.backend.model;
 
 import com.kanbanboard.backend.model.base.AbstractDocument;
+import com.kanbanboard.backend.model.embedded.WorkTracker;
 import com.kanbanboard.backend.model.enums.IssuePriority;
 import com.kanbanboard.backend.model.enums.IssueType;
 import org.springframework.data.annotation.PersistenceConstructor;
