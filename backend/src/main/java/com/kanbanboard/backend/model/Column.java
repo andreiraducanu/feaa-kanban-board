@@ -38,12 +38,15 @@ public class Column extends AbstractDocument {
         return issues;
     }
 
-    public void addIssue(Issue issue) {
-        if (!issues.contains(issue))
-            issues.add(issue);
+    public boolean addIssue(Issue issue) {
+        if (issues.contains(issue))
+            return false;
+
+        issues.add(issue);
+        return true;
     }
 
-    public void removeIssue(Issue issue) {
-        issues.remove(issue);
+    public boolean removeIssue(Issue issue) {
+        return issues.remove(issue);
     }
 }

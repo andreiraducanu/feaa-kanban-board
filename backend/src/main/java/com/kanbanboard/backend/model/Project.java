@@ -40,6 +40,7 @@ public class Project extends AbstractDocument {
 
     public Project(String name, String description, User owner) {
         this(name, description, owner, new ArrayList<>(), new ArrayList<>(), Calendar.getInstance().getTime());
+        members.add(owner);
     }
 
     public String getName() {
@@ -66,26 +67,35 @@ public class Project extends AbstractDocument {
         return members;
     }
 
-    public void addMember(User member) {
-        if (!members.contains(member))
-            members.add(member);
+    public boolean addMember(User member) {
+        if (members.contains(member))
+            return false;
+
+        members.add(member);
+        return true;
     }
 
-    public void removeMember(User member) {
-        members.remove(member);
+    public boolean removeMember(User member) {
+        if (member.equals(owner))
+            return false;
+
+        return members.remove(member);
     }
 
     public List<Column> getColumns() {
         return columns;
     }
 
-    public void addColumn(Column column) {
-        if (!columns.contains(column))
-            columns.add(column);
+    public boolean addColumn(Column column) {
+        if (columns.contains(column))
+            return false;
+
+        columns.add(column);
+        return true;
     }
 
-    public void removeColumn(Column column) {
-        columns.remove(column);
+    public boolean removeColumn(Column column) {
+        return columns.remove(column);
     }
 
     public Date getCreationDate() {
