@@ -18,7 +18,7 @@ public class Project extends AbstractDocument {
     private String description;
 
     @DBRef
-    private User owner;
+    private final User owner;
 
     @DBRef
     private final List<User> members;
@@ -42,5 +42,53 @@ public class Project extends AbstractDocument {
         this(name, description, owner, new ArrayList<>(), new ArrayList<>(), Calendar.getInstance().getTime());
     }
 
-    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public List<User> getMembers() {
+        return members;
+    }
+
+    public void addMember(User member) {
+        if (!members.contains(member))
+            members.add(member);
+    }
+
+    public void removeMember(User member) {
+        members.remove(member);
+    }
+
+    public List<Column> getColumns() {
+        return columns;
+    }
+
+    public void addColumn(Column column) {
+        if (!columns.contains(column))
+            columns.add(column);
+    }
+
+    public void removeColumn(Column column) {
+        columns.remove(column);
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
 }

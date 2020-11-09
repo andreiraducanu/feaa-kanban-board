@@ -12,9 +12,6 @@ import java.util.Date;
 @Document(collection = "work-logs")
 public class WorkLog extends AbstractDocument {
 
-    @Id
-    private String id;
-
     @DBRef
     private final User user;
 
