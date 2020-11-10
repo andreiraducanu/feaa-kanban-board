@@ -34,7 +34,6 @@
 
 		<!-- Spring Boot Validation -->
 
-
 <!--		Spring security-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -79,11 +78,11 @@
 <!--		</dependency>-->
 
 
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>5.4.0</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.security</groupId>-->
+<!--			<artifactId>spring-security-core</artifactId>-->
+<!--			<version>5.4.0</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
