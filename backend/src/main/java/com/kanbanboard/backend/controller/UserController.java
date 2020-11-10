@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 
 
 @RestController
@@ -43,15 +44,12 @@ public class UserController {
     public ResponseEntity<String> register(@RequestBody User user) throws UnsupportedEncodingException {
 
         logger.info("register called");
-//        String hash = userService.getMD5("pass");
 
         if (userService.checkIfUserExits(user.getUsername())) {
             logger.info("User exists");
             return new ResponseEntity<>("Choose another username! It already exists!", HttpStatus.CONFLICT);
         }
 
-        logger.info("User doesn't exists");
-//        user.setPassword(userService.getMD5(user.getPassword()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         logger.info(user.getPassword());
         userService.saveNewUser(user);
@@ -72,14 +70,12 @@ public class UserController {
 
         final String jwt = jwtUtil.generateToken(userDetails);
 
-        logger.info("JWT ESTE " +jwt);
-
         return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.OK);
     }
 
     @GetMapping("/test")
-    public String testRoute(@RequestBody String test){
-
+    public String testRoute(@RequestBody String test, Principal principal){
+        logger.info(principal.getName());
         return test;
     }
 
