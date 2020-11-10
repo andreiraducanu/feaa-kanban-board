@@ -1,53 +1,30 @@
 package com.kanbanboard.backend.model;
 
-import com.kanbanboard.backend.model.base.AbstractDocument;
-import org.springframework.data.annotation.PersistenceConstructor;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Data
 @Document(collection = "users")
-public class User extends AbstractDocument {
+@TypeAlias("user")
+public class User {
 
-    private final String username;
+    @Id
+    private String id;
+
+    private String username;
 
     private String password;
 
-    private String firstName;
+    private String firstname;
 
-    private String lastName;
+    private String lastname;
 
-    @PersistenceConstructor
-    public User(String username, String password, String firstName, String lastName) {
+    public User(String username, String password, String firstname, String lastname) {
         this.username = username;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 }
