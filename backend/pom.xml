@@ -33,7 +33,6 @@
 		</dependency>
 
 		<!-- Spring Boot Validation -->
-=======
 
 
 <!--		Spring security-->
@@ -48,7 +47,6 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 			<version>5.4.0</version>
->>>>>>> Stashed changes
 
 		</dependency>
 
