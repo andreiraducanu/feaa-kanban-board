@@ -168,7 +168,7 @@ paths:
               schema:
                 $ref: "#components/schemas/ResponseMessage"
 
-  /projects/add:
+  /projects:
     post:
       summary: User creates a project
       tags:
@@ -195,7 +195,7 @@ paths:
               schema:
                 $ref: "#components/schemas/ResponseMessage"
 
-  /projects/{id}/members/add:
+  /projects/{id}/members:
     post:
       summary: User adds a member to a project
       tags:
@@ -230,7 +230,7 @@ paths:
                 $ref: "#components/schemas/ResponseMessage"
 
   # Issues
-  /issues/add:
+  /issues:
     post:
       summary: Creates an new issue
       tags:
@@ -335,7 +335,7 @@ paths:
               schema:
                 $ref: "#components/schemas/ResponseMessage"
 
-  /issues/{id}/comments/add:
+  /issues/{id}/comments:
     post:
       summary: Adds a comment
       tags:
@@ -417,7 +417,7 @@ paths:
               schema:
                 $ref: "#components/schemas/ResponseMessage"
 
-  /issues/{id}/children/add:
+  /issues/{id}/children:
     post:
       summary: Adds a child issue
       tags:
@@ -451,7 +451,7 @@ paths:
               schema:
                 $ref: "#components/schemas/ResponseMessage"
 
-  /issues/{id}/worklog/add:
+  /issues/{id}/worklog:
     post:
       summary: Logs a work log time
       tags:
