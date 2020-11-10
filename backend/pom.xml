@@ -33,15 +33,9 @@
 		</dependency>
 
 		<!-- Spring Boot Validation -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 <<<<<<< Updated upstream
-			<artifactId>spring-boot-starter-validation</artifactId>
 =======
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
+
 
 <!--		Spring security-->
 		<dependency>
@@ -56,6 +50,7 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>5.4.0</version>
 >>>>>>> Stashed changes
+
 		</dependency>
 
 		<!-- Spring Boot Dev Tools -->
