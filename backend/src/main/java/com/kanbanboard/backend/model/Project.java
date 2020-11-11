@@ -43,4 +43,16 @@ public class Project {
     public boolean removeColumn(Column column) {
         return columns.remove(column);
     }
+
+    public boolean addMember(User member)
+    {
+        if(members==null)
+            members = new ArrayList<>();
+
+        if (members.contains(member))
+            return false;
+
+        members.add(member);
+        return true;
+    }
 }

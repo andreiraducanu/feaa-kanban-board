@@ -1,5 +1,6 @@
 package com.kanbanboard.backend.service;
 
+import com.kanbanboard.backend.dto.ProjectAddMemberDto;
 import com.kanbanboard.backend.dto.ProjectCreationDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
 import com.kanbanboard.backend.model.Project;
@@ -13,4 +14,6 @@ public interface ProjectService {
     void deleteById(String id);
 
     Project getById(String id);
+
+    Project addMember(String id, ProjectAddMemberDto memberDto);
 }

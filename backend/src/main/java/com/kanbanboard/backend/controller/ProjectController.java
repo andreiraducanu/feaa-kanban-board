@@ -1,5 +1,6 @@
 package com.kanbanboard.backend.controller;
 
+import com.kanbanboard.backend.dto.ProjectAddMemberDto;
 import com.kanbanboard.backend.dto.ProjectCreationDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
 import com.kanbanboard.backend.model.Project;
@@ -24,6 +25,11 @@ public class ProjectController {
     @PostMapping("/projects")
     ResponseEntity<Project> createProject(@Valid @RequestBody ProjectCreationDto projectDto) {
         return new ResponseEntity<>(projectService.create(projectDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/projects/{id}/members")
+    ResponseEntity<Project> addMember(@PathVariable("id") String id, @Valid @RequestBody ProjectAddMemberDto memberIdDto) {
+        return new ResponseEntity<>(projectService.addMember(id, memberIdDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/projects/{id}")
