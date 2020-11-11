@@ -1,8 +1,7 @@
 package com.kanbanboard.backend.controller;
 
-import com.kanbanboard.backend.dto.UserLoginDto;
 import com.kanbanboard.backend.dto.JwtDto;
-import com.kanbanboard.backend.dto.UserRegisterDto;
+import com.kanbanboard.backend.dto.UserLoginDto;
 import com.kanbanboard.backend.model.User;
 import com.kanbanboard.backend.service.UserService;
 import com.kanbanboard.backend.util.JwtUtil;
@@ -19,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 
 
