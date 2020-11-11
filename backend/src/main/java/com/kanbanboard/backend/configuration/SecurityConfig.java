@@ -1,10 +1,13 @@
 package com.kanbanboard.backend.security;
+package com.kanbanboard.backend.configuration;
 
 import com.kanbanboard.backend.filter.JwtRequestFilter;
 import com.kanbanboard.backend.service.UserService;
+import com.kanbanboard.backend.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,17 +22,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     UserService userService;
+    UserServiceImpl userServiceImpl;
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
     public SecurityConfigurer(UserService userService, JwtRequestFilter jwtRequestFilter){
+    public SecurityConfig(UserServiceImpl userServiceImpl, JwtRequestFilter jwtRequestFilter){
 
         this.userService = userService;
+        this.userServiceImpl = userServiceImpl;
         this.jwtRequestFilter = jwtRequestFilter;
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -38,6 +44,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userServiceImpl).passwordEncoder(passwordEncoder());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.kanbanboard.backend;
+package com.kanbanboard.backend.security;
 
 import com.kanbanboard.backend.model.User;
 import org.springframework.security.core.GrantedAuthority;

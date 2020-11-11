@@ -1,7 +1,8 @@
 package com.kanbanboard.backend.controller;
 
-import com.kanbanboard.backend.model.AuthenticationRequest;
-import com.kanbanboard.backend.model.AuthenticationResponse;
+import com.kanbanboard.backend.dto.UserLoginDto;
+import com.kanbanboard.backend.dto.JwtDto;
+import com.kanbanboard.backend.dto.UserRegisterDto;
 import com.kanbanboard.backend.model.User;
 import com.kanbanboard.backend.service.UserService;
 import com.kanbanboard.backend.util.JwtUtil;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 
@@ -41,40 +43,37 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) throws UnsupportedEncodingException {
-
-        logger.info("register called");
-
-        if (userService.checkIfUserExits(user.getUsername())) {
-            logger.info("User exists");
+    public ResponseEntity<String> register(@RequestBody User user) {
+        if (userService.checkIfUserExists(user.getUsername())) {
             return new ResponseEntity<>("Choose another username! It already exists!", HttpStatus.CONFLICT);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        logger.info(user.getPassword());
+
         userService.saveNewUser(user);
+
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDto userLoginDto) throws Exception {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(userLoginDto.getUsername(), userLoginDto.getPassword())
             );
         } catch (BadCredentialsException e) {
             throw new Exception("Incorrect username or password");
         }
 
-        final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
+        final UserDetails userDetails = userService.loadUserByUsername(userLoginDto.getUsername());
 
         final String jwt = jwtUtil.generateToken(userDetails);
 
-        return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.OK);
+        return new ResponseEntity<>(new JwtDto(jwt), HttpStatus.OK);
     }
 
     @GetMapping("/test")
-    public String testRoute(@RequestBody String test, Principal principal){
+    public String testRoute(@RequestBody String test, Principal principal) {
         logger.info(principal.getName());
         return test;
     }
