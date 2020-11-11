@@ -1,4 +1,3 @@
-package com.kanbanboard.backend.security;
 package com.kanbanboard.backend.configuration;
 
 import com.kanbanboard.backend.filter.JwtRequestFilter;
@@ -21,21 +20,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    UserService userService;
     UserServiceImpl userServiceImpl;
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    public SecurityConfigurer(UserService userService, JwtRequestFilter jwtRequestFilter){
     public SecurityConfig(UserServiceImpl userServiceImpl, JwtRequestFilter jwtRequestFilter){
 
-        this.userService = userService;
         this.userServiceImpl = userServiceImpl;
         this.jwtRequestFilter = jwtRequestFilter;
     }
+    @Lazy
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -43,7 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
         auth.userDetailsService(userServiceImpl).passwordEncoder(passwordEncoder());
     }
 
