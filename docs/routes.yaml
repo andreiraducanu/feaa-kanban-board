@@ -79,26 +79,6 @@ paths:
                 $ref: "#components/schemas/ResponseMessage"
 
   # Projects
-  /projects/user:
-    get:
-      summary: Return all user's projects
-      tags:
-        - projects
-      responses:
-        200:
-          description: Return all user's projects
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProjectList"
-
-        404:
-          description: No project found
-          content:
-            application/json:
-              schema:
-                $ref: "#components/schemas/ResponseMessage"
-
   /projects/{id}:
     get:
       summary: Get all info about a specified project
@@ -168,34 +148,7 @@ paths:
               schema:
                 $ref: "#components/schemas/ResponseMessage"
 
-  /projects:
-    post:
-      summary: User creates a project
-      tags:
-        - projects
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ProjectDescription"
-
-      responses:
-        201:
-          description: Project created with success
-          content:
-            application/json:
-              schema:
-                $ref: "#components/schemas/ResponseMessage"
-
-        422:
-          description: Project couldn't be created
-          content:
-            application/json:
-              schema:
-                $ref: "#components/schemas/ResponseMessage"
-
-  /projects/{id}/members:
+    /projects/{id}/members:
     post:
       summary: User adds a member to a project
       tags:
@@ -224,6 +177,51 @@ paths:
 
         404:
           description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+  /projects:
+    get:
+      summary: Return all user's projects
+      tags:
+        - projects
+      responses:
+        200:
+          description: Return all user's projects
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectList"
+
+        404:
+          description: No project found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+    post:
+      summary: User creates a project
+      tags:
+        - projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectDescription"
+
+      responses:
+        201:
+          description: Project created with success
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/ResponseMessage"
+
+        422:
+          description: Project couldn't be created
           content:
             application/json:
               schema:

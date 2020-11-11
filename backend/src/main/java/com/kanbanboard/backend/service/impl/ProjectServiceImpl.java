@@ -1,5 +1,6 @@
 package com.kanbanboard.backend.service.impl;
 
+import com.kanbanboard.backend.dto.ProjectAddMemberDto;
 import com.kanbanboard.backend.dto.ProjectCreationDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
 import com.kanbanboard.backend.model.Project;
@@ -78,5 +79,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     private Project saveOrUpdate(Project project) {
         return projectRepository.save(project);
+    }
+
+    @Override
+    public Project addMember(String id, ProjectAddMemberDto memberIdDto) {
+        User member = userRepository.findById(memberIdDto.getMemberId()).orElse(null);
+
+        if (member == null)
+            return null;
+
+        Project project = getById(id);
+
+        if (project == null)
+            return null;
+
+        project.addMember(member);
+
+        return saveOrUpdate(project);
     }
 }
