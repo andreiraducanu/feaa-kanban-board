@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,4 +46,31 @@ public class Issue {
     private List<WorkLog> workLogs;
 
     private Date creationDate;
+
+    public boolean addWorklog(WorkLog workLog)
+    {
+        if(workLogs==null)
+            workLogs = new ArrayList<>();
+
+        if(currentWorkTime + workLog.getTime() > totalWorkTime)
+            return false;
+
+        currentWorkTime+=workLog.getTime();
+
+        workLogs.add(workLog);
+
+        return true;
+    }
+
+    public boolean removeWorklog(WorkLog workLog)
+    {
+        if(workLogs==null)
+            workLogs = new ArrayList<>();
+
+        currentWorkTime-=workLog.getTime();
+
+        workLogs.remove(workLog);
+
+        return true;
+    }
 }

@@ -1,8 +1,6 @@
 package com.kanbanboard.backend.controller;
 
 import com.kanbanboard.backend.dto.*;
-import com.kanbanboard.backend.model.Comment;
-import com.kanbanboard.backend.model.WorkLog;
 import com.kanbanboard.backend.service.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,20 +59,21 @@ public class IssueController {
         return null;
     }
 
-    // FIXME
+
     @PostMapping("/issues/{id}/worklogs")
-    ResponseEntity<IssueDto> addWorklog(@PathVariable(name = "id") String id, @Valid @RequestBody ProjectCreationDto projectCreationDto) {
-        return null;
+    ResponseEntity<IssueDto> addWorklog(@PathVariable(name = "id") String id, @Valid @RequestBody WorkLogCreationDto workLogCreationDto) {
+        return new ResponseEntity<>(issueService.addWorklog(id, workLogCreationDto), HttpStatus.CREATED);
     }
 
-    // FIXME
+
     @PutMapping("/issues/{idIssue}/worklogs/{idWorklog}")
-    ResponseEntity<IssueDto> updateWorklog(@PathVariable(name = "idIssue") String idIssue, @PathVariable(name = "idWorklog") String idWorklog, @Valid @RequestBody ProjectCreationDto projectCreationDto) {
+    ResponseEntity<IssueDto> updateWorklog(@PathVariable(name = "idIssue") String idIssue, @PathVariable(name = "idWorklog") String idWorklog, @Valid @RequestBody WorkLogUpdateDto workLogUpdateDto) {
         return null;
     }
 
     @DeleteMapping("/issues/{idIssue}/worklogs/{idWorklog}")
     ResponseEntity<String> deleteWorklog(@PathVariable(name = "idIssue") String idIssue, @PathVariable(name = "idWorklog") String idWorklog) {
-        return null;
+        issueService.deleteWorklog(idIssue,idWorklog);
+        return new ResponseEntity<>("Ok", HttpStatus.OK);
     }
 }

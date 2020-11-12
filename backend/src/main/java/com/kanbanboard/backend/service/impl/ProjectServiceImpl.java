@@ -38,7 +38,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto create(ProjectCreationDto projectDto, String username) {
+    public ProjectDto create(String username,ProjectCreationDto projectDto) {
         // Get owner
         User owner = userRepository.findByUsername(username);
 
