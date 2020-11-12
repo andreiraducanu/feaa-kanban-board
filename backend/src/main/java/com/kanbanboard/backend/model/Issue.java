@@ -30,11 +30,17 @@ public class Issue {
 
     private User assignee;
 
+    private Issue epic;
+
     private List<Issue> children;
 
     private List<Comment> comments;
 
-    private WorkTracker workTracker;
+    private int totalWorkTime;
+
+    private int currentWorkTime;
+
+    private List<WorkLog> workLogs;
 
     private Date creationDate;
 }

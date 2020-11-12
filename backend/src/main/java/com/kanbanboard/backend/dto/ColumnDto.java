@@ -13,5 +13,5 @@ public class ColumnDto {
 
     private String name;
 
-    private List<IssueDto> isssue;
+    private List<IssueDto> issues;
 }

@@ -28,5 +28,5 @@ public class IssueDto {
 
     private List<IssueDto> children;
 
-    private List<Comment> comments;
+    private List<CommentDto> comments;
 }

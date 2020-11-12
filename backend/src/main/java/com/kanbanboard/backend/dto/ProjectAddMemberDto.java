@@ -10,5 +10,5 @@ import javax.validation.constraints.NotEmpty;
 public class ProjectAddMemberDto {
 
     @NotEmpty
-    private String username;
+    private String memberUsername;
 }
