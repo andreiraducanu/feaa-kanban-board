@@ -449,7 +449,7 @@ paths:
               schema:
                 $ref: "#components/schemas/ResponseMessage"
 
-  /issues/{id}/worklog:
+  /issues/{id}/worklogs:
     post:
       summary: Logs a work log time
       tags:
@@ -480,9 +480,9 @@ paths:
               schema:
                 $ref: "#components/schemas/ResponseMessage"
 
-  /issues/{idIssue}/worklog/{idWorkLog}:
+  /issues/{idIssue}/worklogs/{idWorkLog}:
     put:
-      summary: Updates a comment
+      summary: Updates a worklog
       tags:
         - issues
 

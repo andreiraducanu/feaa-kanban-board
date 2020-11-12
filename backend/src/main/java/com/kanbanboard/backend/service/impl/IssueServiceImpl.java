@@ -20,4 +20,9 @@ public class IssueServiceImpl implements IssueService {
 
         this.issueRepository = issueRepository;
     }
+
+    @Override
+    public void deleteById(String id) {
+        issueRepository.deleteById(id);
+    }
 }
