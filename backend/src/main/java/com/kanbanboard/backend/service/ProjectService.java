@@ -2,18 +2,22 @@ package com.kanbanboard.backend.service;
 
 import com.kanbanboard.backend.dto.ProjectAddMemberDto;
 import com.kanbanboard.backend.dto.ProjectCreationDto;
+import com.kanbanboard.backend.dto.ProjectDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
-import com.kanbanboard.backend.model.Project;
+
+import java.util.List;
 
 public interface ProjectService {
 
-    Project create(ProjectCreationDto projectDto);
+    ProjectDto create(ProjectCreationDto projectDto, String username);
 
-    Project updateById(String id, ProjectUpdateDto projectDto);
+    List<ProjectDto> getAll(String ownerFilter);
+
+    ProjectDto getById(String id);
+
+    ProjectDto updateById(String id, ProjectUpdateDto projectDto);
 
     void deleteById(String id);
 
-    Project getById(String id);
-
-    Project addMember(String id, ProjectAddMemberDto memberDto);
+    ProjectDto addMember(String id, ProjectAddMemberDto projectMemberDto);
 }

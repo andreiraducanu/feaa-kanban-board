@@ -2,16 +2,22 @@ package com.kanbanboard.backend.service.impl;
 
 import com.kanbanboard.backend.dto.ProjectAddMemberDto;
 import com.kanbanboard.backend.dto.ProjectCreationDto;
+import com.kanbanboard.backend.dto.ProjectDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
+import com.kanbanboard.backend.model.Column;
 import com.kanbanboard.backend.model.Project;
 import com.kanbanboard.backend.model.User;
+import com.kanbanboard.backend.repository.ColumnRepository;
 import com.kanbanboard.backend.repository.ProjectRepository;
 import com.kanbanboard.backend.repository.UserRepository;
-import com.kanbanboard.backend.service.ColumnService;
 import com.kanbanboard.backend.service.ProjectService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -19,25 +25,22 @@ public class ProjectServiceImpl implements ProjectService {
     private final ModelMapper modelMapper;
 
     private final ProjectRepository projectRepository;
-
-    private final ColumnService columnService;
-
-    // FIXME
+    private final ColumnRepository columnRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    ProjectServiceImpl(ModelMapper modelMapper, ProjectRepository projectRepository, ColumnService columnService, UserRepository userRepository) {
+    ProjectServiceImpl(ModelMapper modelMapper, ProjectRepository projectRepository, ColumnRepository columnRepository, UserRepository userRepository) {
         this.modelMapper = modelMapper;
+
         this.projectRepository = projectRepository;
-        this.columnService = columnService;
+        this.columnRepository = columnRepository;
         this.userRepository = userRepository;
     }
 
     @Override
-    public Project create(ProjectCreationDto projectDto) {
-        // FIXME: Get owner
-        User owner = new User("test", "test", "Test", "Test");
-        userRepository.save(owner);
+    public ProjectDto create(ProjectCreationDto projectDto, String username) {
+        // Get owner
+        User owner = userRepository.findByUsername(username);
 
         // Convert DTO to model
         Project project = modelMapper.map(projectDto, Project.class);
@@ -46,25 +49,63 @@ public class ProjectServiceImpl implements ProjectService {
         project.setOwner(owner);
 
         // Add default columns
-        project.addColumn(columnService.createColumn("Backlog"));
-        project.addColumn(columnService.createColumn("To Do"));
-        project.addColumn(columnService.createColumn("In Progress"));
-        project.addColumn(columnService.createColumn("Done"));
+        project.addColumn(createColumn("Backlog"));
+        project.addColumn(createColumn("To Do"));
+        project.addColumn(createColumn("In Progress"));
+        project.addColumn(createColumn("Done"));
 
-        return saveOrUpdate(project);
+        // Save the project
+        project = saveOrUpdate(project);
+
+        return convertToDto(project);
     }
 
     @Override
-    public Project updateById(String id, ProjectUpdateDto projectDto) {
-        Project project = getById(id);
+    public List<ProjectDto> getAll(String ownerFilter) {
+        List<Project> projects;
 
+        User owner = null;
+        if (ownerFilter != null) {
+            // Get the owner
+            owner = userRepository.findByUsername(ownerFilter);
+
+            // Filter projects
+            projects = projectRepository.findByOwner(owner);
+        } else {
+            projects = projectRepository.findAll();
+        }
+
+        // Always return a empty list
+        if (projects == null)
+            projects = new ArrayList<>();
+
+        return convertToDto(projects);
+    }
+
+    @Override
+    public ProjectDto getById(String id) {
+        // TODO: Add exception
+        Project project = findById(id);
+        if (project == null)
+            return null;
+
+        return convertToDto(project);
+    }
+
+    @Override
+    public ProjectDto updateById(String id, ProjectUpdateDto projectDto) {
+        // TODO: Add exception
+        Project project = findById(id);
         if (project == null)
             return null;
 
         project.setName(projectDto.getName());
         project.setDescription(projectDto.getDescription());
 
-        return saveOrUpdate(project);
+        // Update the project
+        project = saveOrUpdate(project);
+
+        return convertToDto(project);
     }
 
     @Override
@@ -73,28 +114,47 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project getById(String id) {
-        return projectRepository.findById(id).orElse(null);
+    public ProjectDto addMember(String id, ProjectAddMemberDto projectMemberDto) {
+        // TODO: Add exception
+        // Get the project
+        Project project = findById(id);
+        if (project == null)
+            return null;
+
+        // TODO: Add exception
+        // Get the member
+        User member = userRepository.findByUsername(projectMemberDto.getUsername());
+        if (member == null)
+            return null;
+
+        // Add the member to project
+        project.addMember(member);
+
+        // Update the project
+        project = saveOrUpdate(project);
+
+        return convertToDto(project);
     }
 
     private Project saveOrUpdate(Project project) {
         return projectRepository.save(project);
     }
 
-    @Override
-    public Project addMember(String id, ProjectAddMemberDto memberIdDto) {
-        User member = userRepository.findById(memberIdDto.getMemberId()).orElse(null);
+    private Project findById(String id) {
+        return projectRepository.findById(id).orElse(null);
+    }
 
-        if (member == null)
-            return null;
+    private ProjectDto convertToDto(Project project) {
+        return modelMapper.map(project, ProjectDto.class);
+    }
 
-        Project project = getById(id);
+    private List<ProjectDto> convertToDto(List<Project> projects) {
+        return projects.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
-        if (project == null)
-            return null;
-
-        project.addMember(member);
-
-        return saveOrUpdate(project);
+    private Column createColumn(String name) {
+        return columnRepository.save(new Column(name));
     }
 }
