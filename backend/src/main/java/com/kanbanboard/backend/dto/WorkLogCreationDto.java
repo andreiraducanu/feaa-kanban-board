@@ -14,7 +14,7 @@ import java.util.Date;
 public class WorkLogCreationDto {
 
     @NotEmpty
-    private String user;
+    private String userUsername;
 
     @PositiveOrZero
     private int time;

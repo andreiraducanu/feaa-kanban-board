@@ -26,13 +26,15 @@ public class Issue {
 
     private IssuePriority priority;
 
+    private Issue epic;
+
+    private Issue parent;
+
+    private List<Issue> children;
+
     private User reporter;
 
     private User assignee;
-
-    private Issue epic;
-
-    private List<Issue> children;
 
     private List<Comment> comments;
 

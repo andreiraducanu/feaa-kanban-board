@@ -123,7 +123,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         // TODO: Add exception
         // Get the member
-        User member = userRepository.findByUsername(projectMemberDto.getUsername());
+        User member = userRepository.findByUsername(projectMemberDto.getMemberUsername());
         if (member == null)
             return null;
 
