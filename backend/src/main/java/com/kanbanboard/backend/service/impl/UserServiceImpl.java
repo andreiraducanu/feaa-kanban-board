@@ -7,13 +7,9 @@ import com.kanbanboard.backend.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,14 +17,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public Boolean checkIfUserExists(String userName) {
+    public boolean checkIfUserExists(String userName) {
         return userRepository.existsByUsername(userName);
     }
 
@@ -36,13 +32,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userRepository.save(user);
     }
 
-
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(userName);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+
         if (user == null) {
-            throw new UsernameNotFoundException(userName);
+            throw new UsernameNotFoundException(username);
         }
+
         return new UserPrincipal(user);
     }
 }

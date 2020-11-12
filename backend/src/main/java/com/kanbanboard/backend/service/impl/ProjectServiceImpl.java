@@ -35,7 +35,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project create(ProjectCreationDto projectDto) {
         // FIXME: Get owner
-        User owner = new User("test", "test", "Test", "Test");
+        User owner = userRepository.findByUsername("test");
         userRepository.save(owner);
 
         // Convert DTO to model

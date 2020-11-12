@@ -1,7 +1,6 @@
 package com.kanbanboard.backend.configuration;
 
 import com.kanbanboard.backend.filter.JwtRequestFilter;
-import com.kanbanboard.backend.service.UserService;
 import com.kanbanboard.backend.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,8 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    UserServiceImpl userServiceImpl;
-    private JwtRequestFilter jwtRequestFilter;
+    private final UserServiceImpl userServiceImpl;
+    private final JwtRequestFilter jwtRequestFilter;
 
     @Autowired
     public SecurityConfig(UserServiceImpl userServiceImpl, JwtRequestFilter jwtRequestFilter){
@@ -31,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.userServiceImpl = userServiceImpl;
         this.jwtRequestFilter = jwtRequestFilter;
     }
+
     @Lazy
     @Bean
     public PasswordEncoder passwordEncoder() {
