@@ -47,30 +47,43 @@ public class Issue {
 
     private Date creationDate;
 
-    public boolean addWorklog(WorkLog workLog)
-    {
-        if(workLogs==null)
+    public boolean addWorklog(WorkLog workLog) {
+        if (workLogs == null)
             workLogs = new ArrayList<>();
 
-        if(currentWorkTime + workLog.getTime() > totalWorkTime)
+        if (currentWorkTime + workLog.getTime() > totalWorkTime)
             return false;
 
-        currentWorkTime+=workLog.getTime();
+        currentWorkTime += workLog.getTime();
 
         workLogs.add(workLog);
 
         return true;
     }
 
-    public boolean removeWorklog(WorkLog workLog)
-    {
-        if(workLogs==null)
+    public boolean removeWorklog(WorkLog workLog) {
+        if (workLogs == null)
             workLogs = new ArrayList<>();
 
-        currentWorkTime-=workLog.getTime();
+        currentWorkTime -= workLog.getTime();
 
         workLogs.remove(workLog);
 
         return true;
+    }
+
+    public void addComent(Comment comment) {
+
+        if (this.comments == null)
+            this.comments = new ArrayList<>();
+
+        this.comments.add(comment);
+    }
+
+    public void addChild(Issue issue) {
+        if (this.children == null)
+            this.children = new ArrayList<>();
+
+        this.children.add(issue);
     }
 }
