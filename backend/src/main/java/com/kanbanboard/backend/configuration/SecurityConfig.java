@@ -26,12 +26,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    public SecurityConfig(UserServiceImpl userServiceImpl, JwtRequestFilter jwtRequestFilter){
+    public SecurityConfig(UserServiceImpl userServiceImpl, JwtRequestFilter jwtRequestFilter) {
 
         this.userServiceImpl = userServiceImpl;
         this.jwtRequestFilter = jwtRequestFilter;
     }
-    @Lazy
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -44,8 +44,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin().loginProcessingUrl("/user/login").and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.csrf().disable()
+                .authorizeRequests().antMatchers("/user/login", "/user/register").permitAll().
+                anyRequest().authenticated().and().
+                exceptionHandling().and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
