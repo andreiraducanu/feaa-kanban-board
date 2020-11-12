@@ -40,23 +40,23 @@ public class IssueController {
     }
 
     @PostMapping("/issues/{id}/comments")
-    ResponseEntity<IssueDto> addComment(@Valid @RequestBody CommentDto commentDto) {
-        return null;
+    ResponseEntity<IssueDto> addComment(@PathVariable(name = "id") String id, @Valid @RequestBody CommentDto commentDto) {
+        return new ResponseEntity<IssueDto>(issueService.addComment(commentDto, id), HttpStatus.OK);
     }
 
     @PutMapping("/issues/{idIssue}/comments/{idComment}")
     ResponseEntity<IssueDto> updateComment(@PathVariable(name = "idIssue") String idIssue, @PathVariable(name = "idComment") String idComment, @Valid @RequestBody CommentDto commentDto) {
-        return null;
+        return new ResponseEntity<IssueDto>(issueService.changeComment(commentDto, idIssue, idComment), HttpStatus.OK);
     }
 
     @DeleteMapping("/issues/{idIssue}/comments/{idComment}")
-    ResponseEntity<IssueDto> deleteComment(@PathVariable(name = "idIssue") String idIssue, @PathVariable(name = "idComment") String idComment, @Valid @RequestBody CommentDto commentDto) {
-        return null;
+    ResponseEntity<String> deleteComment(@PathVariable(name = "idIssue") String idIssue, @PathVariable(name = "idComment") String idComment) {
+        return new ResponseEntity<String>(issueService.deleteComment(idIssue, idComment), HttpStatus.OK);
     }
 
     @PostMapping("/issues/{id}/children")
     ResponseEntity<IssueDto> addChildren(@PathVariable(name = "id") String id, @Valid @RequestBody IssueDto issueDto) {
-        return null;
+        return new ResponseEntity<IssueDto>(issueService.addChild(id, issueDto), HttpStatus.OK);
     }
 
 
@@ -73,7 +73,7 @@ public class IssueController {
 
     @DeleteMapping("/issues/{idIssue}/worklogs/{idWorklog}")
     ResponseEntity<String> deleteWorklog(@PathVariable(name = "idIssue") String idIssue, @PathVariable(name = "idWorklog") String idWorklog) {
-        issueService.deleteWorklog(idIssue,idWorklog);
+        issueService.deleteWorklog(idIssue, idWorklog);
         return new ResponseEntity<>("Ok", HttpStatus.OK);
     }
 }
