@@ -2,8 +2,8 @@ package com.kanbanboard.backend.service.impl;
 
 import com.kanbanboard.backend.dto.IssueDto;
 import com.kanbanboard.backend.dto.WorkLogCreationDto;
+import com.kanbanboard.backend.dto.WorkLogUpdateDto;
 import com.kanbanboard.backend.model.Issue;
-import com.kanbanboard.backend.model.Project;
 import com.kanbanboard.backend.model.WorkLog;
 import com.kanbanboard.backend.repository.IssueRepository;
 import com.kanbanboard.backend.repository.WorkLogRepository;
@@ -33,7 +33,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public IssueDto addWorklog(String id, WorkLogCreationDto workLogCreationDto)
+    public IssueDto addWorkLog(String id, WorkLogCreationDto workLogCreationDto)
     {
         Issue issue = issueRepository.findById(id).orElse(null);
 
@@ -42,11 +42,32 @@ public class IssueServiceImpl implements IssueService {
 
         WorkLog workLog = modelMapper.map(workLogCreationDto, WorkLog.class);
 
-        return null;
+        issue.addWorklog(workLog);
+
+        issue = issueRepository.save(issue);
+
+        return convertToDto(issue);
     }
 
     @Override
-    public void deleteWorklog(String idIssue, String idWorklog) {
+    public IssueDto updateWorkLog(String id, WorkLogUpdateDto workLogUpdateDto)
+    {
+        Issue issue = issueRepository.findById(id).orElse(null);
+
+        if (issue == null)
+            return null;
+
+        WorkLog workLog = modelMapper.map(workLogUpdateDto, WorkLog.class);
+
+        issue.updateWorkLog(workLog);
+
+        issue = issueRepository.save(issue);
+
+        return convertToDto(issue);
+    }
+
+    @Override
+    public void deleteWorkLog(String idIssue, String idWorklog) {
 
         // TODO: Add exception
         Issue issue = issueRepository.findById(idIssue).orElse(null);
@@ -59,10 +80,14 @@ public class IssueServiceImpl implements IssueService {
         if (workLog == null)
             return;
 
-        issue.getWorkLogs().remove(workLog);
+        issue.removeWorkLog(workLog);
 
         workLogRepository.delete(workLog);
 
         issueRepository.save(issue);
+    }
+
+    private IssueDto convertToDto(Issue issue) {
+        return modelMapper.map(issue, IssueDto.class);
     }
 }

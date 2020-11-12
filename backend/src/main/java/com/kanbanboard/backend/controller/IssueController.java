@@ -18,7 +18,7 @@ public class IssueController {
     }
 
     @PostMapping("/issues")
-    ResponseEntity<IssueDto> createIssue(@Valid @RequestBody IssueDto issueDto) {
+    ResponseEntity<IssueDto> createIssue(@Valid @RequestBody IssueCreationDto issueCreationDto) {
         return null;
     }
 
@@ -29,7 +29,7 @@ public class IssueController {
 
     // FIXME
     @PutMapping("/issues/{id}")
-    ResponseEntity<IssueDto> updateIssue(@PathVariable(name = "id") String id, @Valid @RequestBody ProjectUpdateDto projectDto) {
+    ResponseEntity<IssueDto> updateIssue(@PathVariable(name = "id") String id, @Valid @RequestBody IssueUpdateDto issueUpdateDto) {
         return null;
     }
 
@@ -61,19 +61,19 @@ public class IssueController {
 
 
     @PostMapping("/issues/{id}/worklogs")
-    ResponseEntity<IssueDto> addWorklog(@PathVariable(name = "id") String id, @Valid @RequestBody WorkLogCreationDto workLogCreationDto) {
-        return new ResponseEntity<>(issueService.addWorklog(id, workLogCreationDto), HttpStatus.CREATED);
+    ResponseEntity<IssueDto> addWorkLog(@PathVariable(name = "id") String id, @Valid @RequestBody WorkLogCreationDto workLogCreationDto) {
+        return new ResponseEntity<>(issueService.addWorkLog(id, workLogCreationDto), HttpStatus.CREATED);
     }
 
 
     @PutMapping("/issues/{idIssue}/worklogs/{idWorklog}")
-    ResponseEntity<IssueDto> updateWorklog(@PathVariable(name = "idIssue") String idIssue, @PathVariable(name = "idWorklog") String idWorklog, @Valid @RequestBody WorkLogUpdateDto workLogUpdateDto) {
-        return null;
+    ResponseEntity<IssueDto> updateWorkLog(@PathVariable(name = "idIssue") String idIssue, @PathVariable(name = "idWorklog") String idWorklog, @Valid @RequestBody WorkLogUpdateDto workLogUpdateDto) {
+        return new ResponseEntity<>(issueService.updateWorkLog("test", workLogUpdateDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/issues/{idIssue}/worklogs/{idWorklog}")
-    ResponseEntity<String> deleteWorklog(@PathVariable(name = "idIssue") String idIssue, @PathVariable(name = "idWorklog") String idWorklog) {
-        issueService.deleteWorklog(idIssue,idWorklog);
+    ResponseEntity<String> deleteWorkLog(@PathVariable(name = "idIssue") String idIssue, @PathVariable(name = "idWorklog") String idWorklog) {
+        issueService.deleteWorkLog(idIssue, idWorklog);
         return new ResponseEntity<>("Ok", HttpStatus.OK);
     }
 }
