@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ProjectService {
 
-    ProjectDto create(String username,ProjectCreationDto projectDto);
+    ProjectDto create(ProjectCreationDto projectDto);
 
     List<ProjectDto> getAll(String ownerFilter);
 
