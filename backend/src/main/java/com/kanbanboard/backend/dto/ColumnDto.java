@@ -7,17 +7,11 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ProjectDto {
+public class ColumnDto {
 
     private String id;
 
     private String name;
 
-    private String description;
-
-    private UserDto owner;
-
-    private List<UserDto> members;
-
-    private List<ColumnDto> columns;
+    private List<IssueDto> isssue;
 }
