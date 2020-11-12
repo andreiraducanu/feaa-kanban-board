@@ -1,6 +1,7 @@
 package com.kanbanboard.backend.filter;
 
 import com.kanbanboard.backend.service.UserService;
+import com.kanbanboard.backend.service.impl.UserServiceImpl;
 import com.kanbanboard.backend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,12 +20,12 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
     private JwtUtil jwtUtil;
 
     @Autowired
-    public JwtRequestFilter(UserService userService, JwtUtil jwtUtil) {
-        this.userService = userService;
+    public JwtRequestFilter(UserServiceImpl userServiceImpl, JwtUtil jwtUtil) {
+        this.userServiceImpl = userServiceImpl;
         this.jwtUtil = jwtUtil;
     }
 
@@ -39,13 +40,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             token = authorizationHeader.substring(7);
             userName = jwtUtil.extractUsername(token);
+            logger.info("este ok in filtru");
         }
-
+        logger.info("numele este "+userName);
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userService.loadUserByUsername(userName);
+            UserDetails userDetails = this.userServiceImpl.loadUserByUsername(userName);
 
             if (jwtUtil.validateToken(token, userDetails)) {
-
+                logger.info("token valid");
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
