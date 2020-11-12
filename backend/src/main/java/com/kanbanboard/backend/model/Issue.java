@@ -61,7 +61,25 @@ public class Issue {
         return true;
     }
 
-    public boolean removeWorklog(WorkLog workLog) {
+    public boolean updateWorkLog(WorkLog workLog) {
+        if (workLogs == null)
+            workLogs = new ArrayList<>();
+
+        if (currentWorkTime + workLog.getTime() > totalWorkTime)
+            return false;
+
+        WorkLog oldWorkLog = workLogs.get(workLogs.indexOf(workLog));
+
+        currentWorkTime -= oldWorkLog.getTime();
+
+        currentWorkTime += workLog.getTime();
+
+        oldWorkLog.setTime(workLog.getTime());
+
+        return true;
+    }
+
+    public boolean removeWorkLog(WorkLog workLog) {
         if (workLogs == null)
             workLogs = new ArrayList<>();
 

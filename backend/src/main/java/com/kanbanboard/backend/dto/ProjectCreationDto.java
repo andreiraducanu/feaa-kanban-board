@@ -18,6 +18,9 @@ public class ProjectCreationDto {
     @NotEmpty
     private String description;
 
+    @NotEmpty
+    private String ownerUsername;
+
     @JsonIgnore
     private Date creationDate = Calendar.getInstance().getTime();
 }

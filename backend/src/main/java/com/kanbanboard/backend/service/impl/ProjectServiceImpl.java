@@ -38,9 +38,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto create(String username,ProjectCreationDto projectDto) {
+    public ProjectDto create(ProjectCreationDto projectDto) {
         // Get owner
-        User owner = userRepository.findByUsername(username);
+        User owner = userRepository.findByUsername(projectDto.getOwnerUsername());
 
         // Convert DTO to model
         Project project = modelMapper.map(projectDto, Project.class);
