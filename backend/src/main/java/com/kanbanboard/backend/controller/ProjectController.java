@@ -1,7 +1,7 @@
 package com.kanbanboard.backend.controller;
 
 import com.kanbanboard.backend.dto.ProjectAddMemberDto;
-import com.kanbanboard.backend.dto.ProjectCreationDto;
+import com.kanbanboard.backend.dto.ProjectCreateDto;
 import com.kanbanboard.backend.dto.ProjectDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
 import com.kanbanboard.backend.service.ProjectService;
@@ -24,8 +24,8 @@ public class ProjectController {
     }
 
     @PostMapping("/projects")
-    ResponseEntity<ProjectDto> createProject(@Valid @RequestBody ProjectCreationDto projectDto) {
-        return new ResponseEntity<>(projectService.create(projectDto), HttpStatus.CREATED);
+    ResponseEntity<ProjectDto> createProject(@Valid @RequestBody ProjectCreateDto projectCreateDto) {
+        return new ResponseEntity<>(projectService.create(projectCreateDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/projects")
@@ -34,23 +34,22 @@ public class ProjectController {
     }
 
     @GetMapping("/projects/{id}")
-    ResponseEntity<ProjectDto> getProject(@PathVariable(name = "id") String id) {
-        return new ResponseEntity<>(projectService.getById(id), HttpStatus.OK);
+    ResponseEntity<ProjectDto> getProject(@PathVariable(name = "id") String idProject) {
+        return new ResponseEntity<>(projectService.getById(idProject), HttpStatus.OK);
     }
 
     @PutMapping("/projects/{id}")
-    ResponseEntity<ProjectDto> updateProject(@PathVariable(name = "id") String id, @Valid @RequestBody ProjectUpdateDto projectDto) {
-        return new ResponseEntity<>(projectService.updateById(id, projectDto), HttpStatus.OK);
+    ResponseEntity<ProjectDto> updateProject(@PathVariable(name = "id") String idProject, @Valid @RequestBody ProjectUpdateDto projectUpdateDto) {
+        return new ResponseEntity<>(projectService.updateById(idProject, projectUpdateDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/projects/{id}")
-    ResponseEntity<String> deleteProject(@PathVariable(name = "id") String id) {
-        projectService.deleteById(id);
-        return new ResponseEntity<>("Ok", HttpStatus.OK);
+    ResponseEntity<String> deleteProject(@PathVariable(name = "id") String idProject) {
+        return new ResponseEntity<>(projectService.deleteById(idProject), HttpStatus.OK);
     }
 
     @PostMapping("/projects/{id}/members")
-    ResponseEntity<ProjectDto> addMemberToProject(@PathVariable(name = "id") String id, @Valid @RequestBody ProjectAddMemberDto projectMemberDto) {
-        return new ResponseEntity<>(projectService.addMember(id, projectMemberDto), HttpStatus.CREATED);
+    ResponseEntity<ProjectDto> addMemberToProject(@PathVariable(name = "id") String idProject, @Valid @RequestBody ProjectAddMemberDto projectAddMemberDto) {
+        return new ResponseEntity<>(projectService.addMember(idProject, projectAddMemberDto), HttpStatus.OK);
     }
 }

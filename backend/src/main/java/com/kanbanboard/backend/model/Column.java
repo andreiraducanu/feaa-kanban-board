@@ -22,6 +22,23 @@ public class Column {
 
     public Column(String name) {
         this.name = name;
-        issues = new ArrayList<>();
+    }
+
+    public boolean addIssue(Issue issue) {
+        if (issues == null)
+            issues = new ArrayList<>();
+
+        if (issues.contains(issue))
+            return false;
+
+        issues.add(issue);
+        return true;
+    }
+
+    public boolean removeIssue(Issue issue) {
+        if (issues == null)
+            return false;
+
+        return issues.remove(issue);
     }
 }

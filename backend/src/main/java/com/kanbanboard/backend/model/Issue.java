@@ -27,17 +27,11 @@ public class Issue {
 
     private IssuePriority priority;
 
-    private Issue epic;
-
-    private Issue parent;
-
-    private List<Issue> children;
-
     private User reporter;
 
     private User assignee;
 
-    private List<Comment> comments;
+    private List<Issue> children;
 
     private int totalWorkTime;
 
@@ -45,11 +39,56 @@ public class Issue {
 
     private List<WorkLog> workLogs;
 
+    private List<Comment> comments;
+
     private Date creationDate;
 
-    public boolean addWorklog(WorkLog workLog) {
+    public void update(Issue issue) {
+        title = issue.getTitle();
+        description = issue.getDescription();
+        type = issue.getType();
+        priority = issue.getPriority();
+
+        reporter = issue.getReporter();
+        assignee = issue.getAssignee();
+
+        totalWorkTime = issue.getTotalWorkTime();
+    }
+
+    public boolean addChild(Issue childIssue) {
+        if (children == null)
+            children = new ArrayList<>();
+
+        if (containsChild(childIssue))
+            return false;
+
+        children.add(childIssue);
+        return true;
+    }
+
+    public boolean removeChild(Issue childIssue){
+        if (children == null)
+            return false;
+
+        if (!containsChild(childIssue))
+            return false;
+
+        return children.remove(childIssue);
+    }
+
+    public boolean containsChild(Issue childIssue){
+        if (children == null)
+            return false;
+
+        return children.contains(childIssue);
+    }
+
+    public boolean addWorkLog(WorkLog workLog) {
         if (workLogs == null)
             workLogs = new ArrayList<>();
+
+        if (containsWorkLog(workLog))
+            return false;
 
         if (currentWorkTime + workLog.getTime() > totalWorkTime)
             return false;
@@ -61,47 +100,51 @@ public class Issue {
         return true;
     }
 
-    public boolean updateWorkLog(WorkLog workLog) {
-        if (workLogs == null)
-            workLogs = new ArrayList<>();
-
-        if (currentWorkTime + workLog.getTime() > totalWorkTime)
-            return false;
-
-        WorkLog oldWorkLog = workLogs.get(workLogs.indexOf(workLog));
-
-        currentWorkTime -= oldWorkLog.getTime();
-
-        currentWorkTime += workLog.getTime();
-
-        oldWorkLog.setTime(workLog.getTime());
-
-        return true;
-    }
-
     public boolean removeWorkLog(WorkLog workLog) {
         if (workLogs == null)
-            workLogs = new ArrayList<>();
+            return false;
+
+        if (!containsWorkLog(workLog))
+            return false;
 
         currentWorkTime -= workLog.getTime();
-
         workLogs.remove(workLog);
 
         return true;
     }
 
-    public void addComent(Comment comment) {
+    public boolean containsWorkLog(WorkLog workLog){
+        if (workLogs == null)
+            return false;
 
-        if (this.comments == null)
-            this.comments = new ArrayList<>();
-
-        this.comments.add(comment);
+        return workLogs.contains(workLog);
     }
 
-    public void addChild(Issue issue) {
-        if (this.children == null)
-            this.children = new ArrayList<>();
+    public boolean addComment(Comment comment) {
+        if (comments == null)
+            comments = new ArrayList<>();
 
-        this.children.add(issue);
+        if (containsComment(comment))
+            return false;
+
+        comments.add(comment);
+        return true;
+    }
+
+    public boolean removeComment(Comment comment) {
+        if (comments == null)
+            return false;
+
+        if (!containsComment(comment))
+            return false;
+
+        return comments.remove(comment);
+    }
+
+    public boolean containsComment(Comment comment){
+        if (comments == null)
+            return false;
+
+        return comments.contains(comment);
     }
 }

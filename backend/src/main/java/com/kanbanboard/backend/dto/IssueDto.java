@@ -22,23 +22,19 @@ public class IssueDto {
 
     private IssuePriority priority;
 
-    private IssueDto epic;
-
-    private IssueDto parent;
-
-    private List<IssueDto> children;
-
     private UserDto reporter;
 
     private UserDto assignee;
 
-    private List<CommentDto> comments;
+    private List<IssueDto> children;
 
     private int totalWorkTime;
 
     private int currentWorkTime;
 
     private List<WorkLogDto> workLogs;
+
+    private List<CommentDto> comments;
 
     private Date creationDate;
 }

@@ -1,28 +1,31 @@
 package com.kanbanboard.backend.service;
 
-import com.kanbanboard.backend.dto.CommentDto;
-import com.kanbanboard.backend.dto.IssueDto;
-import com.kanbanboard.backend.dto.ProjectDto;
-import com.kanbanboard.backend.dto.WorkLogCreationDto;
-import com.kanbanboard.backend.dto.WorkLogUpdateDto;
-import com.kanbanboard.backend.model.Issue;
-import com.kanbanboard.backend.model.Project;
+import com.kanbanboard.backend.dto.*;
+import com.kanbanboard.backend.model.WorkLog;
 
 public interface IssueService {
 
-    void deleteById(String id);
+    IssueDto create(IssueCreateDto issueCreateDto);
 
-    IssueDto addWorkLog(String id, WorkLogCreationDto workLogCreationDto);
+    IssueDto getById(String idIssue);
 
-    IssueDto addComment(CommentDto commentDto, String id);
+    IssueDto updateById(String idIssue, IssueUpdateDto issueUpdateDto);
 
-    IssueDto changeComment(CommentDto commentDto, String idIssue, String idComment);
+    String deleteById(String idIssue);
+
+    IssueDto addChild(String idIssue, IssueAddChildDto issueAddChildDto);
+
+    IssueDto removeChild(String idIssue, IssueRemoveChildDto issueRemoveChildDto);
+
+    WorkLogDto addWorkLog(String idIssue, WorkLogCreateDto workLogCreateDto);
+
+    WorkLogDto updateWorkLog(String idIssue, String idWorkLog, WorkLogUpdateDto workLogUpdateDto);
+
+    String deleteWorkLog(String idIssue, String idWorkLog);
+
+    CommentDto addComment(String idIssue, CommentCreateDto commentCreateDto);
+
+    CommentDto updateComment(String idIssue, String idComment, CommentUpdateDto commentDto);
 
     String deleteComment(String idIssue, String idComment);
-
-    IssueDto addChild(String id, IssueDto issueDto);
-
-    IssueDto updateWorkLog(String id, WorkLogUpdateDto workLogUpdateDto);
-
-    public void deleteWorkLog(String idIssue, String idWorklog);
 }

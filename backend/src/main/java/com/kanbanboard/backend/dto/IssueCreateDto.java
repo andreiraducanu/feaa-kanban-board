@@ -1,7 +1,6 @@
 package com.kanbanboard.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.kanbanboard.backend.model.Issue;
 import com.kanbanboard.backend.model.enums.IssuePriority;
 import com.kanbanboard.backend.model.enums.IssueType;
 import lombok.Getter;
@@ -15,7 +14,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class IssueCreationDto {
+public class IssueCreateDto {
 
     @NotEmpty
     private String title;
@@ -30,10 +29,10 @@ public class IssueCreationDto {
     private IssuePriority priority;
 
     @NotEmpty
-    private Issue epicId;
+    private String epicId;
 
     @NotEmpty
-    private Issue parentId;
+    private String parentId;
 
     @NotEmpty
     private String reporterUsername;

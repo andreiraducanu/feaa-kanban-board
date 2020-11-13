@@ -29,6 +29,11 @@ public class Project {
 
     private Date creationDate;
 
+    public void update(Project project) {
+        name = project.getName();
+        description = project.getDescription();
+    }
+
     public boolean addColumn(Column column) {
         if (columns == null)
             columns = new ArrayList<>();
@@ -41,12 +46,14 @@ public class Project {
     }
 
     public boolean removeColumn(Column column) {
+        if (columns == null)
+            return false;
+
         return columns.remove(column);
     }
 
-    public boolean addMember(User member)
-    {
-        if(members==null)
+    public boolean addMember(User member) {
+        if (members == null)
             members = new ArrayList<>();
 
         if (members.contains(member))
@@ -54,5 +61,12 @@ public class Project {
 
         members.add(member);
         return true;
+    }
+
+    public boolean removeMember(User member) {
+        if (members == null)
+            return false;
+
+        return members.remove(member);
     }
 }

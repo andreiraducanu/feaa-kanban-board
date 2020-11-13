@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @TypeAlias("workLog")
 @Document(collection = "workLogs")
-public class WorkLog  {
+public class WorkLog {
 
     @Id
     private String id;
@@ -20,4 +20,8 @@ public class WorkLog  {
     private int time;
 
     private Date creationDate;
+
+    public void update(WorkLog workLog) {
+        time = workLog.getTime();
+    }
 }

@@ -1,13 +1,14 @@
 package com.kanbanboard.backend.service.impl;
 
 import com.kanbanboard.backend.dto.ProjectAddMemberDto;
-import com.kanbanboard.backend.dto.ProjectCreationDto;
+import com.kanbanboard.backend.dto.ProjectCreateDto;
 import com.kanbanboard.backend.dto.ProjectDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
 import com.kanbanboard.backend.model.Column;
 import com.kanbanboard.backend.model.Project;
 import com.kanbanboard.backend.model.User;
 import com.kanbanboard.backend.repository.ColumnRepository;
+import com.kanbanboard.backend.repository.IssueRepository;
 import com.kanbanboard.backend.repository.ProjectRepository;
 import com.kanbanboard.backend.repository.UserRepository;
 import com.kanbanboard.backend.service.ProjectService;
@@ -26,24 +27,29 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ColumnRepository columnRepository;
+    private final IssueRepository issueRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    ProjectServiceImpl(ModelMapper modelMapper, ProjectRepository projectRepository, ColumnRepository columnRepository, UserRepository userRepository) {
+    ProjectServiceImpl(ModelMapper modelMapper, ProjectRepository projectRepository, IssueRepository issueRepository, ColumnRepository columnRepository, UserRepository userRepository) {
         this.modelMapper = modelMapper;
 
         this.projectRepository = projectRepository;
         this.columnRepository = columnRepository;
+        this.issueRepository = issueRepository;
         this.userRepository = userRepository;
     }
 
     @Override
-    public ProjectDto create(ProjectCreationDto projectDto) {
+    public ProjectDto create(ProjectCreateDto projectCreateDto) {
+        // TODO: Add exception
         // Get owner
-        User owner = userRepository.findByUsername(projectDto.getOwnerUsername());
+        User owner = userRepository.findByUsername(projectCreateDto.getOwnerUsername());
+        if (owner == null)
+            return null;
 
         // Convert DTO to model
-        Project project = modelMapper.map(projectDto, Project.class);
+        Project project = modelMapper.map(projectCreateDto, Project.class);
 
         // Set the owner
         project.setOwner(owner);
@@ -64,10 +70,12 @@ public class ProjectServiceImpl implements ProjectService {
     public List<ProjectDto> getAll(String ownerFilter) {
         List<Project> projects;
 
-        User owner = null;
         if (ownerFilter != null) {
-            // Get the owner
-            owner = userRepository.findByUsername(ownerFilter);
+            // TODO: Add exception
+            // Get owner
+            User owner = userRepository.findByUsername(ownerFilter);
+            if (owner == null)
+                return null;
 
             // Filter projects
             projects = projectRepository.findByOwner(owner);
@@ -83,9 +91,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto getById(String id) {
+    public ProjectDto getById(String idProject) {
         // TODO: Add exception
-        Project project = findById(id);
+        Project project = findById(idProject);
         if (project == null)
             return null;
 
@@ -93,37 +101,48 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto updateById(String id, ProjectUpdateDto projectDto) {
+    public ProjectDto updateById(String idProject, ProjectUpdateDto projectUpdateDto) {
         // TODO: Add exception
-        Project project = findById(id);
+        // Get the project
+        Project project = findById(idProject);
         if (project == null)
             return null;
 
-        project.setName(projectDto.getName());
-        project.setDescription(projectDto.getDescription());
+        // Convert the DTO to model
+        Project projectUpdate = modelMapper.map(projectUpdateDto, Project.class);
 
         // Update the project
+        project.update(projectUpdate);
         project = saveOrUpdate(project);
 
         return convertToDto(project);
     }
 
     @Override
-    public void deleteById(String id) {
-        projectRepository.deleteById(id);
+    public String deleteById(String idProject) {
+        // TODO: Add exception
+        // Get the project
+        Project project = findById(idProject);
+        if (project == null)
+            return null;
+
+        // Delete the project
+        projectRepository.delete(project);
+
+        return "ok";
     }
 
     @Override
-    public ProjectDto addMember(String id, ProjectAddMemberDto projectMemberDto) {
+    public ProjectDto addMember(String idProject, ProjectAddMemberDto projectAddMemberDto) {
         // TODO: Add exception
         // Get the project
-        Project project = findById(id);
+        Project project = findById(idProject);
         if (project == null)
             return null;
 
         // TODO: Add exception
         // Get the member
-        User member = userRepository.findByUsername(projectMemberDto.getMemberUsername());
+        User member = userRepository.findByUsername(projectAddMemberDto.getMemberUsername());
         if (member == null)
             return null;
 
