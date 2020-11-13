@@ -4,6 +4,7 @@ import com.kanbanboard.backend.dto.ProjectAddMemberDto;
 import com.kanbanboard.backend.dto.ProjectCreateDto;
 import com.kanbanboard.backend.dto.ProjectDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
+import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.model.Column;
 import com.kanbanboard.backend.model.Project;
 import com.kanbanboard.backend.model.User;
@@ -39,12 +40,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto create(ProjectCreateDto projectCreateDto) {
+    public ProjectDto create(ProjectCreateDto projectCreateDto) throws EntityNotFoundException {
         // TODO: Add exception
         // Get owner
         User owner = userRepository.findByUsername(projectCreateDto.getOwnerUsername());
         if (owner == null)
-            return null;
+            throw new EntityNotFoundException("Owner doesn't exists");
 
         // Convert DTO to model
         Project project = modelMapper.map(projectCreateDto, Project.class);
@@ -146,7 +147,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         // TODO: Add exception
         // Add the member to project
-        if(!project.addMember(member))
+        if (!project.addMember(member))
             return null;
 
         // Update the project

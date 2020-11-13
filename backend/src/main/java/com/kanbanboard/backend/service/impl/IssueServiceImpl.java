@@ -163,7 +163,7 @@ public class IssueServiceImpl implements IssueService {
         }
 
         // Update the issue
-        issue = saveOrUpdateIssue(issue);
+        saveOrUpdateIssue(issue);
 
         return convertWorkLogToDto(workLog);
     }

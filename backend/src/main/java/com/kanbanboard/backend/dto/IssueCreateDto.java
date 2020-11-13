@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,9 +16,11 @@ import java.util.Date;
 public class IssueCreateDto {
 
     @NotEmpty
+    private String projectId;
+
+    @NotEmpty
     private String title;
 
-    @NotNull
     private String description;
 
     @NotEmpty
@@ -28,16 +29,8 @@ public class IssueCreateDto {
     @NotEmpty
     private IssuePriority priority;
 
-    @NotEmpty
-    private String epicId;
-
-    @NotEmpty
-    private String parentId;
-
-    @NotEmpty
     private String reporterUsername;
 
-    @NotEmpty
     private String assigneeUsername;
 
     @PositiveOrZero

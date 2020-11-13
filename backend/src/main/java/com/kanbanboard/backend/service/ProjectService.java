@@ -4,12 +4,13 @@ import com.kanbanboard.backend.dto.ProjectAddMemberDto;
 import com.kanbanboard.backend.dto.ProjectCreateDto;
 import com.kanbanboard.backend.dto.ProjectDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
+import com.kanbanboard.backend.exception.EntityNotFoundException;
 
 import java.util.List;
 
 public interface ProjectService {
 
-    ProjectDto create(ProjectCreateDto projectCreateDto);
+    ProjectDto create(ProjectCreateDto projectCreateDto) throws EntityNotFoundException;
 
     List<ProjectDto> getAll(String ownerFilter);
 

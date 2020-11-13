@@ -16,7 +16,7 @@ public class CommentCreateDto {
     private String userUsername;
 
     @NotEmpty
-    private String time;
+    private String text;
 
     @JsonIgnore
     private Date creationDate = Calendar.getInstance().getTime();

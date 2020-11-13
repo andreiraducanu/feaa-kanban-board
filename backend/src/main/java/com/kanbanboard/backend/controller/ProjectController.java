@@ -4,6 +4,7 @@ import com.kanbanboard.backend.dto.ProjectAddMemberDto;
 import com.kanbanboard.backend.dto.ProjectCreateDto;
 import com.kanbanboard.backend.dto.ProjectDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
+import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class ProjectController {
     }
 
     @PostMapping("/projects")
-    ResponseEntity<ProjectDto> createProject(@Valid @RequestBody ProjectCreateDto projectCreateDto) {
+    ResponseEntity<ProjectDto> createProject(@Valid @RequestBody ProjectCreateDto projectCreateDto) throws EntityNotFoundException {
         return new ResponseEntity<>(projectService.create(projectCreateDto), HttpStatus.CREATED);
     }
 
