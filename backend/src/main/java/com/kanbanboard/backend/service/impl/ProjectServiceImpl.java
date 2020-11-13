@@ -27,7 +27,6 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ColumnRepository columnRepository;
-    private final IssueRepository issueRepository;
     private final UserRepository userRepository;
 
     @Autowired
@@ -36,7 +35,6 @@ public class ProjectServiceImpl implements ProjectService {
 
         this.projectRepository = projectRepository;
         this.columnRepository = columnRepository;
-        this.issueRepository = issueRepository;
         this.userRepository = userRepository;
     }
 
@@ -61,9 +59,9 @@ public class ProjectServiceImpl implements ProjectService {
         project.addColumn(createColumn("Done"));
 
         // Save the project
-        project = saveOrUpdate(project);
+        project = saveOrUpdateProject(project);
 
-        return convertToDto(project);
+        return convertProjectToDto(project);
     }
 
     @Override
@@ -87,24 +85,24 @@ public class ProjectServiceImpl implements ProjectService {
         if (projects == null)
             projects = new ArrayList<>();
 
-        return convertToDto(projects);
+        return convertProjectToDto(projects);
     }
 
     @Override
     public ProjectDto getById(String idProject) {
         // TODO: Add exception
-        Project project = findById(idProject);
+        Project project = findProjectById(idProject);
         if (project == null)
             return null;
 
-        return convertToDto(project);
+        return convertProjectToDto(project);
     }
 
     @Override
     public ProjectDto updateById(String idProject, ProjectUpdateDto projectUpdateDto) {
         // TODO: Add exception
         // Get the project
-        Project project = findById(idProject);
+        Project project = findProjectById(idProject);
         if (project == null)
             return null;
 
@@ -113,16 +111,16 @@ public class ProjectServiceImpl implements ProjectService {
 
         // Update the project
         project.update(projectUpdate);
-        project = saveOrUpdate(project);
+        project = saveOrUpdateProject(project);
 
-        return convertToDto(project);
+        return convertProjectToDto(project);
     }
 
     @Override
     public String deleteById(String idProject) {
         // TODO: Add exception
         // Get the project
-        Project project = findById(idProject);
+        Project project = findProjectById(idProject);
         if (project == null)
             return null;
 
@@ -136,7 +134,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto addMember(String idProject, ProjectAddMemberDto projectAddMemberDto) {
         // TODO: Add exception
         // Get the project
-        Project project = findById(idProject);
+        Project project = findProjectById(idProject);
         if (project == null)
             return null;
 
@@ -150,26 +148,26 @@ public class ProjectServiceImpl implements ProjectService {
         project.addMember(member);
 
         // Update the project
-        project = saveOrUpdate(project);
+        project = saveOrUpdateProject(project);
 
-        return convertToDto(project);
+        return convertProjectToDto(project);
     }
 
-    private Project saveOrUpdate(Project project) {
+    private Project saveOrUpdateProject(Project project) {
         return projectRepository.save(project);
     }
 
-    private Project findById(String id) {
+    private Project findProjectById(String id) {
         return projectRepository.findById(id).orElse(null);
     }
 
-    private ProjectDto convertToDto(Project project) {
+    private ProjectDto convertProjectToDto(Project project) {
         return modelMapper.map(project, ProjectDto.class);
     }
 
-    private List<ProjectDto> convertToDto(List<Project> projects) {
+    private List<ProjectDto> convertProjectToDto(List<Project> projects) {
         return projects.stream()
-                .map(this::convertToDto)
+                .map(this::convertProjectToDto)
                 .collect(Collectors.toList());
     }
 

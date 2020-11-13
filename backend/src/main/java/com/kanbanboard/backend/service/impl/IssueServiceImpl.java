@@ -41,17 +41,44 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public IssueDto getById(String idIssue) {
-        return null;
+        // TODO: Add exception
+        // Get the issue
+        Issue issue = findIssueById(idIssue);
+        if (issue == null)
+            return null;
+
+        return convertIssueToDto(issue);
     }
 
     @Override
     public IssueDto updateById(String idIssue, IssueUpdateDto issueUpdateDto) {
-        return null;
+        // TODO: Add exception
+        // Get the issue
+        Issue issue = findIssueById(idIssue);
+        if (issue == null)
+            return null;
+
+        // Convert the DTO to model
+        Issue issueUpdate = modelMapper.map(issueUpdateDto, Issue.class);
+
+        // Update the issue
+        issue.update(issueUpdate);
+        issue = saveOrUpdateIssue(issue);
+
+        return convertIssueToDto(issue);
     }
 
     @Override
-    public String deleteById(String id) {
-        issueRepository.deleteById(id);
+    public String deleteById(String idIssue) {
+        // TODO: Add exception
+        // Get the issue
+        Issue issue = findIssueById(idIssue);
+        if (issue == null)
+            return null;
+
+        // Delete issue
+        issueRepository.delete(issue);
+
         return "ok";
     }
 
