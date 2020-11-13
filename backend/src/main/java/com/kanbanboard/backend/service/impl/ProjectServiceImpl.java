@@ -5,6 +5,7 @@ import com.kanbanboard.backend.dto.ProjectCreateDto;
 import com.kanbanboard.backend.dto.ProjectDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
 import com.kanbanboard.backend.exception.EntityNotFoundException;
+import com.kanbanboard.backend.exception.ServerException;
 import com.kanbanboard.backend.model.Column;
 import com.kanbanboard.backend.model.Project;
 import com.kanbanboard.backend.model.User;
@@ -41,8 +42,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDto create(ProjectCreateDto projectCreateDto) throws EntityNotFoundException {
-        // TODO: Add exception
-        // Get owner
+        // Get owner, for testing purpose
         User owner = userRepository.findByUsername(projectCreateDto.getOwnerUsername());
         if (owner == null)
             throw new EntityNotFoundException("Owner doesn't exists");
@@ -66,46 +66,44 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectDto> getAll(String ownerFilter) {
+    public List<ProjectDto> getAll(String ownerFilter) throws EntityNotFoundException {
         List<Project> projects;
 
         if (ownerFilter != null) {
-            // TODO: Add exception
             // Get owner
             User owner = userRepository.findByUsername(ownerFilter);
             if (owner == null)
-                return null;
+                throw new EntityNotFoundException("Owner doesn't exists");
 
             // Filter projects
             projects = projectRepository.findByOwner(owner);
+
         } else {
             projects = projectRepository.findAll();
         }
 
-        // Always return a empty list
-        if (projects == null)
-            projects = new ArrayList<>();
+        if (projects == null) {
+            throw new EntityNotFoundException("No projects found");
+        }
 
         return convertProjectToDto(projects);
     }
 
     @Override
-    public ProjectDto getById(String idProject) {
-        // TODO: Add exception
+    public ProjectDto getById(String idProject) throws EntityNotFoundException {
         Project project = findProjectById(idProject);
         if (project == null)
-            return null;
+            throw new EntityNotFoundException("No project found");
 
         return convertProjectToDto(project);
     }
 
     @Override
-    public ProjectDto updateById(String idProject, ProjectUpdateDto projectUpdateDto) {
-        // TODO: Add exception
+    public ProjectDto updateById(String idProject, ProjectUpdateDto projectUpdateDto) throws EntityNotFoundException {
         // Get the project
         Project project = findProjectById(idProject);
         if (project == null)
-            return null;
+            throw new EntityNotFoundException("No project found");
 
         // Convert the DTO to model
         Project projectUpdate = modelMapper.map(projectUpdateDto, Project.class);
@@ -118,12 +116,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public String deleteById(String idProject) {
-        // TODO: Add exception
+    public String deleteById(String idProject) throws EntityNotFoundException {
         // Get the project
         Project project = findProjectById(idProject);
         if (project == null)
-            return null;
+            throw new EntityNotFoundException("No project found");
 
         // Delete the project
         projectRepository.delete(project);
@@ -132,23 +129,20 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto addMember(String idProject, ProjectAddMemberDto projectAddMemberDto) {
-        // TODO: Add exception
+    public ProjectDto addMember(String idProject, ProjectAddMemberDto projectAddMemberDto) throws EntityNotFoundException, ServerException {
         // Get the project
         Project project = findProjectById(idProject);
         if (project == null)
-            return null;
+            throw new EntityNotFoundException("No project found");
 
-        // TODO: Add exception
         // Get the member
         User member = userRepository.findByUsername(projectAddMemberDto.getMemberUsername());
         if (member == null)
-            return null;
+            throw new EntityNotFoundException("No such user");
 
-        // TODO: Add exception
         // Add the member to project
         if (!project.addMember(member))
-            return null;
+            throw new ServerException("It looks something went wrong in adding this member! Please try again later");
 
         // Update the project
         project = saveOrUpdateProject(project);
