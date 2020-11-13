@@ -3,14 +3,8 @@ package com.kanbanboard.backend.service.impl;
 import com.kanbanboard.backend.dto.*;
 import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.exception.ServerException;
-import com.kanbanboard.backend.model.Comment;
-import com.kanbanboard.backend.model.Issue;
-import com.kanbanboard.backend.model.User;
-import com.kanbanboard.backend.model.WorkLog;
-import com.kanbanboard.backend.repository.CommentRepository;
-import com.kanbanboard.backend.repository.IssueRepository;
-import com.kanbanboard.backend.repository.UserRepository;
-import com.kanbanboard.backend.repository.WorkLogRepository;
+import com.kanbanboard.backend.model.*;
+import com.kanbanboard.backend.repository.*;
 import com.kanbanboard.backend.service.IssueService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +15,18 @@ public class IssueServiceImpl implements IssueService {
 
     private final ModelMapper modelMapper;
 
+    private final ProjectRepository projectRepository;
+    private final ColumnRepository columnRepository;
     private final IssueRepository issueRepository;
     private final WorkLogRepository workLogRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    IssueServiceImpl(ModelMapper modelMapper, IssueRepository issueRepository, WorkLogRepository workLogRepository, CommentRepository commentRepository, UserRepository userRepository) {
+    public IssueServiceImpl(ModelMapper modelMapper, ProjectRepository projectRepository, ColumnRepository columnRepository, IssueRepository issueRepository, WorkLogRepository workLogRepository, CommentRepository commentRepository, UserRepository userRepository) {
         this.modelMapper = modelMapper;
-
+        this.projectRepository = projectRepository;
+        this.columnRepository = columnRepository;
         this.issueRepository = issueRepository;
         this.workLogRepository = workLogRepository;
         this.commentRepository = commentRepository;
@@ -37,8 +34,47 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public IssueDto create(IssueCreateDto issueCreateDto) {
-        return null;
+    public IssueDto create(IssueCreateDto issueCreateDto) throws EntityNotFoundException, ServerException {
+        // Get the project
+        Project project = findProjectById(issueCreateDto.getProjectId());
+        if (project == null)
+            throw new EntityNotFoundException("No project found");
+
+        User reporter = null;
+        if (issueCreateDto.getReporterUsername() != null) {
+            // Get the reporter
+            reporter = userRepository.findByUsername(issueCreateDto.getReporterUsername());
+            if (reporter == null)
+                throw new EntityNotFoundException("No such reporter");
+        }
+
+        User assignee = null;
+        if (issueCreateDto.getAssigneeUsername() != null) {
+            // Get the assignee
+            assignee = userRepository.findByUsername(issueCreateDto.getAssigneeUsername());
+            if (assignee == null)
+                throw new EntityNotFoundException("No such assignee");
+        }
+
+        // Convert DTO to model
+        Issue issue = modelMapper.map(issueCreateDto, Issue.class);
+
+        issue.setReporter(reporter);
+        issue.setAssignee(assignee);
+
+        // Save the issue
+        issue = saveOrUpdateIssue(issue);
+
+        // Add the issue to project
+        Column backlogColumn = project.getColumns().get(0);
+
+        if (!backlogColumn.addIssue(issue))
+            throw new ServerException("It looks something went wrong in creating this issue! Please try again later");
+
+        // Save the column
+        saveOrUpdateColumn(backlogColumn);
+
+        return convertIssueToDto(issue);
     }
 
     @Override
@@ -95,7 +131,7 @@ public class IssueServiceImpl implements IssueService {
 
         // Add the child to issue
         if (!issue.addChild(childIssue))
-            throw  new ServerException("It looks something went wrong in adding this issue! Please try again later");
+            throw new ServerException("It looks something went wrong in adding this issue! Please try again later");
 
         // Update the project
         issue = saveOrUpdateIssue(issue);
@@ -117,7 +153,7 @@ public class IssueServiceImpl implements IssueService {
 
         // Remove the child from issue
         if (!issue.removeChild(childIssue))
-            throw  new ServerException("It looks something went wrong in removing this child! Please try again later");
+            throw new ServerException("It looks something went wrong in removing this child! Please try again later");
 
         // Update the project
         issue = saveOrUpdateIssue(issue);
@@ -149,7 +185,7 @@ public class IssueServiceImpl implements IssueService {
         // Add the work log to issue
         if (!issue.addWorkLog(workLog)) {
             workLogRepository.delete(workLog);
-            throw  new ServerException("It looks something went wrong in adding this work log! Please try again later");
+            throw new ServerException("It looks something went wrong in adding this work log! Please try again later");
         }
 
         // Update the issue
@@ -160,22 +196,19 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public WorkLogDto updateWorkLog(String idIssue, String idWorkLog, WorkLogUpdateDto workLogUpdateDto) throws EntityNotFoundException, ServerException {
-        // TODO: Add exception
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
             throw new EntityNotFoundException("No issue found");
 
-        // TODO: Add exception
         // Get the work log
         WorkLog workLog = findWorkLogById(idWorkLog);
         if (workLog == null)
             throw new EntityNotFoundException("No work log found");
 
-        // TODO: Add Exception
         // Check if issue has this work log
         if (!issue.containsWorkLog(workLog))
-            throw  new ServerException("Some problems cu DB and server");
+            throw new ServerException("Some problems with database and server");
 
         // Convert DTO to model
         WorkLog workLogUpdate = modelMapper.map(workLogUpdateDto, WorkLog.class);
@@ -189,21 +222,18 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public String deleteWorkLog(String idIssue, String idWorkLog) throws EntityNotFoundException, ServerException {
-        // TODO: Add exception
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
             throw new EntityNotFoundException("No issue found");
 
-        // TODO: Add exception
         // Get the work log
         WorkLog workLog = findWorkLogById(idWorkLog);
         if (workLog == null)
             throw new EntityNotFoundException("No work log found");
 
-        // TODO: Add exception
         if (!issue.removeWorkLog(workLog))
-            throw  new ServerException("Some problems with deleting this work log. Please try again later");
+            throw new ServerException("Some problems with deleting this work log. Please try again later");
 
         // Delete the work log
         workLogRepository.delete(workLog);
@@ -238,7 +268,7 @@ public class IssueServiceImpl implements IssueService {
         // Add the comment to issue
         if (!issue.addComment(comment)) {
             commentRepository.delete(comment);
-            throw  new ServerException("Some problems with adding this issue");
+            throw new ServerException("Some problems with adding this issue");
         }
 
         // Update the issue
@@ -261,7 +291,7 @@ public class IssueServiceImpl implements IssueService {
 
         // Check if issue has this comment
         if (!issue.containsComment(comment))
-            throw  new ServerException("Some problems with adding this comment");
+            throw new ServerException("Some problems with adding this comment");
 
         // Convert the DTO to model
         Comment commentUpdate = modelMapper.map(commentUpdateDto, Comment.class);
@@ -286,7 +316,7 @@ public class IssueServiceImpl implements IssueService {
             throw new EntityNotFoundException("No comment found");
 
         if (!issue.removeComment(comment))
-            throw  new ServerException("Some problems with removing this comment");
+            throw new ServerException("Some problems with removing this comment");
 
         // Delete the comment
         commentRepository.delete(comment);
@@ -295,6 +325,10 @@ public class IssueServiceImpl implements IssueService {
         saveOrUpdateIssue(issue);
 
         return "ok";
+    }
+
+    private Column saveOrUpdateColumn(Column column) {
+        return columnRepository.save(column);
     }
 
     private Issue saveOrUpdateIssue(Issue issue) {
@@ -307,6 +341,10 @@ public class IssueServiceImpl implements IssueService {
 
     private Comment saveOrUpdateComment(Comment comment) {
         return commentRepository.save(comment);
+    }
+
+    private Project findProjectById(String id) {
+        return projectRepository.findById(id).orElse(null);
     }
 
     private Issue findIssueById(String id) {

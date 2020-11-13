@@ -5,6 +5,7 @@ import com.kanbanboard.backend.dto.ProjectCreateDto;
 import com.kanbanboard.backend.dto.ProjectDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
 import com.kanbanboard.backend.exception.EntityNotFoundException;
+import com.kanbanboard.backend.exception.ServerException;
 import com.kanbanboard.backend.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,27 +31,27 @@ public class ProjectController {
     }
 
     @GetMapping("/projects")
-    ResponseEntity<List<ProjectDto>> getProjects(@RequestParam(name = "owner", required = false) String ownerFilter) {
+    ResponseEntity<List<ProjectDto>> getProjects(@RequestParam(name = "owner", required = false) String ownerFilter) throws EntityNotFoundException {
         return new ResponseEntity<>(projectService.getAll(ownerFilter), HttpStatus.OK);
     }
 
     @GetMapping("/projects/{id}")
-    ResponseEntity<ProjectDto> getProject(@PathVariable(name = "id") String idProject) {
+    ResponseEntity<ProjectDto> getProject(@PathVariable(name = "id") String idProject) throws EntityNotFoundException {
         return new ResponseEntity<>(projectService.getById(idProject), HttpStatus.OK);
     }
 
     @PutMapping("/projects/{id}")
-    ResponseEntity<ProjectDto> updateProject(@PathVariable(name = "id") String idProject, @Valid @RequestBody ProjectUpdateDto projectUpdateDto) {
+    ResponseEntity<ProjectDto> updateProject(@PathVariable(name = "id") String idProject, @Valid @RequestBody ProjectUpdateDto projectUpdateDto) throws EntityNotFoundException {
         return new ResponseEntity<>(projectService.updateById(idProject, projectUpdateDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/projects/{id}")
-    ResponseEntity<String> deleteProject(@PathVariable(name = "id") String idProject) {
+    ResponseEntity<String> deleteProject(@PathVariable(name = "id") String idProject) throws EntityNotFoundException {
         return new ResponseEntity<>(projectService.deleteById(idProject), HttpStatus.OK);
     }
 
     @PostMapping("/projects/{id}/members")
-    ResponseEntity<ProjectDto> addMemberToProject(@PathVariable(name = "id") String idProject, @Valid @RequestBody ProjectAddMemberDto projectAddMemberDto) {
+    ResponseEntity<ProjectDto> addMemberToProject(@PathVariable(name = "id") String idProject, @Valid @RequestBody ProjectAddMemberDto projectAddMemberDto) throws ServerException, EntityNotFoundException {
         return new ResponseEntity<>(projectService.addMember(idProject, projectAddMemberDto), HttpStatus.OK);
     }
 }

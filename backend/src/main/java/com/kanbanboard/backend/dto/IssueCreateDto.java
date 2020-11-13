@@ -21,6 +21,7 @@ public class IssueCreateDto {
     @NotEmpty
     private String title;
 
+    @NotEmpty
     private String description;
 
     @NotEmpty

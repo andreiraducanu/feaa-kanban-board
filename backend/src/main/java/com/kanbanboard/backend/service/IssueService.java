@@ -7,7 +7,7 @@ import com.kanbanboard.backend.model.WorkLog;
 
 public interface IssueService {
 
-    IssueDto create(IssueCreateDto issueCreateDto);
+    IssueDto create(IssueCreateDto issueCreateDto) throws EntityNotFoundException, ServerException;
 
     IssueDto getById(String idIssue) throws EntityNotFoundException;
 

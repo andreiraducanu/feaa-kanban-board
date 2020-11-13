@@ -73,7 +73,7 @@ public class ProjectServiceImpl implements ProjectService {
             // Get owner
             User owner = userRepository.findByUsername(ownerFilter);
             if (owner == null)
-                throw new EntityNotFoundException("Owner doesn't exists");
+                throw new EntityNotFoundException("No suck user");
 
             // Filter projects
             projects = projectRepository.findByOwner(owner);
