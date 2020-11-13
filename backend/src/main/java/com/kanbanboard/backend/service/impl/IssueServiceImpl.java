@@ -1,6 +1,8 @@
 package com.kanbanboard.backend.service.impl;
 
 import com.kanbanboard.backend.dto.*;
+import com.kanbanboard.backend.exception.EntityNotFoundException;
+import com.kanbanboard.backend.exception.ServerException;
 import com.kanbanboard.backend.model.Comment;
 import com.kanbanboard.backend.model.Issue;
 import com.kanbanboard.backend.model.User;
@@ -40,23 +42,21 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public IssueDto getById(String idIssue) {
-        // TODO: Add exception
+    public IssueDto getById(String idIssue) throws EntityNotFoundException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
-            return null;
+            throw new EntityNotFoundException("No issue found");
 
         return convertIssueToDto(issue);
     }
 
     @Override
-    public IssueDto updateById(String idIssue, IssueUpdateDto issueUpdateDto) {
-        // TODO: Add exception
+    public IssueDto updateById(String idIssue, IssueUpdateDto issueUpdateDto) throws EntityNotFoundException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
-            return null;
+            throw new EntityNotFoundException("No issue found");
 
         // Convert the DTO to model
         Issue issueUpdate = modelMapper.map(issueUpdateDto, Issue.class);
@@ -69,12 +69,11 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public String deleteById(String idIssue) {
-        // TODO: Add exception
+    public String deleteById(String idIssue) throws EntityNotFoundException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
-            return null;
+            throw new EntityNotFoundException("No issue found");
 
         // Delete issue
         issueRepository.delete(issue);
@@ -83,23 +82,20 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public IssueDto addChild(String idIssue, IssueAddChildDto issueAddChildDto) {
-        // TODO: Add exception
+    public IssueDto addChild(String idIssue, IssueAddChildDto issueAddChildDto) throws EntityNotFoundException, ServerException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
-            return null;
+            throw new EntityNotFoundException("No issue found");
 
-        // TODO: Add exception
         // Get the child issue
         Issue childIssue = findIssueById(issueAddChildDto.getChildId());
         if (childIssue == null)
-            return null;
+            throw new EntityNotFoundException("No child issue found");
 
-        // TODO: Add exception
         // Add the child to issue
         if (!issue.addChild(childIssue))
-            return null;
+            throw  new ServerException("It looks something went wrong in adding this issue! Please try again later");
 
         // Update the project
         issue = saveOrUpdateIssue(issue);
@@ -108,23 +104,20 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public IssueDto removeChild(String idIssue, IssueRemoveChildDto issueRemoveChildDto) {
-        // TODO: Add exception
+    public IssueDto removeChild(String idIssue, IssueRemoveChildDto issueRemoveChildDto) throws EntityNotFoundException, ServerException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
-            return null;
+            throw new EntityNotFoundException("No issue found");
 
-        // TODO: Add exception
         // Get the child issue
         Issue childIssue = findIssueById(issueRemoveChildDto.getChildId());
         if (childIssue == null)
-            return null;
+            throw new EntityNotFoundException("No child issue found");
 
-        // TODO: Add exception
         // Remove the child from issue
         if (!issue.removeChild(childIssue))
-            return null;
+            throw  new ServerException("It looks something went wrong in removing this child! Please try again later");
 
         // Update the project
         issue = saveOrUpdateIssue(issue);
@@ -133,18 +126,16 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public WorkLogDto addWorkLog(String idIssue, WorkLogCreateDto workLogCreateDto) {
-        // TODO: Add exception
+    public WorkLogDto addWorkLog(String idIssue, WorkLogCreateDto workLogCreateDto) throws EntityNotFoundException, ServerException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
-            return null;
+            throw new EntityNotFoundException("No issue found");
 
-        // TODO: Add exception
-        // Get the user
+        // Get the user, for testing purpose
         User user = userRepository.findByUsername(workLogCreateDto.getUserUsername());
         if (user == null)
-            return null;
+            throw new EntityNotFoundException("No user found");
 
         // Convert DTO to model
         WorkLog workLog = modelMapper.map(workLogCreateDto, WorkLog.class);
@@ -155,11 +146,10 @@ public class IssueServiceImpl implements IssueService {
         // Save the model
         workLog = saveOrUpdateWorkLog(workLog);
 
-        // TODO: Add exception
         // Add the work log to issue
         if (!issue.addWorkLog(workLog)) {
             workLogRepository.delete(workLog);
-            return null;
+            throw  new ServerException("It looks something went wrong in adding this work log! Please try again later");
         }
 
         // Update the issue
@@ -169,23 +159,23 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public WorkLogDto updateWorkLog(String idIssue, String idWorkLog, WorkLogUpdateDto workLogUpdateDto) {
+    public WorkLogDto updateWorkLog(String idIssue, String idWorkLog, WorkLogUpdateDto workLogUpdateDto) throws EntityNotFoundException, ServerException {
         // TODO: Add exception
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
-            return null;
+            throw new EntityNotFoundException("No issue found");
 
         // TODO: Add exception
         // Get the work log
         WorkLog workLog = findWorkLogById(idWorkLog);
         if (workLog == null)
-            return null;
+            throw new EntityNotFoundException("No work log found");
 
         // TODO: Add Exception
         // Check if issue has this work log
         if (!issue.containsWorkLog(workLog))
-            return null;
+            throw  new ServerException("Some problems cu DB and server");
 
         // Convert DTO to model
         WorkLog workLogUpdate = modelMapper.map(workLogUpdateDto, WorkLog.class);
@@ -198,22 +188,22 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public String deleteWorkLog(String idIssue, String idWorkLog) {
+    public String deleteWorkLog(String idIssue, String idWorkLog) throws EntityNotFoundException, ServerException {
         // TODO: Add exception
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
-            return null;
+            throw new EntityNotFoundException("No issue found");
 
         // TODO: Add exception
         // Get the work log
         WorkLog workLog = findWorkLogById(idWorkLog);
         if (workLog == null)
-            return null;
+            throw new EntityNotFoundException("No work log found");
 
         // TODO: Add exception
         if (!issue.removeWorkLog(workLog))
-            return null;
+            throw  new ServerException("Some problems with deleting this work log. Please try again later");
 
         // Delete the work log
         workLogRepository.delete(workLog);
@@ -225,18 +215,16 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public CommentDto addComment(String idIssue, CommentCreateDto commentCreateDto) {
-        // TODO: Add exception
+    public CommentDto addComment(String idIssue, CommentCreateDto commentCreateDto) throws EntityNotFoundException, ServerException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
-            return null;
+            throw new EntityNotFoundException("No issue found");
 
-        // TODO: Add exception
-        // Get the user
+        // Get the user, for testing purpose
         User user = userRepository.findByUsername(commentCreateDto.getUserUsername());
         if (user == null)
-            return null;
+            throw new EntityNotFoundException("No user found");
 
         // Convert DTO to model
         Comment comment = modelMapper.map(commentCreateDto, Comment.class);
@@ -247,11 +235,10 @@ public class IssueServiceImpl implements IssueService {
         // Save the model
         comment = saveOrUpdateComment(comment);
 
-        // TODO: Add exception
         // Add the comment to issue
         if (!issue.addComment(comment)) {
             commentRepository.delete(comment);
-            return null;
+            throw  new ServerException("Some problems with adding this issue");
         }
 
         // Update the issue
@@ -261,23 +248,20 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public CommentDto updateComment(String idIssue, String idComment, CommentUpdateDto commentUpdateDto) {
-        // TODO: Add exception
+    public CommentDto updateComment(String idIssue, String idComment, CommentUpdateDto commentUpdateDto) throws EntityNotFoundException, ServerException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
-            return null;
+            throw new EntityNotFoundException("No issue found");
 
-        // TODO: Add exception
         // Get the comment
         Comment comment = findCommentById(idComment);
         if (comment == null)
-            return null;
+            throw new EntityNotFoundException("No comment found");
 
-        // TODO: Add Exception
         // Check if issue has this comment
         if (!issue.containsComment(comment))
-            return null;
+            throw  new ServerException("Some problems with adding this comment");
 
         // Convert the DTO to model
         Comment commentUpdate = modelMapper.map(commentUpdateDto, Comment.class);
@@ -290,22 +274,19 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public String deleteComment(String idIssue, String idComment) {
-        // TODO: Add exception
+    public String deleteComment(String idIssue, String idComment) throws EntityNotFoundException, ServerException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
-            return null;
+            throw new EntityNotFoundException("No issue found");
 
-        // TODO: Add exception
         // Get the comment
         Comment comment = findCommentById(idComment);
         if (comment == null)
-            return null;
+            throw new EntityNotFoundException("No comment found");
 
-        // TODO: Add exception
         if (!issue.removeComment(comment))
-            return null;
+            throw  new ServerException("Some problems with removing this comment");
 
         // Delete the comment
         commentRepository.delete(comment);
