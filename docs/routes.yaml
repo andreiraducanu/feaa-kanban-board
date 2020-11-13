@@ -148,7 +148,7 @@ paths:
               schema:
                 $ref: "#components/schemas/ResponseMessage"
 
-    /projects/{id}/members:
+  /projects/{id}/members:
     post:
       summary: User adds a member to a project
       tags:
