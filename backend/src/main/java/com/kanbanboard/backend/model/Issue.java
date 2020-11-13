@@ -62,15 +62,14 @@ public class Issue {
         if (containsChild(childIssue))
             return false;
 
+
+
         children.add(childIssue);
         return true;
     }
 
     public boolean removeChild(Issue childIssue){
         if (children == null)
-            return false;
-
-        if (!containsChild(childIssue))
             return false;
 
         return children.remove(childIssue);
@@ -133,9 +132,6 @@ public class Issue {
 
     public boolean removeComment(Comment comment) {
         if (comments == null)
-            return false;
-
-        if (!containsComment(comment))
             return false;
 
         return comments.remove(comment);
