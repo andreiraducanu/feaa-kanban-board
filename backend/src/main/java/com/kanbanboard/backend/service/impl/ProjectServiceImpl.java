@@ -144,8 +144,10 @@ public class ProjectServiceImpl implements ProjectService {
         if (member == null)
             return null;
 
+        // TODO: Add exception
         // Add the member to project
-        project.addMember(member);
+        if(!project.addMember(member))
+            return null;
 
         // Update the project
         project = saveOrUpdateProject(project);
