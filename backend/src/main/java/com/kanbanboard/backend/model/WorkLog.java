@@ -3,7 +3,6 @@ package com.kanbanboard.backend.model;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -11,7 +10,7 @@ import java.util.Date;
 @Data
 @TypeAlias("workLog")
 @Document(collection = "workLogs")
-public class WorkLog  {
+public class WorkLog {
 
     @Id
     private String id;
@@ -21,4 +20,8 @@ public class WorkLog  {
     private int time;
 
     private Date creationDate;
+
+    public void update(WorkLog workLog) {
+        time = workLog.getTime();
+    }
 }

@@ -7,8 +7,8 @@ import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
-public class ProjectAddMemberDto {
+public class IssueAddChildDto {
 
     @NotEmpty
-    private String memberUsername;
+    private String childId;
 }

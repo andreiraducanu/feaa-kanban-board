@@ -5,18 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Calendar;
 import java.util.Date;
 
 @Getter
 @Setter
-public class ProjectCreationDto {
+public class WorkLogCreateDto {
 
     @NotEmpty
-    private String name;
+    private String userUsername;
 
-    @NotEmpty
-    private String description;
+    @PositiveOrZero
+    private int time;
 
     @JsonIgnore
     private Date creationDate = Calendar.getInstance().getTime();

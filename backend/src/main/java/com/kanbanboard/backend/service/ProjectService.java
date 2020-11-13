@@ -1,19 +1,25 @@
 package com.kanbanboard.backend.service;
 
 import com.kanbanboard.backend.dto.ProjectAddMemberDto;
-import com.kanbanboard.backend.dto.ProjectCreationDto;
+import com.kanbanboard.backend.dto.ProjectCreateDto;
+import com.kanbanboard.backend.dto.ProjectDto;
 import com.kanbanboard.backend.dto.ProjectUpdateDto;
-import com.kanbanboard.backend.model.Project;
+import com.kanbanboard.backend.exception.EntityNotFoundException;
+import com.kanbanboard.backend.exception.ServerException;
+
+import java.util.List;
 
 public interface ProjectService {
 
-    Project create(ProjectCreationDto projectDto);
+    ProjectDto create(ProjectCreateDto projectCreateDto) throws EntityNotFoundException;
 
-    Project updateById(String id, ProjectUpdateDto projectDto);
+    List<ProjectDto> getAll(String ownerFilter) throws EntityNotFoundException;
 
-    void deleteById(String id);
+    ProjectDto getById(String idProject) throws EntityNotFoundException;
 
-    Project getById(String id);
+    ProjectDto updateById(String idProject, ProjectUpdateDto projectUpdateDto) throws EntityNotFoundException;
 
-    Project addMember(String id, ProjectAddMemberDto memberDto);
+    String deleteById(String idProject) throws EntityNotFoundException;
+
+    ProjectDto addMember(String idProject, ProjectAddMemberDto projectAddMemberDto) throws EntityNotFoundException, ServerException;
 }
