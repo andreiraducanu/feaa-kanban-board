@@ -8,8 +8,10 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 @Setter
 public class UserLoginDto {
+
     @NotEmpty
     private String username;
+
     @NotEmpty
     private String password;
 }
