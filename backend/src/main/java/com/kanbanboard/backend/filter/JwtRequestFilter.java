@@ -1,6 +1,5 @@
 package com.kanbanboard.backend.filter;
 
-import com.kanbanboard.backend.service.UserService;
 import com.kanbanboard.backend.service.impl.UserServiceImpl;
 import com.kanbanboard.backend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;

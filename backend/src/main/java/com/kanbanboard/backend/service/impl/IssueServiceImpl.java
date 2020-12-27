@@ -370,5 +370,4 @@ public class IssueServiceImpl implements IssueService {
     private CommentDto convertCommentToDto(Comment comment) {
         return modelMapper.map(comment, CommentDto.class);
     }
-
 }

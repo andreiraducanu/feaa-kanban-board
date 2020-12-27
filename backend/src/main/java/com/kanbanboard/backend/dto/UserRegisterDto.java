@@ -20,5 +20,4 @@ public class UserRegisterDto {
 
     @NotEmpty
     private String lastname;
-
 }
