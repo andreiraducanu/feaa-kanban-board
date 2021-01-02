@@ -56,6 +56,8 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginDto userLoginDto) throws Exception {
         try {
+            logger.info(userLoginDto.getUsername());
+            logger.info("aici in controller user/login");
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userLoginDto.getUsername(), userLoginDto.getPassword())
             );
