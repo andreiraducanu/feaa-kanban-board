@@ -5,7 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class JwtDto {
+public class LoginDto {
 
     private final String jwt;
+
+    private final UserDto user;
 }

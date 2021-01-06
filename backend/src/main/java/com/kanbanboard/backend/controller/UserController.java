@@ -1,6 +1,6 @@
 package com.kanbanboard.backend.controller;
 
-import com.kanbanboard.backend.dto.JwtDto;
+import com.kanbanboard.backend.dto.LoginDto;
 import com.kanbanboard.backend.dto.UserLoginDto;
 import com.kanbanboard.backend.model.User;
 import com.kanbanboard.backend.service.UserService;
@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDto userLoginDto) throws Exception {
+    public ResponseEntity<LoginDto> login(@Valid @RequestBody UserLoginDto userLoginDto) throws Exception {
         try {
             logger.info(userLoginDto.getUsername());
             logger.info("aici in controller user/login");
@@ -69,7 +69,7 @@ public class UserController {
 
         final String jwt = jwtUtil.generateToken(userDetails);
 
-        return new ResponseEntity<>(new JwtDto(jwt), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginDto(jwt, userService.get(userLoginDto.getUsername())), HttpStatus.OK);
     }
 
     @GetMapping("/test")
