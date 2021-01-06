@@ -2,6 +2,7 @@ package com.kanbanboard.backend.controller;
 
 import com.kanbanboard.backend.dto.JwtDto;
 import com.kanbanboard.backend.dto.UserLoginDto;
+import com.kanbanboard.backend.dto.UserRegisterResponseDto;
 import com.kanbanboard.backend.model.User;
 import com.kanbanboard.backend.service.UserService;
 import com.kanbanboard.backend.util.JwtUtil;
@@ -41,16 +42,23 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    public ResponseEntity<UserRegisterResponseDto> register(@RequestBody User user) {
         if (userService.checkIfUserExists(user.getUsername())) {
-            return new ResponseEntity<>("Choose another username! It already exists!", HttpStatus.CONFLICT);
+            UserRegisterResponseDto userRegisterResponseDto = new UserRegisterResponseDto();
+            userRegisterResponseDto.setMessage("Choose another username! It already exists!");
+            userRegisterResponseDto.setStatus("409");
+            return new ResponseEntity<>(userRegisterResponseDto, HttpStatus.CONFLICT);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userService.saveNewUser(user);
 
-        return new ResponseEntity<>("ok", HttpStatus.OK);
+        UserRegisterResponseDto userRegisterResponseDto = new UserRegisterResponseDto();
+        userRegisterResponseDto.setMessage("The account was created");
+        userRegisterResponseDto.setStatus("200");
+
+        return new ResponseEntity<>(userRegisterResponseDto, HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -63,13 +71,20 @@ public class UserController {
             );
         } catch (BadCredentialsException e) {
             throw new Exception("Incorrect username or password");
+
+            JwtDto jwtDto = new JwtDto(jwt, "OK", "200");
+
+            return new ResponseEntity<>(jwtDto, HttpStatus.OK);
+
         }
 
         final UserDetails userDetails = userService.loadUserByUsername(userLoginDto.getUsername());
 
         final String jwt = jwtUtil.generateToken(userDetails);
 
-        return new ResponseEntity<>(new JwtDto(jwt), HttpStatus.OK);
+        JwtDto jwtDto = new JwtDto(jwt, "OK", "200");
+
+        return new ResponseEntity<>(jwtDto, HttpStatus.OK);
     }
 
     @GetMapping("/test")
