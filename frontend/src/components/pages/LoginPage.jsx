@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { login } from '../../redux/slices/loginSlice';
+import { login } from '../../redux/actions';
 import { createStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -10,9 +10,10 @@ import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import { BrandLogo } from '../../assets/svg/brand';
+import { Redirect } from "react-router-dom";
 import AccountRightArtwork from '../../assets/svg/artwork/account_right.svg';
 import AccountLeftArtwork from '../../assets/svg/artwork/account_left.svg';
-
+import SnackBar from '../common/SnackBar';
 
 const styles = (theme) => createStyles({
     root: {
@@ -61,6 +62,9 @@ const styles = (theme) => createStyles({
 });
 
 const LoginPage = (props) => {
+    const {
+        errorMessage,
+        isAuthenticated } = props;
     const { login } = props;
     const { classes } = props;
 
@@ -75,6 +79,10 @@ const LoginPage = (props) => {
 
     const validateForm = () => (username.length > 0 && password.length > 0);
 
+    if (isAuthenticated) {
+        return <Redirect to={{ pathname: '/' }} />;
+    }
+
     return (
         <React.Fragment>
             <CssBaseline />
@@ -86,7 +94,7 @@ const LoginPage = (props) => {
                     <Typography className={classes.title} color="inherit" variant="subtitle1">
                         Log in to your account
                     </Typography>
-                    <form className={classes.form} onSubmit={handleSubmit}>
+                    <form className='{classes.form}' onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -138,22 +146,29 @@ const LoginPage = (props) => {
                         </Grid>
                     </form>
                 </div>
+                {errorMessage &&
+                    (
+                        <SnackBar
+                            severity='error'
+                            message={errorMessage}
+                        />
+                    )
+                }
             </div>
         </React.Fragment>
     );
 };
 
-const mapStateToProps = state => {
-    console.log(state)
-}
+const mapStateToProps = state => ({
+    errorMessage: state.login.errorMessage,
+    isAuthenticated: state.login.isAuthenticated
+});
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        login: (username, password) => dispatch(login(username, password))
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    login: (username, password) => dispatch(login(username, password))
+});
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(withStyles(styles)(LoginPage));

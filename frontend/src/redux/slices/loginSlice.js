@@ -1,27 +1,38 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const currentUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+
 const loginSlice = createSlice({
     name: 'user',
     initialState: {
-        user: {},
-        token: '',
+        isAuthenticated: currentUser != null,
+        user: currentUser,
+        token: currentUser != null ? localStorage.getItem('jwt') : '',
         errorMessage: ''
     },
     reducers: {
         loginSuccess(state, action) {
+            const { user, jwt } = action.payload;
             console.log("login")
-            state.user = action.payload.user
-            state.token = action.payload.jwt
-        },
-        logoutSuccess(state) {
-            console.log("logout")
-            state.user = {}
-            state.token = ''
-        },
+            state.user = user
+            state.token = jwt
+            state.isAuthenticated = true;
 
+            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('jwt', jwt);
+        },
         loginFailure(state, action) {
             state.errorMessage = action.payload.message
             console.log(state.errorMessage);
+        },
+        logout(state) {
+            console.log("logout")
+            state.isAuthenticated = false;
+            state.user = {}
+            state.token = ''
+
+            localStorage.removeItem('user');
+            localStorage.removeItem('jwt');
         },
     },
 });
@@ -29,7 +40,7 @@ const loginSlice = createSlice({
 
 export default loginSlice.reducer;
 
-const { loginSuccess, logoutSuccess, loginFailure } = loginSlice.actions
+const { loginSuccess, loginFailure } = loginSlice.actions
 
 // Actions
 export const login = (username, password) => async dispatch => {
@@ -46,12 +57,8 @@ export const login = (username, password) => async dispatch => {
             dispatch(loginSuccess(data))
         })
         .catch(err => {
-            dispatch(loginFailure({ message: err.message }))
+            dispatch(loginFailure({ message: "This is an error message" }))
         })
 }
 
-// mai trebuie lucrat
-export const logout = () => async dispatch => {
-    console.log('logout');
-    dispatch(logoutSuccess())
-}
+export const { logout } = loginSlice.actions;

@@ -61,8 +61,9 @@ const styles = (theme) => createStyles({
 });
 
 const SignUpPage = (props) => {
-    const { classes } = props;
+    const { isAuthenticated } = props;
     const { register } = props;
+    const { classes } = props;
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -81,6 +82,10 @@ const SignUpPage = (props) => {
 
         signup(firstName, lastName, username, password)
     };
+
+    if (isAuthenticated) {
+        return <Redirect to={{ pathname: '/' }} />;
+    }
 
     return (
         <React.Fragment>
@@ -178,6 +183,10 @@ const SignUpPage = (props) => {
     );
 };
 
+const mapStateToProps = (state) => ({
+    isAuthenticated: state.login.isAuthenticated
+});
+
 const mapDispatchToProps = (dispatch) => {
     return {
         signup: (firstName, lastName, username, password) => dispatch(signup(firstName, lastName, username, password))
@@ -185,6 +194,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(withStyles(styles)(SignUpPage));

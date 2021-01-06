@@ -4,6 +4,7 @@ import {
     Switch,
     Route
 } from 'react-router-dom';
+import PrivateRoute from './components/common/PrivateRoute';
 import { LoginPage, SignUpPage, HomePage, DashboardPage } from './components/pages';
 
 const App = () => {
@@ -11,18 +12,18 @@ const App = () => {
     return (
         <Router>
             <Switch>
-                <Route exact path="/">
-                    <HomePage />
-                </Route>
                 <Route path="/login">
                     <LoginPage />
                 </Route>
                 <Route path="/signup">
                     <SignUpPage />
                 </Route>
-                <Route path="/dashboard">
+                <PrivateRoute exact path="/">
+                    <HomePage />
+                </PrivateRoute>
+                <PrivateRoute path="/dashboard">
                     <DashboardPage />
-                </Route>
+                </PrivateRoute>
             </Switch>
         </Router>
     );
