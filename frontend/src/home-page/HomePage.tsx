@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { logout } from '../redux/slices/authSlice';
+import { connect } from 'react-redux';
 import clsx from 'clsx';
 import { createStyles, withStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -53,15 +55,19 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-interface HomePageProps extends WithStyles<typeof styles> {
-
-}
-
-const HomePage = (props: HomePageProps): JSX.Element => {
+const HomePage = (props: any): JSX.Element => {
     const { classes } = props;
+    const { logout } = props;
 
     const [projects, setProjects] = useState<any[]>([1]);
     const [showCreateProject, setShowCreateProject] = useState<boolean>(false);
+
+    const handleLogOutButton = (event: any) => {
+        event.preventDefault();
+
+        logout();
+    };
+
 
     const isProjectsEmpty = (): boolean => projects.length == 0;
 
@@ -86,6 +92,9 @@ const HomePage = (props: HomePageProps): JSX.Element => {
                     </Typography>
                     <Button size="small" variant="contained" color="primary">
                         Create
+                    </Button>
+                    <Button size="small" variant="contained" color="primary" onClick={handleLogOutButton}>
+                        Log out
                     </Button>
                 </Toolbar>
                 <div className={classes.appBarShadow} />
@@ -138,4 +147,13 @@ const HomePage = (props: HomePageProps): JSX.Element => {
     );
 };
 
-export default withStyles(styles)(HomePage);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logout: (username: string, password: string) => dispatch(logout())
+    }
+}
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(withStyles(styles)(HomePage));

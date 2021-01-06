@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { register } from '../redux/slices/registerSlice';
 import { createStyles, withStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -59,11 +60,9 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-interface SignUpProps extends WithStyles<typeof styles> {
-}
-
-const SignUpPage = (props: SignUpProps): JSX.Element => {
+const SignUpPage = (props: any): JSX.Element => {
     const { classes } = props;
+    const { register } = props;
 
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
@@ -79,6 +78,8 @@ const SignUpPage = (props: SignUpProps): JSX.Element => {
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
+
+        register(firstName, lastName, username, password)
     };
 
     return (
@@ -177,4 +178,13 @@ const SignUpPage = (props: SignUpProps): JSX.Element => {
     );
 };
 
-export default withStyles(styles)(SignUpPage);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        register: (firstName: string, lastName: string, username: string, password: string) => dispatch(register(firstName, lastName, username, password))
+    }
+}
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(withStyles(styles)(SignUpPage));

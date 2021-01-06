@@ -145,6 +145,10 @@ const LoginPage = (props): JSX.Element => {
     );
 };
 
+const mapStateToProps = state => {
+    console.log(state)
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         login: (username: string, password: string) => dispatch(login(username, password))
