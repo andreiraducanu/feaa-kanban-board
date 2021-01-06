@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { login } from '../redux/slices/authSlice';
 import { createStyles, withStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -59,10 +60,8 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-interface LoginPageProps extends WithStyles<typeof styles> {
-}
-
-const LoginPage = (props: LoginPageProps): JSX.Element => {
+const LoginPage = (props): JSX.Element => {
+    const { login } = props;
     const { classes } = props;
 
     const [username, setUsername] = useState<string>('');
@@ -70,6 +69,8 @@ const LoginPage = (props: LoginPageProps): JSX.Element => {
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
+
+        login(username, password);
     };
 
     const validateForm = (): boolean => {
@@ -144,5 +145,13 @@ const LoginPage = (props: LoginPageProps): JSX.Element => {
     );
 };
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        login: (username: string, password: string) => dispatch(login(username, password))
+    }
+}
 
-export default withStyles(styles)(LoginPage);
+export default connect(
+    null,
+    mapDispatchToProps
+)(withStyles(styles)(LoginPage));
