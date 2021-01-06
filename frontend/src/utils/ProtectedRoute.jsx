@@ -1,13 +1,8 @@
 import React from "react";
-import { Redirect, Route, RouteProps } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 
 
-interface ProtectedRouteProps extends RouteProps {
-    isAuthenticated: boolean;
-    redirectPath: string;
-}
-
-const ProtectedRoute = (props: ProtectedRouteProps): JSX.Element => {
+const ProtectedRoute = (props) => {
     const {
         component,
         isAuthenticated,

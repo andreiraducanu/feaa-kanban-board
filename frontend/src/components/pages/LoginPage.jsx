@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { login } from '../redux/slices/authSlice';
-import { createStyles, withStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { login } from '../../redux/slices/loginSlice';
+import { createStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,12 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import { Link as RouterLink } from 'react-router-dom';
-import { BrandLogo } from '../assets/svg/brand';
-import AccountRightArtwork from '../assets/svg/artwork/account_right.svg';
-import AccountLeftArtwork from '../assets/svg/artwork/account_left.svg';
+import { BrandLogo } from '../../assets/svg/brand';
+import AccountRightArtwork from '../../assets/svg/artwork/account_right.svg';
+import AccountLeftArtwork from '../../assets/svg/artwork/account_left.svg';
 
 
-const styles = (theme: Theme) => createStyles({
+const styles = (theme) => createStyles({
     root: {
         height: '100vh',
         width: '100vw',
@@ -60,22 +60,20 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-const LoginPage = (props): JSX.Element => {
+const LoginPage = (props) => {
     const { login } = props;
     const { classes } = props;
 
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleSubmit = (event: any) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
 
         login(username, password);
     };
 
-    const validateForm = (): boolean => {
-        return username.length > 0 && password.length > 0;
-    };
+    const validateForm = () => (username.length > 0 && password.length > 0);
 
     return (
         <React.Fragment>
@@ -151,7 +149,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        login: (username: string, password: string) => dispatch(login(username, password))
+        login: (username, password) => dispatch(login(username, password))
     }
 }
 

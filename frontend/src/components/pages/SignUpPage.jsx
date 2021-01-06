@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { register } from '../redux/slices/registerSlice';
-import { createStyles, withStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { signup } from '../../redux/slices/signupSlice';
+import { createStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,12 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import { Link as RouterLink } from 'react-router-dom';
-import { BrandLogo } from '../assets/svg/brand';
-import AccountRightArtwork from '../assets/svg/artwork/account_right.svg';
-import AccountLeftArtwork from '../assets/svg/artwork/account_left.svg';
+import { BrandLogo } from '../../assets/svg/brand';
+import AccountRightArtwork from '../../assets/svg/artwork/account_right.svg';
+import AccountLeftArtwork from '../../assets/svg/artwork/account_left.svg';
 
 
-const styles = (theme: Theme) => createStyles({
+const styles = (theme) => createStyles({
     root: {
         height: '100vh',
         width: '100vw',
@@ -60,26 +60,26 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-const SignUpPage = (props: any): JSX.Element => {
+const SignUpPage = (props) => {
     const { classes } = props;
     const { register } = props;
 
-    const [firstName, setFirstName] = useState<string>('');
-    const [lastName, setLastName] = useState<string>('');
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-    const validateForm = (): boolean => {
-        return firstName.length > 0
-            && lastName.length > 0
-            && username.length > 0
-            && password.length > 0;
-    };
+    const validateForm = () => (
+        firstName.length > 0
+        && lastName.length > 0
+        && username.length > 0
+        && password.length > 0
+    );
 
-    const handleSubmit = (event: any) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
 
-        register(firstName, lastName, username, password)
+        signup(firstName, lastName, username, password)
     };
 
     return (
@@ -180,7 +180,7 @@ const SignUpPage = (props: any): JSX.Element => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        register: (firstName: string, lastName: string, username: string, password: string) => dispatch(register(firstName, lastName, username, password))
+        signup: (firstName, lastName, username, password) => dispatch(signup(firstName, lastName, username, password))
     }
 }
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { logout } from '../redux/slices/authSlice';
+import { logout } from '../../redux/slices/loginSlice';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
-import { createStyles, withStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -12,11 +12,11 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import { EmptyImage } from '../assets/svg/icons';
-import CreateProjectDialog from './CreateProjectDialog';
 
-const styles = (theme: Theme) => createStyles({
+import { EmptyImage } from '../../assets/svg/icons';
+import { CreateProjectDialog } from '../dialogs';
+
+const styles = createStyles({
     root: {
         display: 'flex',
         flexDirection: 'column',
@@ -55,23 +55,22 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-const HomePage = (props: any): JSX.Element => {
+const HomePage = (props) => {
     const { classes } = props;
     const { logout } = props;
 
-    const [projects, setProjects] = useState<any[]>([1]);
-    const [showCreateProject, setShowCreateProject] = useState<boolean>(false);
+    const [projects, setProjects] = useState([1]);
+    const [showCreateProject, setShowCreateProject] = useState(false);
 
-    const handleLogOutButton = (event: any) => {
+    const handleLogOutButton = (event) => {
         event.preventDefault();
 
         logout();
     };
 
+    const isProjectsEmpty = () => projects.length == 0;
 
-    const isProjectsEmpty = (): boolean => projects.length == 0;
-
-    const CreateProjectButton = (): JSX.Element => (
+    const CreateProjectButton = () => (
         <Button
             size="small"
             variant="contained"
@@ -149,7 +148,8 @@ const HomePage = (props: any): JSX.Element => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        logout: (username: string, password: string) => dispatch(logout())
+        logout: () => dispatch(logout())
+
     }
 }
 

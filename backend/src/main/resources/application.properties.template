@@ -1,2 +1,0 @@
-spring.data.mongodb.uri=mongodb+srv://<username>:<password>@kanbanboard.i4ve0.mongodb.net/<dbname>?retryWrites=true&w=majority
-spring.data.mongodb.database=kanbanBoard

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { createStyles, withStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,7 +15,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 const DRAWER_WIDTH = 240;
 
-const styles = (theme: Theme) => createStyles({
+const styles = (theme) => createStyles({
     root: {
         display: 'flex'
     },
@@ -84,13 +84,10 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-interface DashboardPageProps extends WithStyles<typeof styles> {
-}
-
-const DashboardPage = (props: DashboardPageProps): JSX.Element => {
+const DashboardPage = (props) => {
     const { classes } = props;
 
-    const [open, setOpen] = useState<boolean>(true);
+    const [open, setOpen] = useState(true);
 
     const handleDrawerOpen = () => {
         setOpen(true);

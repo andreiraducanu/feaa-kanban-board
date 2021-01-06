@@ -1,29 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { login } from './authSlice'
+import { login } from './loginSlice'
 
 const initialUser = null
 
-const registerSlice = createSlice({
-    name: 'register',
+const signupSlice = createSlice({
+    name: 'signup',
     initialState: {
         user: initialUser,
     },
     reducers: {
-        registerSuccess(state) {
-            console.log("register")
+        signupSuccess(state) {
+            console.log("signup")
         },
     },
 });
 
 
-export default registerSlice
+export default signupSlice.reducer;
 
-const { registerSuccess } = registerSlice.actions
+const { signupSuccess } = signupSlice.actions
 
 // Actions
 
-export const register = (firstName: string, lastName: string, username: string, password: string) => async dispatch => {
-    fetch(`http://localhost:8080/user/register`, {
+export const signup = (firstName, lastName, username, password) => async dispatch => {
+    fetch(`http://localhost:8080/user/signup`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -33,7 +33,7 @@ export const register = (firstName: string, lastName: string, username: string, 
     })
         .then(res => {
             if (res.status === 200) {
-                dispatch(registerSuccess())
+                dispatch(signupSuccess())
                 dispatch(login(username, password))
             }
         })

@@ -4,12 +4,9 @@ import {
     Switch,
     Route
 } from 'react-router-dom';
-import HomePage from './home-page';
-import LoginPage from './login-page';
-import SignUpPage from './signup-page';
-import DashboardPage from './dashboard-page';
+import { LoginPage, SignUpPage, HomePage, DashboardPage } from './components/pages';
 
-const App = (): JSX.Element => {
+const App = () => {
 
     return (
         <Router>

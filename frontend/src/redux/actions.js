@@ -1,4 +1,4 @@
-import { authSlice, registerSlice } from './slices';
+import { loginSlice, signupSlice } from './slices';
 
 // export const autoLogin = () => dispatch => {
 //     fetch(`http://localhost:4000/auto_login`, {

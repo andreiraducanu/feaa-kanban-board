@@ -1,7 +1,6 @@
-import { SingleBedOutlined } from '@material-ui/icons';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-const userSlice = createSlice({
+const loginSlice = createSlice({
     name: 'user',
     initialState: {
         user: {},
@@ -22,18 +21,18 @@ const userSlice = createSlice({
 
         loginFailure(state, action) {
             state.errorMessage = action.payload.message
+            console.log(state.errorMessage);
         },
     },
 });
 
 
-export default userSlice
+export default loginSlice.reducer;
 
-const { loginSuccess, logoutSuccess, loginFailure } = userSlice.actions
+const { loginSuccess, logoutSuccess, loginFailure } = loginSlice.actions
 
 // Actions
-
-export const login = (username: string, password: string) => async dispatch => {
+export const login = (username, password) => async dispatch => {
     fetch(`http://localhost:8080/user/login`, {
         method: "POST",
         headers: {
