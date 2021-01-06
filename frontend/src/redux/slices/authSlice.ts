@@ -7,7 +7,7 @@ interface LoginPayload {
 }
 
 const userSlice = createSlice({
-    name: 'user',
+    name: 'auth',
     initialState: {
         loggedIn: false,
     },

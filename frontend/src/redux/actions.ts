@@ -1,3 +1,3 @@
-import { userSlice } from './slices';
+import { authSlice } from './slices';
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout } = authSlice.actions;

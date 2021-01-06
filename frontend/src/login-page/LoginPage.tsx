@@ -65,6 +65,17 @@ interface LoginPageProps extends WithStyles<typeof styles> {
 const LoginPage = (props: LoginPageProps): JSX.Element => {
     const { classes } = props;
 
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+
+    const handleSubmit = (event: any) => {
+        event.preventDefault();
+    };
+
+    const validateForm = (): boolean => {
+        return username.length > 0 && password.length > 0;
+    };
+
     return (
         <React.Fragment>
             <CssBaseline />
@@ -76,7 +87,7 @@ const LoginPage = (props: LoginPageProps): JSX.Element => {
                     <Typography className={classes.title} color="inherit" variant="subtitle1">
                         Log in to your account
                     </Typography>
-                    <form className={classes.form}>
+                    <form className={classes.form} onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -89,6 +100,8 @@ const LoginPage = (props: LoginPageProps): JSX.Element => {
                                     label="Username"
                                     autoComplete="username"
                                     autoFocus
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -97,11 +110,13 @@ const LoginPage = (props: LoginPageProps): JSX.Element => {
                                     required
                                     fullWidth
                                     size="small"
+                                    id="password"
                                     name="password"
                                     label="Password"
                                     type="password"
-                                    id="password"
                                     autoComplete="current-password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Grid>
                         </Grid>
@@ -111,6 +126,7 @@ const LoginPage = (props: LoginPageProps): JSX.Element => {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            disabled={!validateForm()}
                         >
                             Log in
                         </Button>

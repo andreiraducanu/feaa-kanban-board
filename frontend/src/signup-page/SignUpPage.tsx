@@ -65,6 +65,22 @@ interface SignUpProps extends WithStyles<typeof styles> {
 const SignUpPage = (props: SignUpProps): JSX.Element => {
     const { classes } = props;
 
+    const [firstName, setFirstName] = useState<string>('');
+    const [lastName, setLastName] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+
+    const validateForm = (): boolean => {
+        return firstName.length > 0
+            && lastName.length > 0
+            && username.length > 0
+            && password.length > 0;
+    };
+
+    const handleSubmit = (event: any) => {
+        event.preventDefault();
+    };
+
     return (
         <React.Fragment>
             <CssBaseline />
@@ -76,7 +92,7 @@ const SignUpPage = (props: SignUpProps): JSX.Element => {
                     <Typography className={classes.title} color="inherit" variant="subtitle1">
                         Sign up for your account
                     </Typography>
-                    <form className={classes.form}>
+                    <form className={classes.form} onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -89,6 +105,8 @@ const SignUpPage = (props: SignUpProps): JSX.Element => {
                                     label="First Name"
                                     autoComplete="fname"
                                     autoFocus
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -101,6 +119,8 @@ const SignUpPage = (props: SignUpProps): JSX.Element => {
                                     name="lastName"
                                     label="Last Name"
                                     autoComplete="lname"
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -113,6 +133,8 @@ const SignUpPage = (props: SignUpProps): JSX.Element => {
                                     name="username"
                                     label="Username"
                                     autoComplete="username"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -126,6 +148,8 @@ const SignUpPage = (props: SignUpProps): JSX.Element => {
                                     label="Password"
                                     type="password"
                                     autoComplete="current-password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Grid>
                         </Grid>
@@ -135,6 +159,7 @@ const SignUpPage = (props: SignUpProps): JSX.Element => {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            disabled={!validateForm()}
                         >
                             Sign up
                         </Button>
