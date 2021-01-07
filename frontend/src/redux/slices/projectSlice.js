@@ -9,6 +9,9 @@ const projectSlice = createSlice({
         createProject(state, action) {
             console.log("Project created")
         },
+        showProjects(state, action){
+            
+        }
     },
 });
 
