@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +11,8 @@ import TableHead from '@material-ui/core/TableHead';
 import { EmptyImage } from '../../assets/svg/icons';
 import { CreateProjectDialog } from '../dialogs';
 import Header from '../common/Header';
+import TableRow from '@material-ui/core/TableRow';
+import TablePagination from '@material-ui/core/TablePagination';
 
 const styles = createStyles({
     content: {
@@ -43,9 +45,52 @@ const HomePage = (props) => {
     const { classes } = props;
 
     const [projects, setProjects] = useState([1]);
+    const [projectsFlat, setProjectsFlat] = useState([1]);
     const [showCreateProject, setShowCreateProject] = useState(false);
 
+
     const isProjectsEmpty = () => projects.length == 0;
+
+    function displayAllDetailsAboutProject(projectId){
+        // console.log(projectId);
+        console.log(projectId.owner.username)
+    }
+
+    function returnOwnerProject(project){
+        // return project.owner.username;
+        console.log(project.owner.username)
+    }
+
+    useEffect(() => {
+        function setStateSynchronous(json) {
+            return new Promise(resolve => {
+                resolve(setProjects(json));
+            });
+        } 
+        async function doRequest(){
+        console.log("aici");
+        let user = localStorage.getItem("user");
+        let userJson = JSON.parse(user);
+        console.log("aici2");
+        let res = await fetch(`http://localhost:8080/projects?owner=${userJson.username}`,{
+
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+            },
+        });
+        let resJson = await res.json();
+        let arr = [];
+        resJson.forEach(element => {
+            arr.push({"id": element.id, "description": element.description, "username": element.owner.username, "name": element.name});
+        });
+        await setStateSynchronous(arr);      
+    }
+
+    doRequest();
+      },[]);
 
     const CreateProjectButton = () => (
         <Button
@@ -95,14 +140,24 @@ const HomePage = (props) => {
                                     <Table>
                                         <TableHead>
                                             <TableCell>Name</TableCell>
-                                            <TableCell>Created Date</TableCell>
+                                            <TableCell>Description</TableCell>
                                             <TableCell>Lead</TableCell>
                                         </TableHead>
                                         <TableBody>
-
+                                        {projects.map((project) => (
+            
+            <TableRow key={project.id} onClick={() => displayAllDetailsAboutProject(project)}>
+              <TableCell component="th" scope="row">
+                {project.name}
+              </TableCell>
+              <TableCell align="left">{project.description}</TableCell>
+             <TableCell align="left">{project.username}</TableCell>
+            </TableRow>
+                                        ))}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
+   
                             </div>
                         )
                 }
