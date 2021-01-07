@@ -32,16 +32,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 
         final String authorizationHeader = httpServletRequest.getHeader("Authorization");
-
+        System.out.println("Aici in filtru");
         String userName = null;
         String token = null;
         String path = httpServletRequest.getServletPath();
         if (!path.contains("/user/register")) {
+            System.out.println("aici in if");
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 token = authorizationHeader.substring(7);
                 userName = jwtUtil.extractUsername(token);
             }
-
+            System.out.println(userName);
             if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userServiceImpl.loadUserByUsername(userName);
 
