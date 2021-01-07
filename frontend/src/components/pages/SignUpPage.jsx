@@ -62,7 +62,7 @@ const styles = (theme) => createStyles({
 
 const SignUpPage = (props) => {
     const { isAuthenticated } = props;
-    const { register } = props;
+    const { signup } = props;
     const { classes } = props;
 
     const [firstName, setFirstName] = useState('');
@@ -187,11 +187,9 @@ const mapStateToProps = (state) => ({
     isAuthenticated: state.login.isAuthenticated
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        signup: (firstName, lastName, username, password) => dispatch(signup(firstName, lastName, username, password))
-    }
-}
+const mapDispatchToProps = ({
+    signup
+});
 
 export default connect(
     mapStateToProps,

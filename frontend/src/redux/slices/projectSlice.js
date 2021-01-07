@@ -18,8 +18,6 @@ const { createProject } = projectSlice.actions
 
 // Actions
 export const addProject = (name, description, username) => async dispatch => {
-    console.log('andrei loves diana')
-    console.log(`Bearer ${localStorage.getItem('jwt')}`)
     fetch(`http://localhost:8080/projects`, {
         method: "POST",
         headers: {

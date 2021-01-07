@@ -121,8 +121,8 @@ const mapStateToProps = (state) => ({
 })
 
 
-const mapDispatchToProps = (dispatch) => ({
-    addProject: (name, description, username) => dispatch(addProject((name, description, username)))
+const mapDispatchToProps = ({
+    addProject
 });
 
 export default connect(

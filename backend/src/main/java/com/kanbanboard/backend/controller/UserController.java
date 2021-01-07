@@ -40,7 +40,7 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/signup")
     public ResponseEntity<String> register(@RequestBody User user) {
         if (userService.checkIfUserExists(user.getUsername())) {
             return new ResponseEntity<>("Choose another username! It already exists!", HttpStatus.CONFLICT);

@@ -164,8 +164,8 @@ const mapStateToProps = state => ({
     isAuthenticated: state.login.isAuthenticated
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    login: (username, password) => dispatch(login(username, password))
+const mapDispatchToProps = ({
+    login
 });
 
 export default connect(

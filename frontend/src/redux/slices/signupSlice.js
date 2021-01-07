@@ -23,6 +23,7 @@ const { signupSuccess } = signupSlice.actions
 // Actions
 
 export const signup = (firstName, lastName, username, password) => async dispatch => {
+    console.log("here")
     fetch(`http://localhost:8080/user/signup`, {
         method: "POST",
         headers: {
