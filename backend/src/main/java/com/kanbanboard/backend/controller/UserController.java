@@ -42,7 +42,7 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/signup")
     public ResponseEntity<?> register(@RequestBody User user) {
         UserRegisterResponseDto userRegisterResponseDto = new UserRegisterResponseDto();
 
