@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { connect } from 'react-redux';
-import { addProject } from '../../redux/actions'
+import { createProject } from '../../api'
 
 const styles = (theme) => createStyles({
     root: {
@@ -50,7 +50,7 @@ const CreateProjectDialog = (props) => {
     } = props;
 
     const { classes } = props;
-    const { addProject } = props
+    const { createProject } = props
     const { username } = props
 
     const [name, setName] = useState('');
@@ -65,7 +65,7 @@ const CreateProjectDialog = (props) => {
 
     const onCreateButton = (event) => {
         event.preventDefault();
-        addProject(name, description, username);
+        createProject(name, description, username);
     }
 
     return (
@@ -117,12 +117,12 @@ const CreateProjectDialog = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    username: state.login.user.username
+    username: state.session.user.username
 })
 
 
 const mapDispatchToProps = ({
-    addProject
+    createProject
 });
 
 export default connect(

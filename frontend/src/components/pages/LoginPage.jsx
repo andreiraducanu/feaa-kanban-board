@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { login } from '../../redux/actions';
+import { login } from '../../api';
 import { createStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -160,8 +160,8 @@ const LoginPage = (props) => {
 };
 
 const mapStateToProps = state => ({
-    errorMessage: state.login.errorMessage,
-    isAuthenticated: state.login.isAuthenticated
+    errorMessage: state.session.errorMessage,
+    isAuthenticated: state.session.isAuthenticated
 });
 
 const mapDispatchToProps = ({

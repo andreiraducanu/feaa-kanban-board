@@ -9,7 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { logout } from '../../redux/actions';
+import { logoutAction } from '../../redux/actions';
 
 const styles = (theme) => createStyles({
     root: {
@@ -50,14 +50,14 @@ const Header = (props) => {
         firstname,
         lastname
     } = props;
-    const { logout } = props;
+    const { logoutAction } = props;
     const { classes } = props;
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
     const handleLogout = (event) => {
         setMenuAnchorEl(null);
-        logout()
+        logoutAction()
     };
 
     const handleProfileClick = (event) => {
@@ -109,12 +109,12 @@ const Header = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    firstname: state.login.user.firstname,
-    lastname: state.login.user.lastname
+    firstname: state.session.user.firstname,
+    lastname: state.session.user.lastname
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    logout: () => dispatch(logout())
+const mapDispatchToProps = ({
+    logoutAction
 });
 
 export default connect(

@@ -1,13 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import loginReducer from './slices/loginSlice';
-import signupReducer from './slices/signupSlice';
+import sessionReducer from './slices/sessionSlice';
 import projectReducer from './slices/projectSlice';
 import issueReducer from './slices/issueSlice';
 
 const store = configureStore({
     reducer: {
-        login: loginReducer,
-        signup: signupReducer,
+        session: sessionReducer,
         project: projectReducer,
         issue: issueReducer,
     },
