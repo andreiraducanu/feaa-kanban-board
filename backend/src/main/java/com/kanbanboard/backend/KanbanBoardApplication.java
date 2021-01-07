@@ -20,8 +20,7 @@ public class KanbanBoardApplication {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:3000")
-                        .allowedMethods("PUT", "DELETE","GET", "POST")
-                        .allowedHeaders("Authorization");
+                        .allowedMethods("PUT", "DELETE","GET", "POST");
             }
         };
     }
