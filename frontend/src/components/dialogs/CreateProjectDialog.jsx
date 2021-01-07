@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
+import { connect } from 'react-redux';
+import { addProject } from '../../redux/actions'
 
 const styles = (theme) => createStyles({
     root: {
@@ -48,24 +50,23 @@ const CreateProjectDialog = (props) => {
     } = props;
 
     const { classes } = props;
+    const { addProject } = props
+    const { username } = props
 
     const [name, setName] = useState('');
-    const [key, setKey] = useState('');
-
-    const handleNameChange = (event) => {
-        setName(event.target.value);
-    };
-
-    const handleKeyChange = (event) => {
-        setKey(event.target.value);
-    };
+    const [description, setDescription] = useState('');
 
     const canBeCreated = () => {
-        if (name.length <= 0 || key.length <= 0)
+        if (name.length <= 0 || description.length <= 0)
             return false;
 
         return true;
     };
+
+    const onCreateButton = (event) => {
+        event.preventDefault();
+        addProject(name, description, username);
+    }
 
     return (
         <React.Fragment>
@@ -88,22 +89,23 @@ const CreateProjectDialog = (props) => {
                             variant="outlined"
                             size="small"
                             value={name}
-                            onChange={handleNameChange}
+                            onChange={(e) => setName(e.target.value)}
                         />
                         <TextField
-                            id="key"
-                            label="Key"
+                            id="description"
+                            label="description"
                             margin="normal"
                             variant="outlined"
                             size="small"
-                            value={key}
-                            onChange={handleKeyChange}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                         />
                         <Button
                             disabled={!canBeCreated()}
                             size="small"
                             variant="contained"
                             color="primary"
+                            onClick={onCreateButton}
                         >
                             Create
                     </Button>
@@ -114,4 +116,16 @@ const CreateProjectDialog = (props) => {
     );
 };
 
-export default withStyles(styles)(CreateProjectDialog);
+const mapStateToProps = (state) => ({
+    username: state.login.user.username
+})
+
+
+const mapDispatchToProps = (dispatch) => ({
+    addProject: (name, description, username) => dispatch(addProject((name, description, username)))
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(CreateProjectDialog));

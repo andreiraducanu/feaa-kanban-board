@@ -23,7 +23,7 @@ public class IssueController {
 
     @PostMapping("/issues")
     ResponseEntity<IssueDto> createIssue(@Valid @RequestBody IssueCreateDto issueCreateDto) throws ServerException, EntityNotFoundException {
-        return new ResponseEntity<>(issueService.create(issueCreateDto), HttpStatus.OK);
+        return new ResponseEntity<>(issueService.create(issueCreateDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/issues/{id}")
