@@ -7,7 +7,6 @@ const loginSlice = createSlice({
     initialState: {
         isAuthenticated: currentUser != null,
         user: currentUser,
-        token: currentUser != null ? localStorage.getItem('jwt') : '',
         errorMessage: ''
     },
     reducers: {
@@ -15,7 +14,6 @@ const loginSlice = createSlice({
             const { user, jwt } = action.payload;
             console.log("login")
             state.user = user
-            state.token = jwt
             state.isAuthenticated = true;
 
             localStorage.setItem('user', JSON.stringify(user));
@@ -29,7 +27,6 @@ const loginSlice = createSlice({
             console.log("logout")
             state.isAuthenticated = false;
             state.user = {}
-            state.token = ''
 
             localStorage.removeItem('user');
             localStorage.removeItem('jwt');
