@@ -2,6 +2,8 @@ package com.kanbanboard.backend.controller;
 
 import com.kanbanboard.backend.dto.LoginDto;
 import com.kanbanboard.backend.dto.UserLoginDto;
+import com.kanbanboard.backend.dto.UserLoginResponseDto;
+import com.kanbanboard.backend.dto.UserRegisterResponseDto;
 import com.kanbanboard.backend.model.User;
 import com.kanbanboard.backend.service.UserService;
 import com.kanbanboard.backend.util.JwtUtil;
@@ -40,29 +42,37 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User user) {
+        UserRegisterResponseDto userRegisterResponseDto = new UserRegisterResponseDto();
+
         if (userService.checkIfUserExists(user.getUsername())) {
-            return new ResponseEntity<>("Choose another username! It already exists!", HttpStatus.CONFLICT);
+            userRegisterResponseDto.setMessage("Choose another username! It already exists!");
+            userRegisterResponseDto.setStatus("409");
+            return new ResponseEntity<>(userRegisterResponseDto, HttpStatus.CONFLICT);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userService.saveNewUser(user);
 
-        return new ResponseEntity<>("ok", HttpStatus.OK);
+        userRegisterResponseDto.setMessage("The account was created");
+        userRegisterResponseDto.setStatus("200");
+
+        return new ResponseEntity<>(userRegisterResponseDto, HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginDto> login(@Valid @RequestBody UserLoginDto userLoginDto) throws Exception {
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDto userLoginDto) throws Exception {
         try {
-            logger.info(userLoginDto.getUsername());
-            logger.info("aici in controller user/login");
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userLoginDto.getUsername(), userLoginDto.getPassword())
             );
         } catch (BadCredentialsException e) {
-            throw new Exception("Incorrect username or password");
+            UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto();
+            userLoginResponseDto.setMessage("Bad username/password");
+            userLoginResponseDto.setStatus("401");
+            return new ResponseEntity<>(userLoginResponseDto, HttpStatus.CONFLICT);
         }
 
         final UserDetails userDetails = userService.loadUserByUsername(userLoginDto.getUsername());
