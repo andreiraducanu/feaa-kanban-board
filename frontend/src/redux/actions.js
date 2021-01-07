@@ -4,6 +4,24 @@ export {
     logout as logoutAction
 } from './slices/sessionSlice';
 
-export { createProject as createProjectAction } from './slices/projectSlice';
+export {
+    createProject as createProjectAction,
+    getProject as getProjectAction,
+    updateProject as updateProjectAction,
+    deleteProject as deleteProjectAction,
+    addMember as addMemberAction,
+} from './slices/projectSlice';
 
-export { addIssue } from './slices/issueSlice';
+export {
+    createIssue as createIssueAction,
+    updateIssue as updateIssueAction,
+    deleteIssue as deleteIssueAction,
+    addChild as addChildAction,
+    removeChild as removeChildAction,
+    addWorkLog as addWorkLogAction,
+    updateWorkLog as updateWorkLogAction,
+    deleteWorkLog as deleteWorkLogAction,
+    addComment as addCommentAction,
+    updateComment as updateCommentAction,
+    deleteComment as deleteCommentAction,
+} from './slices/issueSlice';

@@ -13,13 +13,14 @@ const sessionSlice = createSlice({
     reducers: {
         loginSuccess(state, action) {
             const { user, jwt } = action.payload;
-            console.log("login")
             state.user = user
             state.jwt = jwt;
             state.isAuthenticated = true;
 
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('jwt', jwt);
+
+            console.log("login")
         },
         logout(state) {
             console.log("logout")

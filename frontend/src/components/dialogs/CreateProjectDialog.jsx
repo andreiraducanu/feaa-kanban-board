@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { connect } from 'react-redux';
-import { createProject } from '../../api'
+import { createProject } from '../../api/projectApi'
 
 const styles = (theme) => createStyles({
     root: {

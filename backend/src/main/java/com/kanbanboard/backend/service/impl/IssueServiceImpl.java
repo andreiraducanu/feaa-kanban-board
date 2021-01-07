@@ -140,14 +140,14 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public IssueDto removeChild(String idIssue, IssueRemoveChildDto issueRemoveChildDto) throws EntityNotFoundException, ServerException {
+    public IssueDto removeChild(String idIssue, String idChild) throws EntityNotFoundException, ServerException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
             throw new EntityNotFoundException("No issue found");
 
         // Get the child issue
-        Issue childIssue = findIssueById(issueRemoveChildDto.getChildId());
+        Issue childIssue = findIssueById(idChild);
         if (childIssue == null)
             throw new EntityNotFoundException("No child issue found");
 
