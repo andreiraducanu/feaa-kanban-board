@@ -33,7 +33,7 @@ export const createIssue = (projectId, title, description, type, priority, repor
 }
 
 export const updateIssue = (title, description, type, priority, reporterUsername, assigneeUsername, totalWorkTime) => async dispatch => {
-    API.put(`/issues/{${issueId}`, {
+    API.put(`/issues/${issueId}`, {
         title: title,
         description: description,
         type: type,
@@ -49,7 +49,7 @@ export const updateIssue = (title, description, type, priority, reporterUsername
 }
 
 export const deleteIssue = (issueId) => async dispatch => {
-    API.delete(`/issues/{${issueId}}`).then(res => {
+    API.delete(`/issues/${issueId}`).then(res => {
         dispatch(deleteIssueAction())
     }).catch(err => {
         dispatch(fetchErrorAction({ message: "This is an error message from deleteIssue" }))
@@ -57,7 +57,7 @@ export const deleteIssue = (issueId) => async dispatch => {
 }
 
 export const addWorkLog = (issueId, userUsername, time) => async dispatch => {
-    API.post(`/issues/{${issueId}}/worklogs`, {
+    API.post(`/issues/${issueId}/worklogs`, {
         userUsername: userUsername,
         time: time,
     }).then(res => {
@@ -68,7 +68,7 @@ export const addWorkLog = (issueId, userUsername, time) => async dispatch => {
 }
 
 export const addChild = (issueId, childId) => async dispatch => {
-    API.post(`/issues/{${issueId}}/children`, {
+    API.post(`/issues/${issueId}/children`, {
         childId: childId,
     }).then(res => {
         dispatch(addChildAction())
@@ -78,7 +78,7 @@ export const addChild = (issueId, childId) => async dispatch => {
 }
 
 export const removeChild = (issueId, childId) => async dispatch => {
-    API.delete(`/issues/{${issueId}}/children/{${childId}}`).then(res => {
+    API.delete(`/issues/${issueId}/children/${childId}`).then(res => {
         dispatch(removeChildAction())
     }).catch(err => {
         dispatch(fetchErrorAction({ message: "This is an error message from removeChild" }))
@@ -86,7 +86,7 @@ export const removeChild = (issueId, childId) => async dispatch => {
 }
 
 export const updateWorkLog = (issueId, idWorkLog, time) => async dispatch => {
-    API.put(`/issues/{${issueId}}/worklogs/{${idWorkLog}}`, {
+    API.put(`/issues/${issueId}/worklogs/${idWorkLog}`, {
         time: time,
     }).then(res => {
         dispatch(updateWorkLogAction())
@@ -96,7 +96,7 @@ export const updateWorkLog = (issueId, idWorkLog, time) => async dispatch => {
 }
 
 export const deleteWorkLog = (issueId, idWorkLog) => async dispatch => {
-    API.delete(`/issues/{${issueId}}/worklogs/{${idWorkLog}}`).then(res => {
+    API.delete(`/issues/${issueId}/worklogs/${idWorkLog}`).then(res => {
         dispatch(deleteWorkLogAction())
     }).catch(err => {
         dispatch(fetchErrorAction({ message: "This is an error message from deleteWorkLog" }))
@@ -104,7 +104,7 @@ export const deleteWorkLog = (issueId, idWorkLog) => async dispatch => {
 }
 
 export const addComment = (issueId, userUsername, text) => async dispatch => {
-    API.post(`/issues/{${issueId}}/comments`, {
+    API.post(`/issues/${issueId}/comments`, {
         userUsername: userUsername,
         text: text,
     }).then(res => {
@@ -115,7 +115,7 @@ export const addComment = (issueId, userUsername, text) => async dispatch => {
 }
 
 export const updateComment = (idIssue, idComment, text) => async dispatch => {
-    API.put(`/issues/{${idIssue}}/comments/{${idComment}}`, {
+    API.put(`/issues/${idIssue}/comments/${idComment}`, {
         text: text,
     }).then(res => {
         dispatch(updateCommentAction())
@@ -125,7 +125,7 @@ export const updateComment = (idIssue, idComment, text) => async dispatch => {
 }
 
 export const deleteComment = (idIssue, idComment) => async dispatch => {
-    API.delete(`/issues/{${idIssue}}/comments/{${idComment}}`).then(res => {
+    API.delete(`/issues/${idIssue}/comments/${idComment}`).then(res => {
         dispatch(deleteCommentAction())
     }).catch(err => {
         dispatch(fetchErrorAction({ message: "This is an error message from deleteComment" }))

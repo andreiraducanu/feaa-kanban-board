@@ -6,6 +6,7 @@ export {
 
 export {
     createProject as createProjectAction,
+    getProjects as getProjectsAction,
     getProject as getProjectAction,
     updateProject as updateProjectAction,
     deleteProject as deleteProjectAction,

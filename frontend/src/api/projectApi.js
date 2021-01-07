@@ -1,6 +1,7 @@
 import {
     fetchErrorAction,
     createProjectAction,
+    getProjectsAction,
     getProjectAction,
     updateProjectAction,
     deleteProjectAction,
@@ -21,8 +22,25 @@ export const createProject = (name, description, username) => async dispatch => 
     })
 }
 
+export const getProject = (projectId) => async dispatch => {
+    API.get(`/projects/${projectId}`).then(res => {
+        dispatch(getProjectAction(res.data))
+    }).catch(err => {
+        dispatch(fetchErrorAction({ message: "This is an error message from getProject" }))
+    })
+}
+
+// functia lui mihai
+export const getProjects = (username?) => async dispatch => {
+    API.get('/projects', { params: { owner: username } }).then(res => {
+        dispatch(getProjectsAction(res.data))
+    }).catch(err => {
+        dispatch(fetchErrorAction({ message: "This is an error message from getProjects" }))
+    })
+}
+
 export const updateProject = (idProject, name, description) => async dispatch => {
-    API.put(`/projects/{${idProject}}`, {
+    API.put(`/projects/${idProject}`, {
         name: name,
         description: description,
     }).then(res => {
@@ -33,7 +51,7 @@ export const updateProject = (idProject, name, description) => async dispatch =>
 }
 
 export const deleteProject = (idProject) => async dispatch => {
-    API.delete(`/projects/{${idProject}}`).then(res => {
+    API.delete(`/projects/${idProject}`).then(res => {
         dispatch(deleteProjectAction())
     }).catch(err => {
         dispatch(fetchErrorAction({ message: "This is an error message from deleteProject" }))
@@ -41,19 +59,11 @@ export const deleteProject = (idProject) => async dispatch => {
 }
 
 export const addChild = (issueId, memberUsername) => async dispatch => {
-    API.post(`/projects/{${issueId}}/members`, {
+    API.post(`/projects/${issueId}/members`, {
         memberUsername: memberUsername,
     }).then(res => {
         dispatch(addMemberAction())
     }).catch(err => {
         dispatch(fetchErrorAction({ message: "This is an error message from addChild" }))
-    })
-}
-
-export const getProject = () => async dispatch => {
-    API.get('/projects').then(res => {
-        dispatch(getProjectAction(res.data))
-    }).catch(err => {
-        dispatch(fetchErrorAction({ message: "This is an error message from getProject" }))
     })
 }

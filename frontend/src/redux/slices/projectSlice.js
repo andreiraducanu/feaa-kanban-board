@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const projectSlice = createSlice({
     name: 'project',
     initialState: {
-        currentProject: {}
+        currentProject: {},
+        projects: []
 
     },
     reducers: {
@@ -11,6 +12,10 @@ const projectSlice = createSlice({
             console.log("Project created")
         },
         // functia lui mihai de getProjects
+        getProjects(state, action) {
+            state.projects = action.payload
+            console.log("All projects get")
+        },
         getProject(state, action) {
             state.currentProject = action.payload
             console.log("Project got")
@@ -27,6 +32,6 @@ const projectSlice = createSlice({
     },
 });
 
-export const { createProject, getProject, updateProject, deleteProject, addMember } = projectSlice.actions;
+export const { createProject, getProjects, getProject, updateProject, deleteProject, addMember } = projectSlice.actions;
 
 export default projectSlice.reducer;
