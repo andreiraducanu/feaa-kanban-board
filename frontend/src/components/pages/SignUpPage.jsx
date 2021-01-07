@@ -10,6 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import { BrandLogo } from '../../assets/svg/brand';
+import { Redirect } from "react-router-dom";
 import AccountRightArtwork from '../../assets/svg/artwork/account_right.svg';
 import AccountLeftArtwork from '../../assets/svg/artwork/account_left.svg';
 

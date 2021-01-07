@@ -23,14 +23,14 @@ const { signupSuccess } = signupSlice.actions
 // Actions
 
 export const signup = (firstName, lastName, username, password) => async dispatch => {
-    console.log("here")
+    console.log(firstName, lastName)
     fetch(`http://localhost:8080/user/signup`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
         },
-        body: JSON.stringify({ firstName: firstName, lastName: lastName, username: username, password: password })
+        body: JSON.stringify({ firstname: firstName, lastname: lastName, username: username, password: password })
     })
         .then(res => {
             if (res.status === 200) {
