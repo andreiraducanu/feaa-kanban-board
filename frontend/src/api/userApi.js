@@ -6,7 +6,7 @@ import {
 import API from './client'
 
 export const login = (username, password) => async dispatch => {
-    API.post('/user/login', {
+    API.post('/users/login', {
         username: username,
         password: password
     }).then(res => {
@@ -17,7 +17,7 @@ export const login = (username, password) => async dispatch => {
 };
 
 export const signup = (firstName, lastName, username, password) => async dispatch => {
-    API.post('/user/signup', {
+    API.post('/users/signup', {
         username: username,
         password: password,
         firstname: firstName,

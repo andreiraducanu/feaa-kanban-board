@@ -36,7 +36,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String userName = null;
         String token = null;
         String path = httpServletRequest.getServletPath();
-        if (!path.contains("/user/signup")) {
+        if (!path.contains("/users/signup")) {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 token = authorizationHeader.substring(7);
                 userName = jwtUtil.extractUsername(token);

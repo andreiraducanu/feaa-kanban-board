@@ -18,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,7 +83,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         if (projects == null) {
-            throw new EntityNotFoundException("No projects found");
+            return new ArrayList<>();
         }
 
         return convertProjectToDto(projects);

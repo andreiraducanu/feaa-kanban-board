@@ -11,6 +11,7 @@ export {
     updateProject as updateProjectAction,
     deleteProject as deleteProjectAction,
     addMember as addMemberAction,
+    getMembers as getMembersAction,
 } from './slices/projectSlice';
 
 export {

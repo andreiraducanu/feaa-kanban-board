@@ -5,7 +5,8 @@ import {
     getProjectAction,
     updateProjectAction,
     deleteProjectAction,
-    addMemberAction
+    addMemberAction,
+    getMembersAction,
 } from '../redux/actions';
 
 import API from './client'
@@ -65,5 +66,13 @@ export const addChild = (issueId, memberUsername) => async dispatch => {
         dispatch(addMemberAction())
     }).catch(err => {
         dispatch(fetchErrorAction({ message: "This is an error message from addChild" }))
+    })
+}
+
+export const getMembers = (projectId) => async dispatch => {
+    API.get('/users', { params: { projectId: projectId } }).then(res => {
+        dispatch(getMembersAction(res.data))
+    }).catch(err => {
+        dispatch(fetchErrorAction({ message: "This is an error message from getUsers" }))
     })
 }

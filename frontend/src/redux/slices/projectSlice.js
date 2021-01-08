@@ -4,7 +4,8 @@ const projectSlice = createSlice({
     name: 'project',
     initialState: {
         currentProject: {},
-        projects: []
+        projects: [],
+        members: {}
 
     },
     reducers: {
@@ -29,9 +30,13 @@ const projectSlice = createSlice({
         addMember(state, action) {
             console.log("Project member added")
         },
+        getMembers(state, action) {
+            state.members = action.payload
+            console.log("All users get")
+        },
     },
 });
 
-export const { createProject, getProjects, getProject, updateProject, deleteProject, addMember } = projectSlice.actions;
+export const { createProject, getProjects, getProject, updateProject, deleteProject, addMember, getMembers } = projectSlice.actions;
 
 export default projectSlice.reducer;

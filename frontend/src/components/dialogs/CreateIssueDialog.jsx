@@ -80,11 +80,9 @@ const CreateIssueDialog = (props) => {
 
     const { classes } = props;
     const { createIssue } = props
+    const { projects } = props
 
-    // FIXME
-    const projects = [];
-
-    const [projectId, setProjectId] = useState('');
+    const [project, setProject] = useState(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [type, setType] = useState('');
@@ -106,7 +104,7 @@ const CreateIssueDialog = (props) => {
 
     const onCreateButton = (event) => {
         event.preventDefault();
-        createIssue(projectId, title, description, type, priority, reporterUsername, assigneeUsername, totalWorkTime);
+        createIssue(project.id, title, description, type, priority, reporterUsername, assigneeUsername, totalWorkTime);
     }
 
     return (
@@ -127,7 +125,7 @@ const CreateIssueDialog = (props) => {
                         required
                         getOptionLabel={(option) => option.name}
                         options={projects}
-                        onChange={(value) => console.log(value)}
+                        onChange={(value) => { console.log(value); setProject(value); }}
                     />
                     <ComboBox
                         className={clsx(classes.item, classes.itemSmall)}
@@ -159,12 +157,16 @@ const CreateIssueDialog = (props) => {
                         className={clsx(classes.item, classes.itemMedium)}
                         label="Reporter"
                         required
-                        options={["test1", "test2", "test3"]}
+                        getOptionLabel={(option) => option.name}
+                        options={project && project.members ? project.members : []}
+                        onChange={(value) => setReporterUsername(value)}
                     />
                     <ComboBox
                         className={clsx(classes.item, classes.itemMedium)}
                         label="Assignee"
-                        options={["test1", "test2", "test3"]}
+                        getOptionLabel={(option) => option.name}
+                        options={project && project.members ? project.members : []}
+                        onChange={(value) => setAssigneeUsername(value)}
                     />
                     <ComboBox
                         className={clsx(classes.item, classes.itemSmall)}
@@ -202,11 +204,15 @@ const CreateIssueDialog = (props) => {
     );
 };
 
+const mapStateToProps = (state) => ({
+    projects: state.project.projects,
+})
+
 const mapDispatchToProps = ({
     createIssue
 });
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(withStyles(styles)(CreateIssueDialog));
