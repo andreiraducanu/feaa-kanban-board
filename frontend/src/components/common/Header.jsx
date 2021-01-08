@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { CreateIssueDialog } from '../dialogs';
 import { logoutAction } from '../../redux/actions';
 
 const styles = (theme) => createStyles({
@@ -53,6 +54,7 @@ const Header = (props) => {
     const { logoutAction } = props;
     const { classes } = props;
 
+    const [showCreateIssue, setShowCreateIssue] = useState(false);
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
     const handleLogout = (event) => {
@@ -76,7 +78,13 @@ const Header = (props) => {
                         <Typography variant="h6">
                             Kanban Board
                     </Typography>
-                        <Button className={classes.createButton} size="small" variant="contained" color="primary">
+                        <Button
+                            className={classes.createButton}
+                            size="small"
+                            variant="contained"
+                            color="primary"
+                            onClick={() => setShowCreateIssue(true)}
+                        >
                             Create
                         </Button>
                     </div>
@@ -104,6 +112,10 @@ const Header = (props) => {
             >
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
+            <CreateIssueDialog
+                open={showCreateIssue}
+                onClose={() => setShowCreateIssue(false)}
+            />
         </React.Fragment>
     );
 }

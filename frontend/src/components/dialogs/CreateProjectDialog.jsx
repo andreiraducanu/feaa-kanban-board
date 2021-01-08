@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { createStyles, withStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -69,50 +68,47 @@ const CreateProjectDialog = (props) => {
     }
 
     return (
-        <React.Fragment>
-            <CssBaseline />
-            <Dialog fullScreen open={open} onClose={onClose} TransitionComponent={Slide}>
-                <div className={classes.closeButtonContainer}>
-                    <IconButton className={classes.closeButton} onClick={onClose}>
-                        <CloseIcon />
-                    </IconButton>
-                </div>
-                <div className={classes.content}>
-                    <div className={classes.paper}>
-                        <Typography className={classes.title} component="h1" variant="h5">
-                            Create Project
+        <Dialog fullScreen open={open} onClose={onClose} TransitionComponent={Slide}>
+            <div className={classes.closeButtonContainer}>
+                <IconButton className={classes.closeButton} onClick={onClose}>
+                    <CloseIcon />
+                </IconButton>
+            </div>
+            <div className={classes.content}>
+                <div className={classes.paper}>
+                    <Typography className={classes.title} component="h1" variant="h5">
+                        Create Project
                         </Typography>
-                        <TextField
-                            id="name"
-                            label="Name"
-                            margin="normal"
-                            variant="outlined"
-                            size="small"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <TextField
-                            id="description"
-                            label="description"
-                            margin="normal"
-                            variant="outlined"
-                            size="small"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                        <Button
-                            disabled={!canBeCreated()}
-                            size="small"
-                            variant="contained"
-                            color="primary"
-                            onClick={onCreateButton}
-                        >
-                            Create
+                    <TextField
+                        id="name"
+                        label="Name"
+                        margin="normal"
+                        variant="outlined"
+                        size="small"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <TextField
+                        id="description"
+                        label="description"
+                        margin="normal"
+                        variant="outlined"
+                        size="small"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                    <Button
+                        disabled={!canBeCreated()}
+                        size="small"
+                        variant="contained"
+                        color="primary"
+                        onClick={onCreateButton}
+                    >
+                        Create
                     </Button>
-                    </div>
                 </div>
-            </Dialog>
-        </React.Fragment>
+            </div>
+        </Dialog>
     );
 };
 
