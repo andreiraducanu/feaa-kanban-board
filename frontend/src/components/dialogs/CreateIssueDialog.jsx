@@ -81,6 +81,9 @@ const CreateIssueDialog = (props) => {
     const { classes } = props;
     const { createIssue } = props
 
+    // FIXME
+    const projects = [];
+
     const [projectId, setProjectId] = useState('');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -122,7 +125,9 @@ const CreateIssueDialog = (props) => {
                         className={clsx(classes.item, classes.itemSmall)}
                         label="Project"
                         required
-                        options={["test1", "test2", "test3"]}
+                        getOptionLabel={(option) => option.name}
+                        options={projects}
+                        onChange={(value) => console.log(value)}
                     />
                     <ComboBox
                         className={clsx(classes.item, classes.itemSmall)}
