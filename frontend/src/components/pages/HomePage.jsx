@@ -13,6 +13,12 @@ import { CreateProjectDialog } from '../dialogs';
 import Header from '../common/Header';
 
 const styles = createStyles({
+    root: {
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
     content: {
         flexGrow: 1,
         padding: '0 40px',
@@ -42,7 +48,7 @@ const styles = createStyles({
 const HomePage = (props) => {
     const { classes } = props;
 
-    const [projects, setProjects] = useState([1]);
+    const [projects, setProjects] = useState([]);
     const [showCreateProject, setShowCreateProject] = useState(false);
 
     const isProjectsEmpty = () => projects.length == 0;
@@ -59,59 +65,61 @@ const HomePage = (props) => {
     );
 
     return (
-        <div className={classes.root}>
+        <React.Fragment>
             <CssBaseline />
-            <Header />
-            <div className={classes.content}>
-                <div className={classes.contentHeader}>
-                    <Typography className={classes.title} variant="h5">
-                        Projects
+            <div className={classes.root}>
+                <Header />
+                <div className={classes.content}>
+                    <div className={classes.contentHeader}>
+                        <Typography className={classes.title} variant="h5">
+                            Projects
                     </Typography>
-                    {!isProjectsEmpty() && <CreateProjectButton />}
-                </div>
-                {
-                    isProjectsEmpty() ?
-                        (
-                            <div className={classes.emptyContainer}>
-                                <EmptyImage className={classes.emptyImage} />
-                                <Typography
-                                    variant="h6"
-                                    style={{ marginBottom: '16px' }}
-                                >
-                                    You currently have no projects
+                        {!isProjectsEmpty() && <CreateProjectButton />}
+                    </div>
+                    {
+                        isProjectsEmpty() ?
+                            (
+                                <div className={classes.emptyContainer}>
+                                    <EmptyImage className={classes.emptyImage} />
+                                    <Typography
+                                        variant="h6"
+                                        style={{ marginBottom: '16px' }}
+                                    >
+                                        You currently have no projects
                                 </Typography>
-                                <Typography
-                                    variant="subtitle1"
-                                    style={{ marginBottom: '24px' }}
-                                >
-                                    Let's create your first project
+                                    <Typography
+                                        variant="subtitle1"
+                                        style={{ marginBottom: '24px' }}
+                                    >
+                                        Let's create your first project
                                 </Typography>
-                                <CreateProjectButton />
-                            </div>
-                        ) :
-                        (
-                            <div>
-                                <TableContainer>
-                                    <Table>
-                                        <TableHead>
-                                            <TableCell>Name</TableCell>
-                                            <TableCell>Created Date</TableCell>
-                                            <TableCell>Lead</TableCell>
-                                        </TableHead>
-                                        <TableBody>
+                                    <CreateProjectButton />
+                                </div>
+                            ) :
+                            (
+                                <div>
+                                    <TableContainer>
+                                        <Table>
+                                            <TableHead>
+                                                <TableCell>Name</TableCell>
+                                                <TableCell>Created Date</TableCell>
+                                                <TableCell>Lead</TableCell>
+                                            </TableHead>
+                                            <TableBody>
 
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </div>
-                        )
-                }
-            </div>
-            <CreateProjectDialog
-                open={showCreateProject}
-                onClose={() => setShowCreateProject(false)}
-            />
-        </div >
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </div>
+                            )
+                    }
+                </div>
+                <CreateProjectDialog
+                    open={showCreateProject}
+                    onClose={() => setShowCreateProject(false)}
+                />
+            </div >
+        </React.Fragment>
     );
 };
 

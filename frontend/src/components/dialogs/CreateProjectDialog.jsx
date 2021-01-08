@@ -11,12 +11,7 @@ import Slide from '@material-ui/core/Slide';
 import { connect } from 'react-redux';
 import { createProject } from '../../api/projectApi'
 
-const styles = (theme) => createStyles({
-    root: {
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-    },
+const styles = createStyles({
     closeButtonContainer: {
         position: 'absolute',
         height: '100%',
@@ -25,6 +20,11 @@ const styles = (theme) => createStyles({
         flexDirection: 'column',
         alignItems: 'center',
         padding: "24px 0 16px",
+    },
+    content: {
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
     },
     closeButton: {
         width: '40px',
@@ -77,7 +77,7 @@ const CreateProjectDialog = (props) => {
                         <CloseIcon />
                     </IconButton>
                 </div>
-                <div className={classes.root}>
+                <div className={classes.content}>
                     <div className={classes.paper}>
                         <Typography className={classes.title} component="h1" variant="h5">
                             Create Project
