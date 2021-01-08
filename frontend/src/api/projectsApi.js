@@ -19,7 +19,6 @@ export const createProject = (name, description, username) => async dispatch => 
     })
 }
 
-// functia lui mihai
 export const getProjects = (username) => async dispatch => {
     API.get('/projects', { params: { owner: username } }).then(res => {
         dispatch(setProjectsAction(res.data))
@@ -61,6 +60,6 @@ export const getMembers = (projectId) => async dispatch => {
     API.get('/users', { params: { projectId: projectId } }).then(res => {
         dispatch(getMembersAction(res.data))
     }).catch(err => {
-        dispatch(fetchErrorAction({ message: "This is an error message from getUsers" }))
+        console.log(err);
     })
 }

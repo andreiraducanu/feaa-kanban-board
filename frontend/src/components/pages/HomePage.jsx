@@ -11,7 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import { EmptyImage } from '../../assets/svg/icons';
 import { CreateProjectDialog } from '../dialogs';
 import Header from '../common/Header';
-import { getProjects } from "../../api/projectApi";
+import { getProjects } from "../../api/projectsApi";
 import { connect } from "react-redux";
 import TableRow from '@material-ui/core/TableRow';
 const styles = createStyles({
@@ -53,7 +53,7 @@ const HomePage = (props) => {
     const [showCreateProject, setShowCreateProject] = useState(false);
     const { projects, getProjects } = props;
     const { currentUser } = props;
-    const isProjectsEmpty = () => Object.keys(projects).length == 0;
+    const isProjectsEmpty = () => projects.length == 0;
 
     const CreateProjectButton = () => (
         <Button
@@ -118,16 +118,16 @@ const HomePage = (props) => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {Object.keys(projects).map(key => (
-                                                    <TableRow key={key}>
+                                                {projects.map((project) => (
+                                                    <TableRow key={project.id} onClick={() => displayAllDetailsAboutProject(project)}>
                                                         <TableCell component="th" scope="row">
-                                                            {projects[key].name}
+                                                            {project.name}
                                                         </TableCell>
                                                         <TableCell align="left">
-                                                            {projects[key].description}
+                                                            {project.description}
                                                         </TableCell>
                                                         <TableCell align="left">
-                                                            {projects[key].owner.username}
+                                                            {project.owner.username}
                                                         </TableCell>
                                                     </TableRow>
                                                 ))}
@@ -148,7 +148,7 @@ const HomePage = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    projects: state.projects.data,
+    projects: Object.keys(state.projects.data).map(key => state.projects.data[key]),
     currentUser: state.session.user
 });
 

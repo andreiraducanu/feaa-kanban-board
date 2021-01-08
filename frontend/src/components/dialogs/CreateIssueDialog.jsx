@@ -205,7 +205,7 @@ const CreateIssueDialog = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    projects: state.project.projects,
+    projects: Object.keys(state.projects.data).map(key => state.projects.data[key]),
 })
 
 const mapDispatchToProps = ({
