@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -11,7 +11,9 @@ import TableHead from '@material-ui/core/TableHead';
 import { EmptyImage } from '../../assets/svg/icons';
 import { CreateProjectDialog } from '../dialogs';
 import Header from '../common/Header';
-
+import { getProjects } from "../../api/projectApi";
+import { connect } from "react-redux";
+import TableRow from '@material-ui/core/TableRow';
 const styles = createStyles({
     root: {
         height: '100vh',
@@ -48,9 +50,9 @@ const styles = createStyles({
 const HomePage = (props) => {
     const { classes } = props;
 
-    const [projects, setProjects] = useState([]);
     const [showCreateProject, setShowCreateProject] = useState(false);
-
+    const { projects, getProjects } = props;
+    const { user } = props;
     const isProjectsEmpty = () => projects.length == 0;
 
     const CreateProjectButton = () => (
@@ -63,6 +65,14 @@ const HomePage = (props) => {
             Create Project
         </Button >
     );
+
+    function displayAllDetailsAboutProject(project) {
+        console.log(project.id);
+    }
+
+    useEffect(() => {
+        getProjects(user);
+    }, []);
 
     return (
         <React.Fragment>
@@ -107,6 +117,18 @@ const HomePage = (props) => {
                                             </TableHead>
                                             <TableBody>
 
+                                                {projects.map((project) => (
+
+                                                    <TableRow key={project.id} onClick={() => displayAllDetailsAboutProject(project)}>
+                                                        <TableCell component="th" scope="row">
+                                                            {project.name}
+                                                        </TableCell>
+                                                        <TableCell align="left">{project.description}</TableCell>
+                                                        <TableCell align="left">{project.owner.username}</TableCell>
+                                                    </TableRow>
+                                                ))}
+
+
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
@@ -123,5 +145,16 @@ const HomePage = (props) => {
     );
 };
 
+const mapStateToProps = (state) => ({
+    projects: state.project.projects,
+    user: state.session.user.username
+});
 
-export default (withStyles(styles)(HomePage));
+const mapDispatchToProps = ({
+    getProjects
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(HomePage));
