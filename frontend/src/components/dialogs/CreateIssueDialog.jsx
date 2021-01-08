@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { createStyles, withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -11,7 +11,8 @@ import ComboBox from '../controls/ComboBox';
 import Link from '@material-ui/core/Link';
 import { EpicIcon, StoryIcon, TaskIcon, BugIcon, SubtaskIcon } from '../../assets/svg/issue-type'
 import Typography from '@material-ui/core/Typography';
-import { Divider } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { createIssue } from '../../api/issueApi'
 
 const styles = (theme) => createStyles({
     dialogPaper: {
@@ -69,6 +70,16 @@ const CreateIssueDialog = (props) => {
     } = props;
 
     const { classes } = props;
+    const { createIssue } = props
+
+    const [projectId, setProjectId] = useState('');
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [type, setType] = useState('');
+    const [priority, setPriority] = useState('');
+    const [reporterUsername, setReporterUsername] = useState('');
+    const [assigneeUsername, setAssigneeUsername] = useState('');
+    const [totalWorkTime, setTotalWorkTime] = useState('');
 
     const renderIssueType = (issueType) => (
         <div className={classes.optionContainer}>
@@ -80,6 +91,11 @@ const CreateIssueDialog = (props) => {
             </Typography>
         </div>
     );
+
+    const onCreateButton = (event) => {
+        event.preventDefault();
+        createIssue(projectId, title, description, type, priority, reporterUsername, assigneeUsername, totalWorkTime);
+    }
 
     return (
         <Dialog
@@ -106,7 +122,7 @@ const CreateIssueDialog = (props) => {
                         options={ISSUE_TYPES}
                         getOptionLabel={(option) => option.name}
                         renderOption={renderIssueType}
-                        onChange={(value) => console.log(value)}
+                        onChange={(value) => setType(value.toUpperCase())}
                     />
                     <TextField
                         className={clsx(classes.item, classes.itemSmall)}
@@ -114,6 +130,7 @@ const CreateIssueDialog = (props) => {
                         required
                         variant="outlined"
                         size="small"
+                        onChange={(e) => setTitle(e.target.value)}
                     />
                     <TextField
                         className={clsx(classes.item)}
@@ -122,6 +139,7 @@ const CreateIssueDialog = (props) => {
                         rows={5}
                         variant="outlined"
                         size="small"
+                        onChange={(e) => setDescription(e.target.value)}
                     />
                     <ComboBox
                         className={clsx(classes.item, classes.itemMedium)}
@@ -138,6 +156,15 @@ const CreateIssueDialog = (props) => {
                         className={clsx(classes.item, classes.itemSmall)}
                         label="Priority"
                         options={["test1", "test2", "test3"]}
+                        onChange={(value) => console.log(value)}
+                    />
+                    <TextField
+                        className={clsx(classes.item)}
+                        label="Total work time"
+                        required
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => setTotalWorkTime(e.target.value)}
                     />
                 </div>
             </DialogContent>
@@ -147,6 +174,7 @@ const CreateIssueDialog = (props) => {
                     variant="contained"
                     color="primary"
                     className={classes.createAction}
+                    onClick={onCreateButton}
                 >
                     Create
                 </Button>
@@ -154,8 +182,15 @@ const CreateIssueDialog = (props) => {
                     Cancel
                 </Link>
             </DialogActions>
-        </Dialog>
+        </Dialog >
     );
 };
 
-export default withStyles(styles)(CreateIssueDialog);
+const mapDispatchToProps = ({
+    createIssue
+});
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(withStyles(styles)(CreateIssueDialog));
