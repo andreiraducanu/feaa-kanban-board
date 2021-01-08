@@ -1,9 +1,7 @@
 package com.kanbanboard.backend.controller;
 
-import com.kanbanboard.backend.dto.LoginDto;
-import com.kanbanboard.backend.dto.UserLoginDto;
-import com.kanbanboard.backend.dto.UserLoginResponseDto;
-import com.kanbanboard.backend.dto.UserRegisterResponseDto;
+import com.kanbanboard.backend.dto.*;
+import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.model.User;
 import com.kanbanboard.backend.service.UserService;
 import com.kanbanboard.backend.util.JwtUtil;
@@ -21,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 
 @RestController
-@RequestMapping("/user")
 public class UserController {
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -42,7 +40,12 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/signup")
+    @GetMapping("/users")
+    ResponseEntity<List<UserDto>> getAll(@RequestParam(name = "projectId", required = false) String projectId) throws EntityNotFoundException {
+        return new ResponseEntity<>(userService.getAll(projectId), HttpStatus.OK);
+    }
+
+    @PostMapping("/users/signup")
     public ResponseEntity<?> register(@RequestBody User user) {
         UserRegisterResponseDto userRegisterResponseDto = new UserRegisterResponseDto();
 
@@ -62,7 +65,7 @@ public class UserController {
         return new ResponseEntity<>(userRegisterResponseDto, HttpStatus.OK);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/users/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginDto userLoginDto) throws Exception {
         try {
             authenticationManager.authenticate(
@@ -82,11 +85,9 @@ public class UserController {
         return new ResponseEntity<>(new LoginDto(jwt, userService.get(userLoginDto.getUsername())), HttpStatus.OK);
     }
 
-    @GetMapping("/test")
+    @GetMapping("/users/test")
     public String testRoute(@RequestBody String test, Principal principal) {
         logger.info(principal.getName());
         return test;
     }
-
-
 }

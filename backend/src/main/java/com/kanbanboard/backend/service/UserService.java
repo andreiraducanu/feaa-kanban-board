@@ -1,9 +1,12 @@
 package com.kanbanboard.backend.service;
 
+import com.kanbanboard.backend.dto.ProjectDto;
 import com.kanbanboard.backend.dto.UserDto;
 import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.List;
 
 public interface UserService {
     boolean checkIfUserExists(String username);
@@ -13,4 +16,6 @@ public interface UserService {
     UserDto get(String username) throws EntityNotFoundException;
 
     UserDetails loadUserByUsername(String username);
+
+    List<UserDto> getAll(String projectId) throws EntityNotFoundException;
 }
