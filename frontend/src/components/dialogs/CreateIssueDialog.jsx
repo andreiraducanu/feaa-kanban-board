@@ -9,7 +9,8 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import ComboBox from '../controls/ComboBox';
 import Link from '@material-ui/core/Link';
-import { EpicIcon, StoryIcon, TaskIcon, BugIcon, SubtaskIcon } from '../../assets/svg/issue-type'
+import { EpicIcon, StoryIcon, TaskIcon, BugIcon, SubtaskIcon } from '../../assets/svg/issue-type';
+import { HighestIcon, HighIcon, MediumIcon, LowIcon, LowestIcon } from '../../assets/svg/issue-priority';
 import Typography from '@material-ui/core/Typography';
 import { Divider } from '@material-ui/core';
 
@@ -62,6 +63,14 @@ const ISSUE_TYPES = [
     { name: 'Subtask', icon: <SubtaskIcon /> }
 ];
 
+const ISSUE_PRIORITIES = [
+    { name: 'Highest', icon: <HighestIcon /> },
+    { name: 'High', icon: <HighIcon /> },
+    { name: 'Medium', icon: <MediumIcon /> },
+    { name: 'Low', icon: <LowIcon /> },
+    { name: 'Lowest', icon: <LowestIcon /> }
+];
+
 const CreateIssueDialog = (props) => {
     const {
         open,
@@ -70,13 +79,13 @@ const CreateIssueDialog = (props) => {
 
     const { classes } = props;
 
-    const renderIssueType = (issueType) => (
+    const renderIssueOption = (option) => (
         <div className={classes.optionContainer}>
             <div className={classes.optionIcon}>
-                {issueType.icon}
+                {option.icon}
             </div>
             <Typography className={classes.optionLabel} variant="subtitle1">
-                {issueType.name}
+                {option.name}
             </Typography>
         </div>
     );
@@ -105,7 +114,7 @@ const CreateIssueDialog = (props) => {
                         required
                         options={ISSUE_TYPES}
                         getOptionLabel={(option) => option.name}
-                        renderOption={renderIssueType}
+                        renderOption={renderIssueOption}
                         onChange={(value) => console.log(value)}
                     />
                     <TextField
@@ -137,7 +146,10 @@ const CreateIssueDialog = (props) => {
                     <ComboBox
                         className={clsx(classes.item, classes.itemSmall)}
                         label="Priority"
-                        options={["test1", "test2", "test3"]}
+                        options={ISSUE_PRIORITIES}
+                        getOptionLabel={(option) => option.name}
+                        renderOption={renderIssueOption}
+                        onChange={(value) => console.log(value)}
                     />
                 </div>
             </DialogContent>
