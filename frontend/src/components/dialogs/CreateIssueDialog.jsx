@@ -9,7 +9,8 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import ComboBox from '../controls/ComboBox';
 import Link from '@material-ui/core/Link';
-import { EpicIcon, StoryIcon, TaskIcon, BugIcon, SubtaskIcon } from '../../assets/svg/issue-type'
+import { EpicIcon, StoryIcon, TaskIcon, BugIcon, SubtaskIcon } from '../../assets/svg/issue-type';
+import { HighestIcon, HighIcon, MediumIcon, LowIcon, LowestIcon } from '../../assets/svg/issue-priority';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import { createIssue } from '../../api/issueApi'
@@ -63,6 +64,14 @@ const ISSUE_TYPES = [
     { name: 'Subtask', icon: <SubtaskIcon /> }
 ];
 
+const ISSUE_PRIORITIES = [
+    { name: 'Highest', icon: <HighestIcon /> },
+    { name: 'High', icon: <HighIcon /> },
+    { name: 'Medium', icon: <MediumIcon /> },
+    { name: 'Low', icon: <LowIcon /> },
+    { name: 'Lowest', icon: <LowestIcon /> }
+];
+
 const CreateIssueDialog = (props) => {
     const {
         open,
@@ -81,13 +90,13 @@ const CreateIssueDialog = (props) => {
     const [assigneeUsername, setAssigneeUsername] = useState('');
     const [totalWorkTime, setTotalWorkTime] = useState('');
 
-    const renderIssueType = (issueType) => (
+    const renderIssueOption = (option) => (
         <div className={classes.optionContainer}>
             <div className={classes.optionIcon}>
-                {issueType.icon}
+                {option.icon}
             </div>
             <Typography className={classes.optionLabel} variant="subtitle1">
-                {issueType.name}
+                {option.name}
             </Typography>
         </div>
     );
@@ -121,8 +130,8 @@ const CreateIssueDialog = (props) => {
                         required
                         options={ISSUE_TYPES}
                         getOptionLabel={(option) => option.name}
-                        renderOption={renderIssueType}
-                        onChange={(value) => setType(value.toUpperCase())}
+                        renderOption={renderIssueOption}
+                        onChange={(value) => setType(value.name.toUpperCase())}
                     />
                     <TextField
                         className={clsx(classes.item, classes.itemSmall)}
@@ -155,8 +164,10 @@ const CreateIssueDialog = (props) => {
                     <ComboBox
                         className={clsx(classes.item, classes.itemSmall)}
                         label="Priority"
-                        options={["test1", "test2", "test3"]}
-                        onChange={(value) => console.log(value)}
+                        options={ISSUE_PRIORITIES}
+                        getOptionLabel={(option) => option.name}
+                        renderOption={renderIssueOption}
+                        onChange={(value) => setPriority(value.name.toUpperCase())}
                     />
                     <TextField
                         className={clsx(classes.item)}
