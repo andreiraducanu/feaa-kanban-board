@@ -53,7 +53,7 @@ const HomePage = (props) => {
     const [showCreateProject, setShowCreateProject] = useState(false);
     const { projects, getProjects } = props;
     const { currentUser } = props;
-    const isProjectsEmpty = () => projects.length == 0;
+    const isProjectsEmpty = () => Object.keys(projects).length == 0;
 
     const CreateProjectButton = () => (
         <Button
@@ -118,16 +118,16 @@ const HomePage = (props) => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {projects.map((project) => (
-                                                    <TableRow key={project.id} onClick={() => displayAllDetailsAboutProject(project)}>
+                                                {Object.keys(projects).map(key => (
+                                                    <TableRow key={key}>
                                                         <TableCell component="th" scope="row">
-                                                            {project.name}
+                                                            {projects[key].name}
                                                         </TableCell>
                                                         <TableCell align="left">
-                                                            {project.description}
+                                                            {projects[key].description}
                                                         </TableCell>
                                                         <TableCell align="left">
-                                                            {project.owner.username}
+                                                            {projects[key].owner.username}
                                                         </TableCell>
                                                     </TableRow>
                                                 ))}
@@ -148,7 +148,7 @@ const HomePage = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    projects: state.project.projects,
+    projects: state.projects.data,
     currentUser: state.session.user
 });
 

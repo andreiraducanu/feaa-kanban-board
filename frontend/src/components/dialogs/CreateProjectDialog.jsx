@@ -64,7 +64,9 @@ const CreateProjectDialog = (props) => {
 
     const onCreateButton = (event) => {
         event.preventDefault();
+
         createProject(name, description, username);
+        onClose(event);
     }
 
     return (

@@ -1,12 +1,8 @@
 import {
-    fetchErrorAction,
-    createProjectAction,
-    getProjectsAction,
-    getProjectAction,
-    updateProjectAction,
-    deleteProjectAction,
-    addMemberAction,
-    getMembersAction,
+    setProjectsAction,
+    addProjectAction,
+    removeProjectAction,
+    updateProjectAction
 } from '../redux/actions';
 
 import API from './client'
@@ -17,26 +13,18 @@ export const createProject = (name, description, username) => async dispatch => 
         description: description,
         ownerUsername: username
     }).then(res => {
-        dispatch(createProjectAction(res.data))
+        dispatch(addProjectAction(res.data))
     }).catch(err => {
-        dispatch(fetchErrorAction({ message: "This is an error message from addProject" }))
-    })
-}
-
-export const getProject = (projectId) => async dispatch => {
-    API.get(`/projects/${projectId}`).then(res => {
-        dispatch(getProjectAction(res.data))
-    }).catch(err => {
-        dispatch(fetchErrorAction({ message: "This is an error message from getProject" }))
+        console.log(err);
     })
 }
 
 // functia lui mihai
 export const getProjects = (username) => async dispatch => {
     API.get('/projects', { params: { owner: username } }).then(res => {
-        dispatch(getProjectsAction(res.data))
+        dispatch(setProjectsAction(res.data))
     }).catch(err => {
-        dispatch(fetchErrorAction({ message: "This is an error message from getProjects" }))
+        console.log(err);
     })
 }
 
@@ -45,27 +33,27 @@ export const updateProject = (idProject, name, description) => async dispatch =>
         name: name,
         description: description,
     }).then(res => {
-        dispatch(updateProjectAction())
+        dispatch(updateProjectAction(res.data))
     }).catch(err => {
-        dispatch(fetchErrorAction({ message: "This is an error message from updateProject" }))
+        console.log(err);
     })
 }
 
 export const deleteProject = (idProject) => async dispatch => {
     API.delete(`/projects/${idProject}`).then(res => {
-        dispatch(deleteProjectAction())
+        dispatch(removeProjectAction(idProject))
     }).catch(err => {
-        dispatch(fetchErrorAction({ message: "This is an error message from deleteProject" }))
+        console.log(err);
     })
 }
 
-export const addChild = (issueId, memberUsername) => async dispatch => {
-    API.post(`/projects/${issueId}/members`, {
+export const addMember = (projectId, memberUsername) => async dispatch => {
+    API.post(`/projects/${projectId}/members`, {
         memberUsername: memberUsername,
     }).then(res => {
-        dispatch(addMemberAction())
+        dispatch(updateProjectAction(res.data))
     }).catch(err => {
-        dispatch(fetchErrorAction({ message: "This is an error message from addChild" }))
+        console.log(err);
     })
 }
 

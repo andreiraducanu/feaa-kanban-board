@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import sessionReducer from './slices/sessionSlice';
-import projectReducer from './slices/projectSlice';
+import projectsReducer from './slices/projectsSlice';
 import issueReducer from './slices/issueSlice';
 
 const store = configureStore({
     reducer: {
         session: sessionReducer,
-        project: projectReducer,
+        projects: projectsReducer,
         issue: issueReducer,
     },
 });

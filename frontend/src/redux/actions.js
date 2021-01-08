@@ -5,14 +5,11 @@ export {
 } from './slices/sessionSlice';
 
 export {
-    createProject as createProjectAction,
-    getProjects as getProjectsAction,
-    getProject as getProjectAction,
-    updateProject as updateProjectAction,
-    deleteProject as deleteProjectAction,
-    addMember as addMemberAction,
-    getMembers as getMembersAction,
-} from './slices/projectSlice';
+    setProjects as setProjectsAction,
+    addProject as addProjectAction,
+    removeProject as removeProjectAction,
+    updateProject as updateProjectAction
+} from './slices/projectsSlice';
 
 export {
     createIssue as createIssueAction,
