@@ -31,7 +31,7 @@ export const getProject = (projectId) => async dispatch => {
 }
 
 // functia lui mihai
-export const getProjects = (username?) => async dispatch => {
+export const getProjects = (username) => async dispatch => {
     API.get('/projects', { params: { owner: username } }).then(res => {
         dispatch(getProjectsAction(res.data))
     }).catch(err => {
