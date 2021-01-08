@@ -19,11 +19,8 @@ const sessionSlice = createSlice({
 
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('jwt', jwt);
-
-            console.log("login")
         },
         logout(state) {
-            console.log("logout")
             state.isAuthenticated = false;
             state.user = {}
             state.jwt = ''

@@ -111,24 +111,26 @@ const HomePage = (props) => {
                                     <TableContainer>
                                         <Table>
                                             <TableHead>
-                                                <TableCell>Name</TableCell>
-                                                <TableCell>Created Date</TableCell>
-                                                <TableCell>Lead</TableCell>
+                                                <TableRow>
+                                                    <TableCell>Name</TableCell>
+                                                    <TableCell>Created Date</TableCell>
+                                                    <TableCell>Lead</TableCell>
+                                                </TableRow>
                                             </TableHead>
                                             <TableBody>
-
                                                 {projects.map((project) => (
-
                                                     <TableRow key={project.id} onClick={() => displayAllDetailsAboutProject(project)}>
                                                         <TableCell component="th" scope="row">
                                                             {project.name}
                                                         </TableCell>
-                                                        <TableCell align="left">{project.description}</TableCell>
-                                                        <TableCell align="left">{project.owner.username}</TableCell>
+                                                        <TableCell align="left">
+                                                            {project.description}
+                                                        </TableCell>
+                                                        <TableCell align="left">
+                                                            {project.owner.username}
+                                                        </TableCell>
                                                     </TableRow>
                                                 ))}
-
-
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
