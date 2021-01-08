@@ -52,7 +52,7 @@ const HomePage = (props) => {
 
     const [showCreateProject, setShowCreateProject] = useState(false);
     const { projects, getProjects } = props;
-    const { user } = props;
+    const { currentUser } = props;
     const isProjectsEmpty = () => projects.length == 0;
 
     const CreateProjectButton = () => (
@@ -71,7 +71,7 @@ const HomePage = (props) => {
     }
 
     useEffect(() => {
-        getProjects(user);
+        getProjects(currentUser.username);
     }, []);
 
     return (
@@ -147,7 +147,7 @@ const HomePage = (props) => {
 
 const mapStateToProps = (state) => ({
     projects: state.project.projects,
-    user: state.session.user.username
+    currentUser: state.session.user
 });
 
 const mapDispatchToProps = ({
