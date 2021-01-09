@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createStyles, withStyles } from '@material-ui/core/styles';
+import { createStyles, withStyles, makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -9,11 +9,20 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import { EmptyImage } from '../../assets/svg/icons';
-import { CreateProjectDialog } from '../dialogs';
+import { CreateProjectDialog, SimpleDialog } from '../dialogs';
 import Header from '../common/Header';
 import { getProjects } from "../../api/projectsApi";
 import { connect } from "react-redux";
 import TableRow from '@material-ui/core/TableRow';
+import MenuIcon from '@material-ui/icons/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import { blue } from '@material-ui/core/colors';
+import PropTypes from 'prop-types';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 const styles = createStyles({
     root: {
         height: '100vh',
@@ -44,7 +53,7 @@ const styles = createStyles({
         minHeight: '160px',
         height: 'auto',
         width: 'auto',
-    }
+    },
 });
 
 const HomePage = (props) => {
@@ -66,9 +75,49 @@ const HomePage = (props) => {
         </Button >
     );
 
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState(1);
+
     function displayAllDetailsAboutProject(project) {
         console.log(project.id);
     }
+
+    function deleteProjectSelected(project) {
+        console.log("delete project");
+        handleClickOpen(project.id);
+        console.log(project.id);
+    }
+
+    const handleClickOpen = (id) => {
+        setOpen(true);
+        setSelectedValue(id);
+        console.log("valoarea este", selectedValue);
+    };
+
+    const handleCloseDiag = (value) => {
+        setOpen(false);
+        setSelectedValue(value);
+    };
+
+    function editProject(project) {
+        console.log("edit project");
+        console.log(project.id);
+    }
+
+    function addMemberProject(project) {
+        console.log("add member project");
+        console.log(project.id);
+    }
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     useEffect(() => {
         getProjects(currentUser.username);
@@ -119,18 +168,31 @@ const HomePage = (props) => {
                                             </TableHead>
                                             <TableBody>
                                                 {projects.map((project) => (
-                                                    <TableRow key={project.id} onClick={() => displayAllDetailsAboutProject(project)}>
-                                                        <TableCell component="th" scope="row">
+
+                                                    <TableRow key={project.id}>
+                                                        <TableCell component="th" scope="row" onClick={() => displayAllDetailsAboutProject(project)} >
                                                             {project.name}
                                                         </TableCell>
-                                                        <TableCell align="left">
-                                                            {project.description}
-                                                        </TableCell>
-                                                        <TableCell align="left">
-                                                            {project.owner.username}
+                                                        <TableCell align="left" onClick={() => displayAllDetailsAboutProject(project)}>{project.description} </TableCell>
+                                                        <TableCell align="left" onClick={() => displayAllDetailsAboutProject(project)}>{project.owner.username}</TableCell>
+                                                        <TableCell align="right">
+                                                            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>   <MenuIcon></MenuIcon> </Button>
+                                                            <Menu
+                                                                id="simple-menu"
+                                                                anchorEl={anchorEl}
+                                                                keepMounted
+                                                                open={Boolean(anchorEl)}
+                                                                onClose={handleClose}
+                                                            >
+                                                                <MenuItem onClick={() => deleteProjectSelected(project)}>Delete</MenuItem>
+                                                                <MenuItem onClick={() => editProject(project)}>Edit project</MenuItem>
+                                                                <MenuItem onClick={() => addMemberProject(project)}>Add member</MenuItem>
+                                                            </Menu>
                                                         </TableCell>
                                                     </TableRow>
                                                 ))}
+
+                                                <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleCloseDiag} />
                                             </TableBody>
                                         </Table>
                                     </TableContainer>

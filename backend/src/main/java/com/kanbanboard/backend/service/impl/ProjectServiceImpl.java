@@ -124,7 +124,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         // Delete the project
         projectRepository.delete(project);
-
+        System.out.println("delete");
         return "ok";
     }
 
