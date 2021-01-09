@@ -4,7 +4,8 @@ const projectSlice = createSlice({
     name: 'project',
     initialState: {
         currentProject: {},
-        projects: []
+        projects: [],
+        deletedProject: {}
 
     },
     reducers: {
@@ -24,6 +25,8 @@ const projectSlice = createSlice({
             console.log("Project updated")
         },
         deleteProject(state, action) {
+            console.log("action payload este" + action.payload);
+            state.deletedProject = action.payload;
             console.log("Project deleted")
         },
         addMember(state, action) {
