@@ -1,8 +1,9 @@
 import {
-    setProjectsAction,
-    addProjectAction,
-    removeProjectAction,
-    updateProjectAction
+    projectAddedAction,
+    projectDeletedAction,
+    projectUpdatedAction,
+    projectsLoadingAction,
+    projectsLoadedAction
 } from '../redux/actions';
 
 import API from './client'
@@ -13,15 +14,16 @@ export const createProject = (name, description, username) => async dispatch => 
         description: description,
         ownerUsername: username
     }).then(res => {
-        dispatch(addProjectAction(res.data))
+        dispatch(projectAddedAction(res.data))
     }).catch(err => {
         console.log(err);
     })
 }
 
 export const getProjects = (username) => async dispatch => {
+    dispatch(projectsLoadingAction);
     API.get('/projects', { params: { owner: username } }).then(res => {
-        dispatch(setProjectsAction(res.data))
+        dispatch(projectsLoadedAction(res.data))
     }).catch(err => {
         console.log(err);
     })
@@ -32,7 +34,7 @@ export const updateProject = (idProject, name, description) => async dispatch =>
         name: name,
         description: description,
     }).then(res => {
-        dispatch(updateProjectAction(res.data))
+        dispatch(projectUpdatedAction(res.data))
     }).catch(err => {
         console.log(err);
     })
@@ -40,7 +42,7 @@ export const updateProject = (idProject, name, description) => async dispatch =>
 
 export const deleteProject = (idProject) => async dispatch => {
     API.delete(`/projects/${idProject}`).then(res => {
-        dispatch(removeProjectAction(idProject))
+        dispatch(projectDeletedAction(idProject))
     }).catch(err => {
         console.log(err);
     })
@@ -50,7 +52,7 @@ export const addMember = (projectId, memberUsername) => async dispatch => {
     API.post(`/projects/${projectId}/members`, {
         memberUsername: memberUsername,
     }).then(res => {
-        dispatch(updateProjectAction(res.data))
+        dispatch(projectUpdatedAction(res.data))
     }).catch(err => {
         console.log(err);
     })

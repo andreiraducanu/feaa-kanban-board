@@ -187,6 +187,9 @@ const CreateIssueDialog = (props) => {
                 </div>
             </DialogContent>
             <DialogActions className={classes.actions}>
+                <Link onClick={onClose}>
+                    Cancel
+                </Link>
                 <Button
                     size="small"
                     variant="contained"
@@ -196,16 +199,13 @@ const CreateIssueDialog = (props) => {
                 >
                     Create
                 </Button>
-                <Link onClick={onClose}>
-                    Cancel
-                </Link>
             </DialogActions>
         </Dialog >
     );
 };
 
 const mapStateToProps = (state) => ({
-    projects: Object.keys(state.projects.data).map(key => state.projects.data[key]),
+    projects: Object.values(state.projects.data).map(key => state.projects.data[key]),
 })
 
 const mapDispatchToProps = ({

@@ -1,10 +1,4 @@
 import axios from 'axios';
-import store from '../redux/store';
-import {
-    loginSuccessAction,
-    fetchErrorAction,
-    createProjectAction
-} from '../redux/actions';
 
 const API = axios.create({
     baseURL: 'http://localhost:8080',
@@ -15,11 +9,11 @@ const API = axios.create({
 });
 
 API.interceptors.request.use(config => {
-    const jwt = store.getState().session.jwt;
+    const jwt = localStorage.getItem('jwt');
 
     const path = config.url;
 
-    if (!(path.match('/user/login') || path.match('/user/signup'))) {
+    if (!(path.match('/users/login') || path.match('/users/signup'))) {
         config.headers.Authorization = `Bearer ${jwt}`
     }
 

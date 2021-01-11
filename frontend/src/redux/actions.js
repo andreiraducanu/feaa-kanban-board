@@ -5,10 +5,11 @@ export {
 } from './slices/sessionSlice';
 
 export {
-    setProjects as setProjectsAction,
-    addProject as addProjectAction,
-    removeProject as removeProjectAction,
-    updateProject as updateProjectAction
+    projectAdded as projectAddedAction,
+    projectDeleted as projectDeletedAction,
+    projectUpdated as projectUpdatedAction,
+    projectsLoading as projectsLoadingAction,
+    projectsLoaded as projectsLoadedAction,
 } from './slices/projectsSlice';
 
 export {

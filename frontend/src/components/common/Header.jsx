@@ -112,10 +112,10 @@ const Header = (props) => {
             >
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
-            <CreateIssueDialog
+            {/* <CreateIssueDialog
                 open={showCreateIssue}
                 onClose={() => setShowCreateIssue(false)}
-            />
+            /> */}
         </React.Fragment>
     );
 }
