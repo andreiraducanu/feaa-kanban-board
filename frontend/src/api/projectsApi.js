@@ -30,10 +30,12 @@ export const getProjects = (username) => async dispatch => {
 }
 
 export const updateProject = (idProject, name, description) => async dispatch => {
+    console.log(idProject, name, description)
     API.put(`/projects/${idProject}`, {
         name: name,
         description: description,
     }).then(res => {
+        console.log(res.data)
         dispatch(projectUpdatedAction(res.data))
     }).catch(err => {
         console.log(err);

@@ -6,7 +6,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import ProjectListItem from './ProjectListItem';
-import { DeleteProjectDialog } from '../dialogs';
+import { DeleteProjectDialog, EditProjectDialog } from '../dialogs';
 
 const ProjectList = ({ projectIds }) => {
 
@@ -14,13 +14,16 @@ const ProjectList = ({ projectIds }) => {
 
     const [showDeleteProject, setShowDeleteProject] = useState(false);
 
+    const [showEditProject, setShowEditProject] = useState(false);
+
     const handleDeleteClick = (projectId) => {
         setSelectedProjectId(projectId);
         setShowDeleteProject(true);
     };
 
     const handleEditClick = (projectId) => {
-        //TODO
+        setSelectedProjectId(projectId);
+        setShowEditProject(true);
     };
 
     const handleAddMemberClick = (projectId) => {
@@ -54,6 +57,11 @@ const ProjectList = ({ projectIds }) => {
             <DeleteProjectDialog
                 open={showDeleteProject}
                 onClose={() => setShowDeleteProject(false)}
+                projectId={selectedProjectId}
+            />
+            <EditProjectDialog
+                open={showEditProject}
+                onClose={() => setShowEditProject(false)}
                 projectId={selectedProjectId}
             />
         </React.Fragment>

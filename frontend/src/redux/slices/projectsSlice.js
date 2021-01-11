@@ -24,11 +24,9 @@ const projectsSlice = createSlice({
         projectUpdated(state, action) {
             const project = action.payload;
 
-            if (project.id in state.entities) {
-                state.entities[project.id] = project;
+            state.entities[project.id] = project;
 
-                console.log(`Project ${newProject.id} updated`);
-            }
+            console.log(`Project ${project.id} updated`);
         },
         projectsLoading(state) {
             state.status = 'loading'
