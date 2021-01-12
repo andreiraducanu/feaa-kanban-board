@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-import { connect } from 'react-redux';
 import { createProject } from '../../api/projectsApi'
 import { selectUsername } from '../../redux/slices/sessionSlice';
 

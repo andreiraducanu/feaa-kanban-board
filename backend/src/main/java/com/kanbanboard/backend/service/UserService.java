@@ -17,5 +17,7 @@ public interface UserService {
 
     UserDetails loadUserByUsername(String username);
 
-    List<UserDto> getAll(String projectId) throws EntityNotFoundException;
+    List<UserDto> getNonMembers(String projectId) throws EntityNotFoundException;
+
+    List<UserDto> getAll() throws EntityNotFoundException;
 }

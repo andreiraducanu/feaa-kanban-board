@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public List<UserDto> getAll(String projectId) throws EntityNotFoundException {
+    public List<UserDto> getNonMembers(String projectId) throws EntityNotFoundException {
         List<User> users;
 
         Project project = findProjectById(projectId);
@@ -84,6 +84,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         {
             members.forEach(users::remove);
         }
+
+        if (users == null) {
+            return new ArrayList<>();
+        }
+
+        return convertUserToDto(users);
+    }
+
+    @Override
+    public List<UserDto> getAll() throws EntityNotFoundException {
+        List<User> users;
+
+        users = userRepository.findAll();
 
         if (users == null) {
             return new ArrayList<>();

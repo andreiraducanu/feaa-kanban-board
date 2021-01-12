@@ -41,8 +41,13 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    ResponseEntity<List<UserDto>> getAll(@RequestParam(name = "projectId", required = false) String projectId) throws EntityNotFoundException {
-        return new ResponseEntity<>(userService.getAll(projectId), HttpStatus.OK);
+    ResponseEntity<List<UserDto>> getNonMembers(@RequestParam(name = "projectId", required = false) String projectId) throws EntityNotFoundException {
+        return new ResponseEntity<>(userService.getNonMembers(projectId), HttpStatus.OK);
+    }
+
+    @GetMapping("/users/all")
+    ResponseEntity<List<UserDto>> getAll() throws EntityNotFoundException {
+        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
     }
 
     @PostMapping("/users/signup")
