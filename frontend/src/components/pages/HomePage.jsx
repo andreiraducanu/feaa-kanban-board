@@ -4,28 +4,42 @@ import { createStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
 import { CreateProjectDialog } from '../dialogs';
 import Header from '../common/Header';
 import { getProjects } from "../../api/projectsApi";
 import { EmptyImage } from '../../assets/svg/icons';
-
 import { selectProjectIds } from '../../redux/slices/projectsSlice';
-import ProjectList from '../projects/ProjectList';
+import ProjectTable from '../projects/ProjectTable';
 
 const styles = createStyles({
     root: {
-        height: '100vh',
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        height: '100%',
+        overflow: 'hidden',
+        width: '100%'
+    },
+    wrapper: {
+        display: 'flex',
+        flex: '1 1 auto',
+        overflow: 'hidden',
+        paddingTop: 64
+    },
+    contentContainer: {
+        display: 'flex',
+        flex: '1 1 auto',
+        overflow: 'hidden'
     },
     content: {
-        flexGrow: 1,
-        padding: '0 40px',
+        flex: '1 1 auto',
+        height: '100%',
+        overflow: 'auto'
     },
     contentHeader: {
         display: 'flex',
-        margin: '16px 0 24px'
+        justifyContent: 'space-between',
+        marginBottom: '16px'
     },
     title: {
         flexGrow: 1
@@ -76,35 +90,43 @@ const HomePage = (props) => {
             <CssBaseline />
             <div className={classes.root}>
                 <Header />
-                <div className={classes.content}>
-                    <div className={classes.contentHeader}>
-                        <Typography className={classes.title} variant="h5">
-                            Projects
-                    </Typography>
-                        {!isProjectsEmpty() && <CreateProjectButton />}
+                <div className={classes.wrapper}>
+                    <div className={classes.contentContainer}>
+                        <div className={classes.content}>
+                            <Container maxWidth={false}>
+                                <Box mt={3}>
+                                    <div className={classes.contentHeader}>
+                                        <Typography className={classes.title} variant="h5">
+                                            Projects
+                                        </Typography>
+                                        {!isProjectsEmpty() && <CreateProjectButton />}
+                                    </div>
+                                    {isProjectsEmpty() ?
+                                        (
+                                            <div className={classes.emptyContainer}>
+                                                <EmptyImage className={classes.emptyImage} />
+                                                <Typography
+                                                    variant="h6"
+                                                    style={{ marginBottom: '16px' }}
+                                                >
+                                                    You currently have no projects
+                                                </Typography>
+                                                <Typography
+                                                    variant="subtitle1"
+                                                    style={{ marginBottom: '24px' }}
+                                                >
+                                                    Let's create your first project
+                                                </Typography>
+                                                <CreateProjectButton />
+                                            </div>
+                                        ) : (
+                                            <ProjectTable projectIds={projectIds} />
+                                        )
+                                    }
+                                </Box>
+                            </Container>
+                        </div>
                     </div>
-                    {isProjectsEmpty() ?
-                        (
-                            <div className={classes.emptyContainer}>
-                                <EmptyImage className={classes.emptyImage} />
-                                <Typography
-                                    variant="h6"
-                                    style={{ marginBottom: '16px' }}
-                                >
-                                    You currently have no projects
-                                </Typography>
-                                <Typography
-                                    variant="subtitle1"
-                                    style={{ marginBottom: '24px' }}
-                                >
-                                    Let's create your first project
-                                </Typography>
-                                <CreateProjectButton />
-                            </div>
-                        ) : (
-                            <ProjectList projectIds={projectIds} />
-                        )
-                    }
                 </div>
             </div>
             <CreateProjectDialog

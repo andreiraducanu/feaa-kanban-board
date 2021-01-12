@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { createStyles, withStyles } from '@material-ui/core/styles';
+import { useSelector, useDispatch } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import { deepOrange } from '@material-ui/core/colors';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,33 +9,23 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { CreateIssueDialog } from '../dialogs';
+import { BrandLogo } from '../../assets/svg/brand';
 import { logoutAction } from '../../redux/actions';
 
-const styles = (theme) => createStyles({
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-    },
-    appBarShadow: {
-        height: '4px',
-        background: "linear-gradient(180deg,rgba(9,30,66,0.13) 0,rgba(9,30,66,0.13) 1px,rgba(9,30,66,0.08) 1px,rgba(9,30,66,0) 4px)"
-    },
+const useStyles = makeStyles(theme => ({
     toolbar: {
-        minHeight: '56px'
+        borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
     },
     leftContainer: {
-        display: 'flex',
         flexGrow: 1,
-        alignItems: 'center'
+        display: 'flex'
     },
     rightContainer: {
-        display: 'flex',
-        alignItems: 'center'
+        display: 'flex'
     },
-    createButton: {
-        marginLeft: '24px'
+    logo: {
+        width: 237.5,
+        height: 40
     },
     avatar: {
         width: '32px',
@@ -44,22 +34,22 @@ const styles = (theme) => createStyles({
         color: theme.palette.getContrastText(deepOrange[500]),
         backgroundColor: deepOrange[500],
     },
-});
+}));
 
-const Header = (props) => {
-    const {
-        firstname,
-        lastname
-    } = props;
-    const { logoutAction } = props;
-    const { classes } = props;
+const Header = () => {
+    const classes = useStyles();
 
-    const [showCreateIssue, setShowCreateIssue] = useState(false);
+    const { firstname, lastname } = useSelector(state => ({
+        firstname: state.session.user.firstname,
+        lastname: state.session.user.lastname
+    }));
+    const dispatch = useDispatch();
+
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
     const handleLogout = (event) => {
         setMenuAnchorEl(null);
-        logoutAction()
+        dispatch(logoutAction())
     };
 
     const handleProfileClick = (event) => {
@@ -72,21 +62,10 @@ const Header = (props) => {
 
     return (
         <React.Fragment>
-            <AppBar elevation={0} position="relative" color="transparent">
+            <AppBar elevation={0} color="default">
                 <Toolbar className={classes.toolbar}>
                     <div className={classes.leftContainer}>
-                        <Typography variant="h6">
-                            Kanban Board
-                    </Typography>
-                        <Button
-                            className={classes.createButton}
-                            size="small"
-                            variant="contained"
-                            color="primary"
-                            onClick={() => setShowCreateIssue(true)}
-                        >
-                            Create
-                        </Button>
+                        <BrandLogo className={classes.logo} />
                     </div>
                     <div className={classes.rightContainer}>
                         <Button aria-controls="menu" aria-haspopup="true" onClick={handleProfileClick}>
@@ -101,7 +80,6 @@ const Header = (props) => {
                         </Button>
                     </div>
                 </Toolbar>
-                <div className={classes.appBarShadow} />
             </AppBar>
             <Menu
                 id="menu"
@@ -112,24 +90,8 @@ const Header = (props) => {
             >
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
-            {/* <CreateIssueDialog
-                open={showCreateIssue}
-                onClose={() => setShowCreateIssue(false)}
-            /> */}
         </React.Fragment>
     );
-}
+};
 
-const mapStateToProps = (state) => ({
-    firstname: state.session.user.firstname,
-    lastname: state.session.user.lastname
-});
-
-const mapDispatchToProps = ({
-    logoutAction
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(withStyles(styles)(Header));
+export default Header;

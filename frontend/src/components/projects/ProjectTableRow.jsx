@@ -8,7 +8,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
-const ProjectListItem = ({ id, onDeleteClick, onEditClick, onAddMemberClick }) => {
+const ProjectTableRow = ({ id, onDeleteClick, onEditClick, onAddMemberClick }) => {
 
     const project = useSelector(state => selectProjectById(state, id));
     const { name, description, owner } = project;
@@ -40,7 +40,7 @@ const ProjectListItem = ({ id, onDeleteClick, onEditClick, onAddMemberClick }) =
                 {`${owner.firstname} ${owner.lastname}`}
             </TableCell>
             <TableCell align="right">
-                <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleMenuClick}>
+                <IconButton style={{ maxHeight: '24px' }} onClick={handleMenuClick}>
                     <MoreHorizIcon />
                 </IconButton>
                 <Menu
@@ -65,4 +65,4 @@ const ProjectListItem = ({ id, onDeleteClick, onEditClick, onAddMemberClick }) =
     );
 };
 
-export default ProjectListItem;
+export default ProjectTableRow;

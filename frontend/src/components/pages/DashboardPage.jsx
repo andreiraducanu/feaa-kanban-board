@@ -1,34 +1,43 @@
 import React, { useState } from 'react';
-import { createStyles, withStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '@material-ui/core/Drawer';
 import Header from '../common/Header';
 
-const styles = createStyles({
+const useStyles = makeStyles({
     root: {
-        height: '100vh',
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center'
+        height: '100%',
+        width: '100%',
+        overflow: 'hidden',
     },
-    content: {
-        flexGrow: 1,
-        backgroundColor: 'red'
+    drawerPaper: {
+        width: 256,
+        top: 64,
+        height: 'calc(100% - 64px)',
     },
 });
 
-const DashboardPage = ({ classes }) => {
+const DashboardPage = () => {
+    const classes = useStyles();
 
     return (
         <React.Fragment>
             <CssBaseline />
             <div className={classes.root}>
                 <Header />
-                <div className={classes.content}>
-                    Hello World
-                </div>
+                <Drawer
+                    anchor='left'
+                    classes={{ paper: classes.drawerPaper }}
+                    open
+                    variant="persistent"
+                >
+                    Test
+                </Drawer>
             </div>
         </React.Fragment>
     );
 };
 
-export default withStyles(styles)(DashboardPage);
+export default DashboardPage;
