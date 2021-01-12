@@ -35,36 +35,25 @@ const AddMemberDialog = ({ projectId, open, onClose, classes }) => {
 
     const dispatch = useDispatch();
 
-    const canBeAdded = () => {
-        if (memberUsername.length <= 0)
-            return false;
-
-        return true;
-    };
+    const canBeAdded = () => memberUsername.length > 0;
 
     const handleAddMemberClick = (event) => {
-        event.preventDefault();
-
-        console.log("Test in handle button" + projectId + memberUsername)
-
         dispatch(addMember(projectId, memberUsername));
-
         setMemberUsername('')
-
         onClose();
     };
 
     useEffect(() => {
-
-        console.log("Test in usse efect " + projectId)
         const fetchUsers = async () => {
             const result = await getUsers(projectId)
             setUsers(result.data)
+        };
+
+        if (open == true) {
+            fetchUsers();
         }
 
-        fetchUsers()
-
-    }, [open == true])
+    }, [open])
 
     return (
         <React.Fragment>

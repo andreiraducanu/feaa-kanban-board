@@ -23,6 +23,11 @@ const ProjectListItem = ({ id, onDeleteClick, onEditClick, onAddMemberClick }) =
         setMenuAnchorEl(null);
     };
 
+    const handleClick = (action) => {
+        action();
+        handleMenuClose();
+    }
+
     return (
         <TableRow key={id}>
             <TableCell component="th" scope="row">
@@ -45,13 +50,13 @@ const ProjectListItem = ({ id, onDeleteClick, onEditClick, onAddMemberClick }) =
                     open={Boolean(menuAnchorEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem onClick={onDeleteClick}>
+                    <MenuItem onClick={() => handleClick(onDeleteClick)}>
                         Delete
                     </MenuItem>
-                    <MenuItem onClick={onEditClick}>
+                    <MenuItem onClick={() => handleClick(onEditClick)}>
                         Edit project
                     </MenuItem>
-                    <MenuItem onClick={onAddMemberClick}>
+                    <MenuItem onClick={() => handleClick(onAddMemberClick)}>
                         Add member
                     </MenuItem>
                 </Menu>
