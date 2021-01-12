@@ -2,6 +2,7 @@ import { createSlice, createSelector } from '@reduxjs/toolkit';
 
 const initialState = {
     entities: {},
+    users: {},
     status: 'normal'
 };
 
@@ -48,6 +49,7 @@ export const {
     projectAdded,
     projectDeleted,
     projectUpdated,
+    usersLoaded,
     projectsLoading,
     projectsLoaded
 } = projectsSlice.actions;

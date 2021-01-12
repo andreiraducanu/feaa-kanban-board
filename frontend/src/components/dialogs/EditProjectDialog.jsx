@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createStyles, withStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -29,7 +27,14 @@ const EditProjectDialog = ({ projectId, open, onClose, classes }) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
 
-    const handleEdit = () => {
+    const canBeUpdated = () => {
+        if (name.length <= 0 || description.length <= 0)
+            return false;
+
+        return true;
+    };
+
+    const handleEditClick = () => {
         dispatch(updateProject(projectId, name, description));
         onClose();
 
@@ -69,11 +74,12 @@ const EditProjectDialog = ({ projectId, open, onClose, classes }) => {
                         Cancel
                     </Link>
                     <Button
+                        disabled={!canBeUpdated()}
                         className={classes.action}
                         size="small"
                         variant="contained"
                         color="primary"
-                        onClick={handleEdit}
+                        onClick={handleEditClick}
                     >
                         Update
                     </Button>

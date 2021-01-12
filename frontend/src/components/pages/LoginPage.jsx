@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
 import { login } from '../../api/userApi';
 import { createStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -14,6 +14,7 @@ import { Redirect } from "react-router-dom";
 import AccountRightArtwork from '../../assets/svg/artwork/account_right.svg';
 import AccountLeftArtwork from '../../assets/svg/artwork/account_left.svg';
 import SnackBar from '../common/SnackBar';
+import { selectErrorMessage, selectIsAuthenticated } from '../../redux/slices/sessionSlice';
 
 const styles = (theme) => createStyles({
     root: {
@@ -61,20 +62,19 @@ const styles = (theme) => createStyles({
     },
 });
 
-const LoginPage = (props) => {
-    const {
-        errorMessage,
-        isAuthenticated } = props;
-    const { login } = props;
-    const { classes } = props;
+const LoginPage = ({ classes }) => {
+    const errorMessage = useSelector(selectErrorMessage)
+    const isAuthenticated = useSelector(selectIsAuthenticated)
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    const dispatch = useDispatch();
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        login(username, password);
+        dispatch(login(username, password));
     };
 
     const validateForm = () => (username.length > 0 && password.length > 0);
@@ -159,16 +159,4 @@ const LoginPage = (props) => {
     );
 };
 
-const mapStateToProps = state => ({
-    errorMessage: state.session.errorMessage,
-    isAuthenticated: state.session.isAuthenticated
-});
-
-const mapDispatchToProps = ({
-    login
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(LoginPage));
+export default withStyles(styles)(LoginPage);

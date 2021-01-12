@@ -2,6 +2,7 @@ import {
     projectAddedAction,
     projectDeletedAction,
     projectUpdatedAction,
+    usersLoadedAction,
     projectsLoadingAction,
     projectsLoadedAction
 } from '../redux/actions';
@@ -51,18 +52,12 @@ export const deleteProject = (idProject) => async dispatch => {
 }
 
 export const addMember = (projectId, memberUsername) => async dispatch => {
+    console.log("Test in api" + projectId + memberUsername)
     API.post(`/projects/${projectId}/members`, {
         memberUsername: memberUsername,
     }).then(res => {
+        console.log(res.data)
         dispatch(projectUpdatedAction(res.data))
-    }).catch(err => {
-        console.log(err);
-    })
-}
-
-export const getMembers = (projectId) => async dispatch => {
-    API.get('/users', { params: { projectId: projectId } }).then(res => {
-        dispatch(getMembersAction(res.data))
     }).catch(err => {
         console.log(err);
     })

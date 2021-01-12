@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import clsx from 'clsx';
 import { createStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from '../common/Header';
@@ -17,8 +16,7 @@ const styles = createStyles({
     },
 });
 
-const DashboardPage = (props) => {
-    const { classes } = props;
+const DashboardPage = ({ classes }) => {
 
     return (
         <React.Fragment>

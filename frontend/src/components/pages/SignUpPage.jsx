@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
 import { signup } from '../../api/userApi';
 import { createStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -13,6 +13,7 @@ import { BrandLogo } from '../../assets/svg/brand';
 import { Redirect } from "react-router-dom";
 import AccountRightArtwork from '../../assets/svg/artwork/account_right.svg';
 import AccountLeftArtwork from '../../assets/svg/artwork/account_left.svg';
+import { selectIsAuthenticated } from '../../redux/slices/sessionSlice';
 
 
 const styles = (theme) => createStyles({
@@ -61,15 +62,15 @@ const styles = (theme) => createStyles({
     },
 });
 
-const SignUpPage = (props) => {
-    const { isAuthenticated } = props;
-    const { signup } = props;
-    const { classes } = props;
+const SignUpPage = ({ classes }) => {
+    const isAuthenticated = useSelector(selectIsAuthenticated)
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const dispatch = useDispatch();
 
     const validateForm = () => (
         firstName.length > 0
@@ -81,7 +82,7 @@ const SignUpPage = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        signup(firstName, lastName, username, password)
+        dispatch(signup(firstName, lastName, username, password))
     };
 
     if (isAuthenticated) {
@@ -184,15 +185,4 @@ const SignUpPage = (props) => {
     );
 };
 
-const mapStateToProps = (state) => ({
-    isAuthenticated: state.session.isAuthenticated
-});
-
-const mapDispatchToProps = ({
-    signup
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(SignUpPage));
+export default withStyles(styles)(SignUpPage);

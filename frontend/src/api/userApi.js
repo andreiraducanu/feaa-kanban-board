@@ -28,3 +28,7 @@ export const signup = (firstName, lastName, username, password) => async dispatc
         dispatch(fetchErrorAction({ message: "This is an error message from signup" }))
     })
 }
+
+export const getUsers = (projectId) => {
+    return API.get('/users', { params: { projectId: projectId } })
+}

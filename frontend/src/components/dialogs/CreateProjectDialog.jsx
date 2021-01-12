@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 import { createStyles, withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
@@ -9,6 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { connect } from 'react-redux';
 import { createProject } from '../../api/projectsApi'
+import { selectUsername } from '../../redux/slices/sessionSlice';
 
 const styles = createStyles({
     closeButtonContainer: {
@@ -42,18 +44,14 @@ const styles = createStyles({
 });
 
 
-const CreateProjectDialog = (props) => {
-    const {
-        open,
-        onClose
-    } = props;
+const CreateProjectDialog = ({ open, onClose, classes }) => {
 
-    const { classes } = props;
-    const { createProject } = props
-    const { username } = props
+    const username = useSelector(selectUsername)
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+
+    const dispatch = useDispatch();
 
     const canBeCreated = () => {
         if (name.length <= 0 || description.length <= 0)
@@ -65,7 +63,10 @@ const CreateProjectDialog = (props) => {
     const onCreateButton = (event) => {
         event.preventDefault();
 
-        createProject(name, description, username);
+        dispatch(createProject(name, description, username));
+        setName('')
+        setDescription('')
+
         onClose(event);
     }
 
@@ -114,16 +115,5 @@ const CreateProjectDialog = (props) => {
     );
 };
 
-const mapStateToProps = (state) => ({
-    username: state.session.user.username
-})
 
-
-const mapDispatchToProps = ({
-    createProject
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(CreateProjectDialog));
+export default withStyles(styles)(CreateProjectDialog);

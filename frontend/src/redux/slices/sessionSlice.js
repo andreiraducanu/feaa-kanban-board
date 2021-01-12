@@ -8,7 +8,7 @@ const sessionSlice = createSlice({
         isAuthenticated: currentUser != null,
         user: currentUser,
         jwt: '',
-        errorMessage: ''
+        errorMessage: '',
     },
     reducers: {
         loginSuccess(state, action) {
@@ -39,3 +39,9 @@ const sessionSlice = createSlice({
 export const { loginSuccess, fetchError, logout } = sessionSlice.actions
 
 export default sessionSlice.reducer;
+
+export const selectUsername = (state) => state.session.user.username;
+
+export const selectErrorMessage = (state) => state.session.errorMessage;
+
+export const selectIsAuthenticated = (state) => state.session.isAuthenticated;
