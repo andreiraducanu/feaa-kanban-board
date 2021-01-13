@@ -1,9 +1,6 @@
 package com.kanbanboard.backend.service.impl;
 
-import com.kanbanboard.backend.dto.ProjectAddMemberDto;
-import com.kanbanboard.backend.dto.ProjectCreateDto;
-import com.kanbanboard.backend.dto.ProjectDto;
-import com.kanbanboard.backend.dto.ProjectUpdateDto;
+import com.kanbanboard.backend.dto.*;
 import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.exception.ServerException;
 import com.kanbanboard.backend.model.Column;
@@ -66,14 +63,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectDto> getAll(String ownerFilter) throws EntityNotFoundException {
+    public List<ProjectItemDto> getAll(String ownerFilter) throws EntityNotFoundException {
         List<Project> projects;
 
         if (ownerFilter != null) {
             // Get owner
             User owner = userRepository.findByUsername(ownerFilter);
             if (owner == null)
-                throw new EntityNotFoundException("No suck user");
+                throw new EntityNotFoundException("No such user");
 
             // Filter projects
             projects = projectRepository.findByOwner(owner);
@@ -86,7 +83,7 @@ public class ProjectServiceImpl implements ProjectService {
             return new ArrayList<>();
         }
 
-        return convertProjectToDto(projects);
+        return convertProjectToProjectItemDto(projects);
     }
 
     @Override
@@ -162,9 +159,19 @@ public class ProjectServiceImpl implements ProjectService {
         return modelMapper.map(project, ProjectDto.class);
     }
 
+    private ProjectItemDto convertProjectToProjectItemDto(Project project) {
+        return modelMapper.map(project, ProjectItemDto.class);
+    }
+
     private List<ProjectDto> convertProjectToDto(List<Project> projects) {
         return projects.stream()
                 .map(this::convertProjectToDto)
+                .collect(Collectors.toList());
+    }
+
+    private List<ProjectItemDto> convertProjectToProjectItemDto(List<Project> projects) {
+        return projects.stream()
+                .map(this::convertProjectToProjectItemDto)
                 .collect(Collectors.toList());
     }
 

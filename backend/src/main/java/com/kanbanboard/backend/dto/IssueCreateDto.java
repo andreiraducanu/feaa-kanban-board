@@ -21,13 +21,16 @@ public class IssueCreateDto {
     @NotEmpty
     private String title;
 
-    @NotNull
+//    @NotNull
+    @JsonIgnore
     private IssueType type;
 
-    @NotNull
+//    @NotNull
+    @JsonIgnore
     private IssuePriority priority;
 
-    @NotNull
+//    @NotNull
+    @JsonIgnore
     private String assigneeUsername;
 
     @JsonIgnore

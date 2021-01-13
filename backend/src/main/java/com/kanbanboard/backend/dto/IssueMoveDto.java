@@ -15,6 +15,5 @@ public class IssueMoveDto {
     @NotEmpty
     private String idColumn;
 
-    @NotEmpty
     private int index;
 }

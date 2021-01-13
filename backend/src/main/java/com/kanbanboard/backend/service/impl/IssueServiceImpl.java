@@ -6,9 +6,12 @@ import com.kanbanboard.backend.exception.ServerException;
 import com.kanbanboard.backend.model.*;
 import com.kanbanboard.backend.repository.*;
 import com.kanbanboard.backend.service.IssueService;
+import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class IssueServiceImpl implements IssueService {
@@ -39,7 +42,7 @@ public class IssueServiceImpl implements IssueService {
         Project project = findProjectById(issueCreateDto.getProjectId());
         if (project == null)
             throw new EntityNotFoundException("No project found");
-
+        System.out.println(project);
         User reporter = null;
 //        if (issueCreateDto.getReporterUsername() != null) {
 //            // Get the reporter
@@ -73,6 +76,8 @@ public class IssueServiceImpl implements IssueService {
 
         // Save the column
         saveOrUpdateColumn(backlogColumn);
+        System.out.println(project);
+        projectRepository.save(project);
 
         return convertIssueToDto(issue);
     }
@@ -106,7 +111,41 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public IssueDto moveById(String idIssue, IssueMoveDto issueMoveDto) throws EntityNotFoundException {
-        return null;
+
+        Project project = projectRepository.findById(issueMoveDto.getIdProject()).orElse(null);
+        boolean found = false;
+        if (project != null) {
+            List<Column> columns = project.getColumns();
+            for (int i = 0; i < columns.size(); i++) {
+                if (columns.get(i).getIssues() != null) {
+                    for (int j = 0; j < columns.get(i).getIssues().size(); j++) {
+                        if (columns.get(i).getIssues().get(j).getId().equals(idIssue)) {
+                            Column column = columnRepository.findById(issueMoveDto.getIdColumn()).orElse(null);
+                            if (column != null) {
+                                System.out.println(column);
+                                Issue issue = new Issue();
+                                issue.setIndex(issueMoveDto.getIndex());
+                                issue.setAssignee(null);
+                                issue.setReporter(null);
+                                issue.setDescription(columns.get(i).getIssues().get(j).getDescription());
+                                issue.setTitle(columns.get(i).getIssues().get(j).getTitle());
+                                issueRepository.save(issue);
+
+                                column.addIssue(issue);
+
+                                columnRepository.save(column);
+
+                                projectRepository.save(project);
+
+                            }
+                        }
+                    }
+                }
+                if (found)
+                    break;
+            }
+        }
+        return new IssueDto();
     }
 
     @Override

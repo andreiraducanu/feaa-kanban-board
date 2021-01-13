@@ -1,9 +1,6 @@
 package com.kanbanboard.backend.controller;
 
-import com.kanbanboard.backend.dto.ProjectAddMemberDto;
-import com.kanbanboard.backend.dto.ProjectCreateDto;
-import com.kanbanboard.backend.dto.ProjectDto;
-import com.kanbanboard.backend.dto.ProjectUpdateDto;
+import com.kanbanboard.backend.dto.*;
 import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.exception.ServerException;
 import com.kanbanboard.backend.service.ProjectService;
@@ -32,7 +29,7 @@ public class ProjectController {
 
     @GetMapping("/projects")
     ResponseEntity<List<ProjectItemDto>> getProjects(@RequestParam(name = "owner", required = false) String ownerFilter) throws EntityNotFoundException {
-        return new ResponseEntity<>(projectService.getAll(ownerFilter), HttpStatus.OK);
+        return new ResponseEntity<List<ProjectItemDto>>(projectService.getAll(ownerFilter), HttpStatus.OK);
     }
 
     @GetMapping("/projects/{id}")
