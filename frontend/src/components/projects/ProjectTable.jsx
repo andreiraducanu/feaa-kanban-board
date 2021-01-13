@@ -53,7 +53,7 @@ const ProjectTable = ({ projectIds }) => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Name</TableCell>
-                                <TableCell>Created Date</TableCell>
+                                <TableCell>Description</TableCell>
                                 <TableCell>Lead</TableCell>
                                 <TableCell></TableCell>
                             </TableRow >
@@ -64,7 +64,7 @@ const ProjectTable = ({ projectIds }) => {
                                 .map(projectId =>
                                     <ProjectTableRow
                                         key={projectId}
-                                        id={projectId}
+                                        projectId={projectId}
                                         onDeleteClick={() => handleDeleteClick(projectId)}
                                         onEditClick={() => handleEditClick(projectId)}
                                         onAddMemberClick={() => handleAddMemberClick(projectId)}

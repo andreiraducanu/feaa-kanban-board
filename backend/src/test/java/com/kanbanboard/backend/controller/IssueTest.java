@@ -31,12 +31,12 @@ public class IssueTest {
     void setUp(){
         issueCreateDto = new IssueCreateDto();
         issueCreateDto.setAssigneeUsername("test");
-        issueCreateDto.setDescription("test");
+        //issueCreateDto.setDescription("test");
         issueCreateDto.setProjectId("5fad483c34948f4a6cae302e");
         issueCreateDto.setType(IssueType.EPIC);
         issueCreateDto.setPriority(IssuePriority.HIGH);
         issueCreateDto.setTitle("test");
-        issueCreateDto.setReporterUsername("test");
+        //issueCreateDto.setReporterUsername("test");
     }
 
     @Test

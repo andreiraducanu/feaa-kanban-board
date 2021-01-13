@@ -13,6 +13,9 @@ import { BrandLogo } from '../../assets/svg/brand';
 import { logoutAction } from '../../redux/actions';
 
 const useStyles = makeStyles(theme => ({
+    appBar: {
+        backgroundColor: 'white'
+    },
     toolbar: {
         borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
     },
@@ -62,7 +65,7 @@ const Header = () => {
 
     return (
         <React.Fragment>
-            <AppBar elevation={0} color="default">
+            <AppBar elevation={0} className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <div className={classes.leftContainer}>
                         <BrandLogo className={classes.logo} />

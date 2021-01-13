@@ -16,25 +16,11 @@ public class IssueDto {
 
     private String title;
 
-    private String description;
-
     private IssueType type;
 
     private IssuePriority priority;
 
-    private UserDto reporter;
-
     private UserDto assignee;
-
-    private List<IssueDto> children;
-
-    private int totalWorkTime;
-
-    private int currentWorkTime;
-
-    private List<WorkLogDto> workLogs;
-
-    private List<CommentDto> comments;
 
     private Date creationDate;
 }

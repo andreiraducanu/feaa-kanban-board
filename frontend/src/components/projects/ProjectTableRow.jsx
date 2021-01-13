@@ -6,11 +6,13 @@ import TableCell from '@material-ui/core/TableCell';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
-const ProjectTableRow = ({ id, onDeleteClick, onEditClick, onAddMemberClick }) => {
+const ProjectTableRow = ({ projectId, onDeleteClick, onEditClick, onAddMemberClick }) => {
 
-    const project = useSelector(state => selectProjectById(state, id));
+    const project = useSelector(state => selectProjectById(state, projectId));
     const { name, description, owner } = project;
 
     const [menuAnchorEl, setMenuAnchorEl] = useState(null);
@@ -29,14 +31,16 @@ const ProjectTableRow = ({ id, onDeleteClick, onEditClick, onAddMemberClick }) =
     }
 
     return (
-        <TableRow key={id}>
-            <TableCell component="th" scope="row">
-                {name}
+        <TableRow key={projectId}>
+            <TableCell>
+                <Link component={RouterLink} to={`/dashboard/${projectId}`} variant="subtitle2">
+                    {name}
+                </Link>
             </TableCell>
-            <TableCell align="left" >
+            <TableCell>
                 {description}
             </TableCell>
-            <TableCell align="left">
+            <TableCell>
                 {`${owner.firstname} ${owner.lastname}`}
             </TableCell>
             <TableCell align="right">

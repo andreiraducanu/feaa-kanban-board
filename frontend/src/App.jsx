@@ -21,7 +21,7 @@ const App = () => {
                 <PrivateRoute exact path="/">
                     <HomePage />
                 </PrivateRoute>
-                <PrivateRoute path="/dashboard">
+                <PrivateRoute path="/dashboard/:projectId">
                     <DashboardPage />
                 </PrivateRoute>
             </Switch>

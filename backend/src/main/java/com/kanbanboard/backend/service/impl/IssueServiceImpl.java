@@ -41,12 +41,12 @@ public class IssueServiceImpl implements IssueService {
             throw new EntityNotFoundException("No project found");
 
         User reporter = null;
-        if (issueCreateDto.getReporterUsername() != null) {
-            // Get the reporter
-            reporter = userRepository.findByUsername(issueCreateDto.getReporterUsername());
-            if (reporter == null)
-                throw new EntityNotFoundException("No such reporter");
-        }
+//        if (issueCreateDto.getReporterUsername() != null) {
+//            // Get the reporter
+//            reporter = userRepository.findByUsername(issueCreateDto.getReporterUsername());
+//            if (reporter == null)
+//                throw new EntityNotFoundException("No such reporter");
+//        }
 
         User assignee = null;
         if (issueCreateDto.getAssigneeUsername() != null) {
