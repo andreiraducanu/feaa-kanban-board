@@ -31,7 +31,7 @@ public class ProjectController {
     }
 
     @GetMapping("/projects")
-    ResponseEntity<List<ProjectDto>> getProjects(@RequestParam(name = "owner", required = false) String ownerFilter) throws EntityNotFoundException {
+    ResponseEntity<List<ProjectItemDto>> getProjects(@RequestParam(name = "owner", required = false) String ownerFilter) throws EntityNotFoundException {
         return new ResponseEntity<>(projectService.getAll(ownerFilter), HttpStatus.OK);
     }
 

@@ -13,6 +13,8 @@ public interface IssueService {
 
     IssueDto updateById(String idIssue, IssueUpdateDto issueUpdateDto) throws EntityNotFoundException;
 
+    IssueDto moveById(String idIssue, IssueMoveDto issueMoveDto) throws EntityNotFoundException;
+
     String deleteById(String idIssue) throws EntityNotFoundException;
 
     IssueDto addChild(String idIssue, IssueAddChildDto issueAddChildDto) throws EntityNotFoundException, ServerException;

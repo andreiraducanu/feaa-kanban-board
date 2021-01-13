@@ -105,6 +105,11 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
+    public IssueDto moveById(String idIssue, IssueMoveDto issueMoveDto) throws EntityNotFoundException {
+        return null;
+    }
+
+    @Override
     public String deleteById(String idIssue) throws EntityNotFoundException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
