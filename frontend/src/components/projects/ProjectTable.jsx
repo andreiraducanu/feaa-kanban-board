@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import ProjectTableRow from './ProjectTableRow';
-import { DeleteProjectDialog, EditProjectDialog, AddMemberDialog } from '../dialogs';
+import { DeleteProjectDialog, EditProjectDialog } from '../dialogs';
 
 const ProjectTable = ({ projectIds }) => {
 
@@ -19,7 +19,6 @@ const ProjectTable = ({ projectIds }) => {
 
     const [showDeleteProject, setShowDeleteProject] = useState(false);
     const [showEditProject, setShowEditProject] = useState(false);
-    const [showAddMemberProject, setShowAddMemberProject] = useState(false);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -38,11 +37,6 @@ const ProjectTable = ({ projectIds }) => {
     const handleEditClick = (projectId) => {
         setSelectedProjectId(projectId);
         setShowEditProject(true);
-    };
-
-    const handleAddMemberClick = (projectId) => {
-        setSelectedProjectId(projectId);
-        setShowAddMemberProject(true);
     };
 
     return (
@@ -67,7 +61,6 @@ const ProjectTable = ({ projectIds }) => {
                                         projectId={projectId}
                                         onDeleteClick={() => handleDeleteClick(projectId)}
                                         onEditClick={() => handleEditClick(projectId)}
-                                        onAddMemberClick={() => handleAddMemberClick(projectId)}
                                     />
                                 )}
                         </TableBody>
@@ -91,11 +84,6 @@ const ProjectTable = ({ projectIds }) => {
             <EditProjectDialog
                 open={showEditProject}
                 onClose={() => setShowEditProject(false)}
-                projectId={selectedProjectId}
-            />
-            <AddMemberDialog
-                open={showAddMemberProject}
-                onClose={() => setShowAddMemberProject(false)}
                 projectId={selectedProjectId}
             />
         </React.Fragment>

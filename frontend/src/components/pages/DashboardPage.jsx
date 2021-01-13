@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -7,6 +8,10 @@ import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Header from '../common/Header';
 import Board from '../kanban-board/Board';
+import ProjectMembers from '../projects/ProjectMembersList';
+import { AddMemberDialog, CreateIssueDialog } from '../dialogs'
+import Button from '@material-ui/core/Button';
+import { selectProjectById } from '../../redux/slices/projectsSlice';
 
 const useStyles = makeStyles({
     root: {
@@ -44,6 +49,33 @@ const DashboardPage = () => {
 
     const { projectId } = useParams();
 
+    const project = useSelector(state => selectProjectById(state, projectId))
+
+    const [showAddMemberDialog, setShowAddMemberDialog] = useState(false);
+    const [showCreateIssueDialog, setShowCreateIssueDialog] = useState(false);
+
+    const AddMemberButton = () => (
+        <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => setShowAddMemberDialog(true)}
+        >
+            Add member
+        </Button >
+    );
+
+    const CreateIssueButton = () => (
+        <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={() => setShowCreateIssueDialog(true)}
+        >
+            Create issue
+        </Button >
+    );
+
     return (
         <React.Fragment>
             <CssBaseline />
@@ -55,7 +87,15 @@ const DashboardPage = () => {
                     open
                     variant="persistent"
                 >
-                    {projectId}
+                    <p>
+                        Members
+                    </p>
+
+                    <AddMemberButton />
+
+                    <CreateIssueButton />
+
+                    <ProjectMembers members={project.members} />
                 </Drawer>
                 <div className={classes.wrapper}>
                     <div className={classes.contentContainer}>
@@ -69,6 +109,17 @@ const DashboardPage = () => {
                     </div>
                 </div>
             </div>
+            <AddMemberDialog
+                open={showAddMemberDialog}
+                onClose={() => setShowAddMemberDialog(false)}
+                projectId={projectId}
+            />
+            <CreateIssueDialog
+                open={showCreateIssueDialog}
+                onClose={() => setShowCreateIssueDialog(false)}
+                members={project.members}
+                projectId={projectId}
+            />
         </React.Fragment>
     );
 };

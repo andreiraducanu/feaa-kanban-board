@@ -15,16 +15,13 @@ import {
 
 import API from './client'
 
-export const createIssue = (projectId, title, description, type, priority, reporterUsername, assigneeUsername, totalWorkTime) => async dispatch => {
+export const createIssue = (projectId, title, type, priority, assigneeUsername) => async dispatch => {
     API.post('/issues', {
         projectId: projectId,
         title: title,
-        description: description,
         type: type,
         priority: priority,
-        reporterUsername: reporterUsername,
         assigneeUsername: assigneeUsername,
-        totalWorkTime: totalWorkTime
     }).then(res => {
         dispatch(createIssueAction())
     }).catch(err => {

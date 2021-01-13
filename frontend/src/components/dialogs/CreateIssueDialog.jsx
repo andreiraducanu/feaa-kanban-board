@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
+import { useDispatch } from 'react-redux'
 import { createStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -15,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import { createIssue } from '../../api/issueApi'
 
-const styles = (theme) => createStyles({
+const useStyles = makeStyles(theme => ({
     dialogPaper: {
         height: '80vh'
     },
@@ -53,7 +55,7 @@ const styles = (theme) => createStyles({
     createAction: {
         marginRight: '16px'
     }
-});
+}));
 
 
 const ISSUE_TYPES = [
@@ -72,24 +74,14 @@ const ISSUE_PRIORITIES = [
     { name: 'Lowest', icon: <LowestIcon /> }
 ];
 
-const CreateIssueDialog = (props) => {
-    const {
-        open,
-        onClose
-    } = props;
+const CreateIssueDialog = ({ projectId, members, open, onClose }) => {
+    const classes = useStyles();
 
-    const { classes } = props;
-    const { createIssue } = props
-    const { projects } = props
-
-    const [project, setProject] = useState(null);
     const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
     const [type, setType] = useState('');
     const [priority, setPriority] = useState('');
-    const [reporterUsername, setReporterUsername] = useState('');
     const [assigneeUsername, setAssigneeUsername] = useState('');
-    const [totalWorkTime, setTotalWorkTime] = useState('');
+    const dispatch = useDispatch();
 
     const renderIssueOption = (option) => (
         <div className={classes.optionContainer}>
@@ -104,7 +96,7 @@ const CreateIssueDialog = (props) => {
 
     const onCreateButton = (event) => {
         event.preventDefault();
-        createIssue(project.id, title, description, type, priority, reporterUsername, assigneeUsername, totalWorkTime);
+        dispatch(createIssue(projectId, title, type, priority, assigneeUsername));
     }
 
     return (
@@ -119,14 +111,6 @@ const CreateIssueDialog = (props) => {
             <DialogTitle>Create issue</DialogTitle>
             <DialogContent dividers>
                 <div className={classes.content}>
-                    <ComboBox
-                        className={clsx(classes.item, classes.itemSmall)}
-                        label="Project"
-                        required
-                        getOptionLabel={(option) => option.name}
-                        options={projects}
-                        onChange={(value) => { console.log(value); setProject(value); }}
-                    />
                     <ComboBox
                         className={clsx(classes.item, classes.itemSmall)}
                         label="Issue Type"
@@ -144,29 +128,12 @@ const CreateIssueDialog = (props) => {
                         size="small"
                         onChange={(e) => setTitle(e.target.value)}
                     />
-                    <TextField
-                        className={clsx(classes.item)}
-                        label="Description"
-                        multiline
-                        rows={5}
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <ComboBox
-                        className={clsx(classes.item, classes.itemMedium)}
-                        label="Reporter"
-                        required
-                        getOptionLabel={(option) => option.name}
-                        options={project && project.members ? project.members : []}
-                        onChange={(value) => setReporterUsername(value)}
-                    />
                     <ComboBox
                         className={clsx(classes.item, classes.itemMedium)}
                         label="Assignee"
-                        getOptionLabel={(option) => option.name}
-                        options={project && project.members ? project.members : []}
-                        onChange={(value) => setAssigneeUsername(value)}
+                        getOptionLabel={(option) => option.username}
+                        options={members}
+                        onChange={(value) => setAssigneeUsername(value.username)}
                     />
                     <ComboBox
                         className={clsx(classes.item, classes.itemSmall)}
@@ -175,14 +142,6 @@ const CreateIssueDialog = (props) => {
                         getOptionLabel={(option) => option.name}
                         renderOption={renderIssueOption}
                         onChange={(value) => setPriority(value.name.toUpperCase())}
-                    />
-                    <TextField
-                        className={clsx(classes.item)}
-                        label="Total work time"
-                        required
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => setTotalWorkTime(e.target.value)}
                     />
                 </div>
             </DialogContent>
@@ -204,15 +163,5 @@ const CreateIssueDialog = (props) => {
     );
 };
 
-const mapStateToProps = (state) => ({
-    projects: Object.values(state.projects.data).map(key => state.projects.data[key]),
-})
 
-const mapDispatchToProps = ({
-    createIssue
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withStyles(styles)(CreateIssueDialog));
+export default CreateIssueDialog;

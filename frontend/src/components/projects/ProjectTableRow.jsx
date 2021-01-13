@@ -60,9 +60,6 @@ const ProjectTableRow = ({ projectId, onDeleteClick, onEditClick, onAddMemberCli
                     <MenuItem onClick={() => handleClick(onEditClick)}>
                         Edit project
                     </MenuItem>
-                    <MenuItem onClick={() => handleClick(onAddMemberClick)}>
-                        Add member
-                    </MenuItem>
                 </Menu>
             </TableCell>
         </TableRow>
