@@ -23,13 +23,13 @@ public class ProjectController {
     }
 
     @PostMapping("/projects")
-    ResponseEntity<ProjectDto> createProject(@Valid @RequestBody ProjectCreateDto projectCreateDto) throws EntityNotFoundException {
+    ResponseEntity<ProjectItemDto> createProject(@Valid @RequestBody ProjectCreateDto projectCreateDto) throws EntityNotFoundException {
         return new ResponseEntity<>(projectService.create(projectCreateDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/projects")
     ResponseEntity<List<ProjectItemDto>> getProjects(@RequestParam(name = "owner", required = false) String ownerFilter) throws EntityNotFoundException {
-        return new ResponseEntity<List<ProjectItemDto>>(projectService.getAll(ownerFilter), HttpStatus.OK);
+        return new ResponseEntity<>(projectService.getAll(ownerFilter), HttpStatus.OK);
     }
 
     @GetMapping("/projects/{id}")

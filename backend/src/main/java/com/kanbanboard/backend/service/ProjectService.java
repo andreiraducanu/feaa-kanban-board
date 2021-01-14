@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProjectService {
 
-    ProjectDto create(ProjectCreateDto projectCreateDto) throws EntityNotFoundException;
+    ProjectItemDto create(ProjectCreateDto projectCreateDto) throws EntityNotFoundException;
 
     List<ProjectItemDto> getAll(String ownerFilter) throws EntityNotFoundException;
 

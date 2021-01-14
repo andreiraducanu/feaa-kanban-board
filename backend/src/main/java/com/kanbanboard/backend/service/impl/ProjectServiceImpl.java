@@ -38,7 +38,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto create(ProjectCreateDto projectCreateDto) throws EntityNotFoundException {
+    public ProjectItemDto create(ProjectCreateDto projectCreateDto) throws EntityNotFoundException {
         // Get owner, for testing purpose
         User owner = userRepository.findByUsername(projectCreateDto.getOwnerUsername());
         if (owner == null)
@@ -59,7 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
         // Save the project
         project = saveOrUpdateProject(project);
 
-        return convertProjectToDto(project);
+        return convertToProjectItemDto(project);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ProjectServiceImpl implements ProjectService {
             return new ArrayList<>();
         }
 
-        return convertProjectToProjectItemDto(projects);
+        return convertToProjectItemDtoList(projects);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class ProjectServiceImpl implements ProjectService {
         if (project == null)
             throw new EntityNotFoundException("No project found");
 
-        return convertProjectToDto(project);
+        return convertToProjectDto(project);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.update(projectUpdate);
         project = saveOrUpdateProject(project);
 
-        return convertProjectToDto(project);
+        return convertToProjectDto(project);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class ProjectServiceImpl implements ProjectService {
         // Update the project
         project = saveOrUpdateProject(project);
 
-        return convertProjectToDto(project);
+        return convertToProjectDto(project);
     }
 
     private Project saveOrUpdateProject(Project project) {
@@ -155,23 +155,23 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.findById(id).orElse(null);
     }
 
-    private ProjectDto convertProjectToDto(Project project) {
+    private ProjectDto convertToProjectDto(Project project) {
         return modelMapper.map(project, ProjectDto.class);
     }
 
-    private ProjectItemDto convertProjectToProjectItemDto(Project project) {
-        return modelMapper.map(project, ProjectItemDto.class);
-    }
-
-    private List<ProjectDto> convertProjectToDto(List<Project> projects) {
+    private List<ProjectDto> convertToProjectDtoList(List<Project> projects) {
         return projects.stream()
-                .map(this::convertProjectToDto)
+                .map(this::convertToProjectDto)
                 .collect(Collectors.toList());
     }
 
-    private List<ProjectItemDto> convertProjectToProjectItemDto(List<Project> projects) {
+    private ProjectItemDto convertToProjectItemDto(Project project) {
+        return modelMapper.map(project, ProjectItemDto.class);
+    }
+
+    private List<ProjectItemDto> convertToProjectItemDtoList(List<Project> projects) {
         return projects.stream()
-                .map(this::convertProjectToProjectItemDto)
+                .map(this::convertToProjectItemDto)
                 .collect(Collectors.toList());
     }
 
