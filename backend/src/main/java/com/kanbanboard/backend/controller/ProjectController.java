@@ -51,4 +51,12 @@ public class ProjectController {
     ResponseEntity<ProjectDto> addMemberToProject(@PathVariable(name = "id") String idProject, @Valid @RequestBody ProjectAddMemberDto projectAddMemberDto) throws ServerException, EntityNotFoundException {
         return new ResponseEntity<>(projectService.addMember(idProject, projectAddMemberDto), HttpStatus.OK);
     }
+
+    @PutMapping("/projects/{idProject}/issues/{idIssue}/move")
+    ResponseEntity<ProjectDto> moveIssue(
+            @PathVariable(name = "idProject") String idProject,
+            @PathVariable(name = "idIssue") String idIssue,
+            @Valid @RequestBody IssueMoveDto issueMoveDto) throws EntityNotFoundException {
+        return new ResponseEntity<>(projectService.moveIssue(idProject, idIssue, issueMoveDto), HttpStatus.OK);
+    }
 }

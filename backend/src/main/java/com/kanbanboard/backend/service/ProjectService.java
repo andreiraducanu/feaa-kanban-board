@@ -3,6 +3,7 @@ package com.kanbanboard.backend.service;
 import com.kanbanboard.backend.dto.*;
 import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.exception.ServerException;
+import com.kanbanboard.backend.model.Issue;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface ProjectService {
     String deleteById(String idProject) throws EntityNotFoundException;
 
     ProjectDto addMember(String idProject, ProjectAddMemberDto projectAddMemberDto) throws EntityNotFoundException, ServerException;
+
+    ProjectDto moveIssue(String idProject, String idIssue, IssueMoveDto issueMoveDto) throws EntityNotFoundException;
 }

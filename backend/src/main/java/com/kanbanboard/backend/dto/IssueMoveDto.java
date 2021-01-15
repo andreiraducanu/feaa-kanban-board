@@ -4,16 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PositiveOrZero;
 
 @Getter
 @Setter
 public class IssueMoveDto {
 
     @NotEmpty
-    private String projectId;
+    private String sourceColumnId;
 
     @NotEmpty
-    private String columnId;
+    private String destinationColumnId;
 
-    private int index;
+    @PositiveOrZero
+    private int destinationIndex;
 }

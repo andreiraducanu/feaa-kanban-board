@@ -145,7 +145,7 @@ const DashboardPage = () => {
                                 <div className={classes.content}>
                                     <Container maxWidth={false}>
                                         <Box mt={3}>
-                                            <Board project={project} />
+                                            <Board />
                                         </Box>
                                     </Container>
                                 </div>

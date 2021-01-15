@@ -57,7 +57,6 @@ export const updateProject = (projectId, name, description) => async dispatch =>
         name: name,
         description: description,
     }).then(res => {
-        console.log(res.data)
         dispatch(projectUpdatedAction(res.data))
     }).catch(err => {
         console.log(err);
@@ -76,9 +75,26 @@ export const addMember = (projectId, memberUsername) => async dispatch => {
     API.post(`/projects/${projectId}/members`, {
         memberUsername: memberUsername,
     }).then(res => {
-        console.log(res.data)
         dispatch(projectSelectedAction(res.data))
     }).catch(err => {
         console.log(err);
     });
 };
+
+
+export const moveIssue = (
+    projectId,
+    issueId,
+    { sourceColumnId, destinationColumnId, destinationIndex }
+) => async dispatch => {
+
+    API.put(`/projects/${projectId}/issues/${issueId}/move`, {
+        sourceColumnId: sourceColumnId,
+        destinationColumnId: destinationColumnId,
+        destinationIndex: destinationIndex
+    }).then(res => {
+        dispatch(projectSelectedAction(res.data))
+    }).catch(err => {
+        console.log(err);
+    });
+}

@@ -4,6 +4,7 @@ import com.kanbanboard.backend.dto.*;
 import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.exception.ServerException;
 import com.kanbanboard.backend.model.Column;
+import com.kanbanboard.backend.model.Issue;
 import com.kanbanboard.backend.model.Project;
 import com.kanbanboard.backend.model.User;
 import com.kanbanboard.backend.repository.ColumnRepository;
@@ -92,16 +93,6 @@ public class ProjectServiceImpl implements ProjectService {
         if (project == null)
             throw new EntityNotFoundException("No project found");
 
-        if (project.getMembers() == null) {
-            project.setMembers(new ArrayList<>());
-        }
-
-        project.getColumns().forEach(column -> {
-            if (column.getIssues() == null) {
-                column.setIssues(new ArrayList<>());
-            }
-        });
-
         return convertToProjectDto(project);
     }
 
@@ -131,7 +122,6 @@ public class ProjectServiceImpl implements ProjectService {
 
         // Delete the project
         projectRepository.delete(project);
-        System.out.println("delete");
         return "ok";
     }
 
@@ -154,6 +144,85 @@ public class ProjectServiceImpl implements ProjectService {
         // Update the project
         project = saveOrUpdateProject(project);
 
+        return convertToProjectDto(project);
+    }
+
+    @Override
+    public ProjectDto moveIssue(String idProject, String idIssue, IssueMoveDto issueMoveDto) throws EntityNotFoundException {
+        Project project = findProjectById(idProject);
+        if (project == null)
+            throw new EntityNotFoundException("No project found");
+
+        String sourceColumnId = issueMoveDto.getSourceColumnId();
+        String destinationColumnId = issueMoveDto.getDestinationColumnId();
+        int destinationIndex = issueMoveDto.getDestinationIndex();
+
+        // Get the source column
+        Column sourceColumn = findColumnById(sourceColumnId, project);
+        if (sourceColumn == null) {
+            throw new EntityNotFoundException("No source column found");
+        }
+
+        // Get the destination column
+        Column destinationColumn;
+        if (sourceColumnId.equals(destinationColumnId)) {
+            destinationColumn = sourceColumn;
+        } else {
+            destinationColumn = findColumnById(destinationColumnId, project);
+            if (destinationColumn == null) {
+                throw new EntityNotFoundException("No destinationcolumn found");
+            }
+        }
+
+        // Get the issue
+        Issue issue = findIssueById(idIssue, sourceColumn);
+        if (issue == null) {
+            throw new EntityNotFoundException("No issue found");
+        }
+
+        // Remove issue from source column
+        sourceColumn.getIssues().remove(issue);
+
+        // Insert issue into destination column
+        destinationColumn.getIssues().add(destinationIndex, issue);
+
+        // Save
+        saveOrUpdateColumn(sourceColumn);
+        saveOrUpdateColumn(destinationColumn);
+        project = saveOrUpdateProject(project);
+
+        return convertToProjectDto(project);
+    }
+
+    private Project saveOrUpdateProject(Project project) {
+        return projectRepository.save(project);
+    }
+
+    private Column saveOrUpdateColumn(Column column) {
+        return columnRepository.save(column);
+    }
+
+    private Project findProjectById(String id) {
+        return projectRepository.findById(id).orElse(null);
+    }
+
+    private Column findColumnById(String id, Project project) {
+        return project.getColumns()
+                .stream()
+                .filter(column -> column.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private Issue findIssueById(String id, Column column) {
+        return column.getIssues()
+                .stream()
+                .filter(issue -> issue.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private ProjectDto convertToProjectDto(Project project) {
         if (project.getMembers() == null) {
             project.setMembers(new ArrayList<>());
         }
@@ -164,25 +233,7 @@ public class ProjectServiceImpl implements ProjectService {
             }
         });
 
-        return convertToProjectDto(project);
-    }
-
-    private Project saveOrUpdateProject(Project project) {
-        return projectRepository.save(project);
-    }
-
-    private Project findProjectById(String id) {
-        return projectRepository.findById(id).orElse(null);
-    }
-
-    private ProjectDto convertToProjectDto(Project project) {
         return modelMapper.map(project, ProjectDto.class);
-    }
-
-    private List<ProjectDto> convertToProjectDtoList(List<Project> projects) {
-        return projects.stream()
-                .map(this::convertToProjectDto)
-                .collect(Collectors.toList());
     }
 
     private ProjectItemDto convertToProjectItemDto(Project project) {
@@ -196,6 +247,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     private Column createColumn(String name) {
-        return columnRepository.save(new Column(name));
+        Column column = new Column(name);
+        column.setIssues(new ArrayList<>());
+
+        return saveOrUpdateColumn(column);
     }
 }

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import { DragDropContext } from 'react-beautiful-dnd';
+import { moveIssue } from '../../api/projectsApi';
 import Column from './Column';
 
 const useStyles = makeStyles({
@@ -10,8 +11,11 @@ const useStyles = makeStyles({
     }
 });
 
-const Board = ({ project }) => {
+const Board = () => {
     const classes = useStyles();
+
+    const project = useSelector(state => state.projects.current);
+    const dispatch = useDispatch();
 
     const [data, setData] = useState(project);
     const [isDragging, setIsDragging] = useState(false);
@@ -19,6 +23,10 @@ const Board = ({ project }) => {
     const handleDragStart = (result) => {
         setIsDragging(true);
     };
+
+    useEffect(() => {
+        setData(project);
+    }, [project])
 
     const handleDragEnd = (result) => {
         setIsDragging(false);
@@ -59,6 +67,16 @@ const Board = ({ project }) => {
 
             setData(newData);
 
+            dispatch(moveIssue(
+                project.id,
+                draggableId,
+                {
+                    sourceColumnId: sourceColumn.id,
+                    destinationColumnId: destinationColumn.id,
+                    destinationIndex: destination.index
+                }
+            ));
+
             return;
         }
 
@@ -89,6 +107,16 @@ const Board = ({ project }) => {
         }
 
         setData(newData);
+
+        dispatch(moveIssue(
+            project.id,
+            draggableId,
+            {
+                sourceColumnId: sourceColumn.id,
+                destinationColumnId: destinationColumn.id,
+                destinationIndex: destination.index
+            }
+        ));
     };
 
     return (
