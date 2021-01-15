@@ -42,8 +42,8 @@ public class IssueServiceImpl implements IssueService {
         Project project = findProjectById(issueCreateDto.getProjectId());
         if (project == null)
             throw new EntityNotFoundException("No project found");
-        System.out.println(project);
-        User reporter = null;
+
+//        User reporter = null;
 //        if (issueCreateDto.getReporterUsername() != null) {
 //            // Get the reporter
 //            reporter = userRepository.findByUsername(issueCreateDto.getReporterUsername());
@@ -59,10 +59,12 @@ public class IssueServiceImpl implements IssueService {
                 throw new EntityNotFoundException("No such assignee");
         }
 
-        // Convert DTO to model
-        Issue issue = modelMapper.map(issueCreateDto, Issue.class);
-
-        issue.setReporter(reporter);
+        // Creat issue model
+        Issue issue = new Issue();
+        issue.setTitle(issueCreateDto.getTitle());
+        issue.setType(issueCreateDto.getType());
+        issue.setPriority(issueCreateDto.getPriority());
+        issue.setCreationDate(issueCreateDto.getCreationDate());
         issue.setAssignee(assignee);
 
         // Save the issue
@@ -107,45 +109,6 @@ public class IssueServiceImpl implements IssueService {
         issue = saveOrUpdateIssue(issue);
 
         return convertIssueToDto(issue);
-    }
-
-    @Override
-    public IssueDto moveById(String idIssue, IssueMoveDto issueMoveDto) throws EntityNotFoundException {
-
-        Project project = projectRepository.findById(issueMoveDto.getIdProject()).orElse(null);
-        boolean found = false;
-        if (project != null) {
-            List<Column> columns = project.getColumns();
-            for (int i = 0; i < columns.size(); i++) {
-                if (columns.get(i).getIssues() != null) {
-                    for (int j = 0; j < columns.get(i).getIssues().size(); j++) {
-                        if (columns.get(i).getIssues().get(j).getId().equals(idIssue)) {
-                            Column column = columnRepository.findById(issueMoveDto.getIdColumn()).orElse(null);
-                            if (column != null) {
-                                System.out.println(column);
-                                Issue issue = new Issue();
-                                issue.setIndex(issueMoveDto.getIndex());
-                                issue.setAssignee(null);
-                                issue.setReporter(null);
-                                issue.setDescription(columns.get(i).getIssues().get(j).getDescription());
-                                issue.setTitle(columns.get(i).getIssues().get(j).getTitle());
-                                issueRepository.save(issue);
-
-                                column.addIssue(issue);
-
-                                columnRepository.save(column);
-
-                                projectRepository.save(project);
-
-                            }
-                        }
-                    }
-                }
-                if (found)
-                    break;
-            }
-        }
-        return new IssueDto();
     }
 
     @Override

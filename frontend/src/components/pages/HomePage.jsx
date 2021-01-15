@@ -1,7 +1,6 @@
 import React, { useState, useLayoutEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStyles, withStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -87,7 +86,6 @@ const HomePage = (props) => {
 
     return (
         <React.Fragment>
-            <CssBaseline />
             <div className={classes.root}>
                 <Header />
                 <div className={classes.wrapper}>

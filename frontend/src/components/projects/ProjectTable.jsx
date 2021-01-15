@@ -13,7 +13,7 @@ import { DeleteProjectDialog, EditProjectDialog } from '../dialogs';
 const ProjectTable = ({ projectIds }) => {
 
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     const [selectedProjectId, setSelectedProjectId] = useState(null);
 

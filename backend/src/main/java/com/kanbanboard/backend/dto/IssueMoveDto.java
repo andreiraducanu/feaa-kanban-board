@@ -10,10 +10,10 @@ import javax.validation.constraints.NotEmpty;
 public class IssueMoveDto {
 
     @NotEmpty
-    private String idProject;
+    private String projectId;
 
     @NotEmpty
-    private String idColumn;
+    private String columnId;
 
     private int index;
 }

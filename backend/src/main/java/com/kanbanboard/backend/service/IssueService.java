@@ -3,7 +3,6 @@ package com.kanbanboard.backend.service;
 import com.kanbanboard.backend.dto.*;
 import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.exception.ServerException;
-import com.kanbanboard.backend.model.WorkLog;
 
 public interface IssueService {
 
@@ -12,8 +11,6 @@ public interface IssueService {
     IssueDto getById(String idIssue) throws EntityNotFoundException;
 
     IssueDto updateById(String idIssue, IssueUpdateDto issueUpdateDto) throws EntityNotFoundException;
-
-    IssueDto moveById(String idIssue, IssueMoveDto issueMoveDto) throws EntityNotFoundException;
 
     String deleteById(String idIssue) throws EntityNotFoundException;
 

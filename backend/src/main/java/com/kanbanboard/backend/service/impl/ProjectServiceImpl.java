@@ -92,6 +92,16 @@ public class ProjectServiceImpl implements ProjectService {
         if (project == null)
             throw new EntityNotFoundException("No project found");
 
+        if (project.getMembers() == null) {
+            project.setMembers(new ArrayList<>());
+        }
+
+        project.getColumns().forEach(column -> {
+            if (column.getIssues() == null) {
+                column.setIssues(new ArrayList<>());
+            }
+        });
+
         return convertToProjectDto(project);
     }
 
@@ -143,6 +153,16 @@ public class ProjectServiceImpl implements ProjectService {
 
         // Update the project
         project = saveOrUpdateProject(project);
+
+        if (project.getMembers() == null) {
+            project.setMembers(new ArrayList<>());
+        }
+
+        project.getColumns().forEach(column -> {
+            if (column.getIssues() == null) {
+                column.setIssues(new ArrayList<>());
+            }
+        });
 
         return convertToProjectDto(project);
     }

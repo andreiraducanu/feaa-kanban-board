@@ -36,11 +36,6 @@ public class IssueController {
         return new ResponseEntity<>(issueService.updateById(idIssue, issueUpdateDto), HttpStatus.OK);
     }
 
-    @PutMapping("/issues/{id}/move")
-    ResponseEntity<IssueDto> moveIssue(@PathVariable(name = "id") String idIssue, @Valid @RequestBody IssueMoveDto issueMoveDto) throws EntityNotFoundException {
-        return new ResponseEntity<>(issueService.moveById(idIssue, issueMoveDto), HttpStatus.OK);
-    }
-
     @DeleteMapping("/issues/{id}")
     ResponseEntity<String> deleteIssue(@PathVariable(name = "id") String idIssue) throws EntityNotFoundException {
         return new ResponseEntity<>(issueService.deleteById(idIssue), HttpStatus.OK);

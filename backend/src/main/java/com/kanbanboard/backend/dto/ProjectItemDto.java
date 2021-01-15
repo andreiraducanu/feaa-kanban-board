@@ -13,5 +13,5 @@ public class ProjectItemDto {
 
     String description;
 
-    String owner;
+    UserDto owner;
 }

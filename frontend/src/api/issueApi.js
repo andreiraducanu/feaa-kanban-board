@@ -10,24 +10,11 @@ import {
     deleteWorkLogAction,
     addCommentAction,
     updateCommentAction,
-    deleteCommentAction
+    deleteCommentAction,
+    projectSelectedAction,
 } from '../redux/actions';
 
 import API from './client'
-
-export const createIssue = (projectId, title, type, priority, assigneeUsername) => async dispatch => {
-    API.post('/issues', {
-        projectId: projectId,
-        title: title,
-        type: type,
-        priority: priority,
-        assigneeUsername: assigneeUsername,
-    }).then(res => {
-        dispatch(createIssueAction())
-    }).catch(err => {
-        dispatch(fetchErrorAction({ message: "This is an error message from createIssue" }))
-    })
-}
 
 export const updateIssue = (title, description, type, priority, reporterUsername, assigneeUsername, totalWorkTime) => async dispatch => {
     API.put(`/issues/${issueId}`, {

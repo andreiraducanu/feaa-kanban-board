@@ -2,12 +2,12 @@ import {
     projectAddedAction,
     projectDeletedAction,
     projectUpdatedAction,
-    usersLoadedAction,
+    projectSelectedAction,
     projectsLoadingAction,
     projectsLoadedAction
 } from '../redux/actions';
 
-import API from './client'
+import API from './client';
 
 export const createProject = (name, description, username) => async dispatch => {
     API.post('/projects', {
@@ -18,6 +18,20 @@ export const createProject = (name, description, username) => async dispatch => 
         dispatch(projectAddedAction(res.data))
     }).catch(err => {
         console.log(err);
+    });
+};
+
+export const createIssue = (projectId, title, type, priority, assigneeUsername) => async dispatch => {
+    API.post('/issues', {
+        projectId: projectId,
+        title: title,
+        type: type,
+        priority: priority,
+        assigneeUsername: assigneeUsername,
+    }).then(res => {
+        dispatch(getProject(projectId));
+    }).catch(err => {
+        dispatch(fetchErrorAction({ message: "This is an error message from createIssue" }))
     })
 }
 
@@ -27,12 +41,19 @@ export const getProjects = (username) => async dispatch => {
         dispatch(projectsLoadedAction(res.data))
     }).catch(err => {
         console.log(err);
-    })
-}
+    });
+};
 
-export const updateProject = (idProject, name, description) => async dispatch => {
-    console.log(idProject, name, description)
-    API.put(`/projects/${idProject}`, {
+export const getProject = (projectId) => async dispatch => {
+    API.get(`/projects/${projectId}`).then(res => {
+        dispatch(projectSelectedAction(res.data));
+    }).catch(err => {
+        console.log(err);
+    });
+};
+
+export const updateProject = (projectId, name, description) => async dispatch => {
+    API.put(`/projects/${projectId}`, {
         name: name,
         description: description,
     }).then(res => {
@@ -40,25 +61,24 @@ export const updateProject = (idProject, name, description) => async dispatch =>
         dispatch(projectUpdatedAction(res.data))
     }).catch(err => {
         console.log(err);
-    })
-}
+    });
+};
 
-export const deleteProject = (idProject) => async dispatch => {
-    API.delete(`/projects/${idProject}`).then(res => {
-        dispatch(projectDeletedAction(idProject))
+export const deleteProject = (projectId) => async dispatch => {
+    API.delete(`/projects/${projectId}`).then(res => {
+        dispatch(projectDeletedAction(projectId))
     }).catch(err => {
         console.log(err);
-    })
-}
+    });
+};
 
 export const addMember = (projectId, memberUsername) => async dispatch => {
-    console.log("Test in api" + projectId + memberUsername)
     API.post(`/projects/${projectId}/members`, {
         memberUsername: memberUsername,
     }).then(res => {
         console.log(res.data)
-        dispatch(projectUpdatedAction(res.data))
+        dispatch(projectSelectedAction(res.data))
     }).catch(err => {
         console.log(err);
-    })
-}
+    });
+};

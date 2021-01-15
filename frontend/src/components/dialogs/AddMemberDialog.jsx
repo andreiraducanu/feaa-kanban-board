@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -13,27 +13,26 @@ import { getUsers } from "../../api/userApi";
 import { addMember } from '../../api/projectsApi'
 
 
-const styles = theme => createStyles({
+const useStyles = makeStyles(theme => ({
     action: {
         marginRight: '8px'
     },
     item: {
         marginBottom: theme.spacing(3),
-    },
-    itemSmall: {
-        width: 244
+        width: 488
     },
     addMemberButton: {
         backgroundColor: theme.palette.error.main,
         color: '#FFF'
     },
-});
+}));
 
-const AddMemberDialog = ({ projectId, open, onClose, classes }) => {
+const AddMemberDialog = ({ projectId, open, onClose }) => {
     const [users, setUsers] = useState(null)
     const [memberUsername, setMemberUsername] = useState('')
 
     const dispatch = useDispatch();
+    const classes = useStyles();
 
     const canBeAdded = () => memberUsername.length > 0;
 
@@ -57,14 +56,18 @@ const AddMemberDialog = ({ projectId, open, onClose, classes }) => {
 
     return (
         <React.Fragment>
-            <Dialog onClose={onClose} aria-labelledby="simple-dialog-title" open={open}>
+            <Dialog
+                aria-labelledby="simple-dialog-title"
+                onClose={onClose}
+                open={open}
+            >
                 <DialogTitle id="simple-dialog-title">
-                    Add members
+                    Add new member to team
                 </DialogTitle>
                 <DialogContent>
                     <ComboBox
-                        className={clsx(classes.item, classes.itemMedium)}
-                        label="Members"
+                        className={classes.item}
+                        label="User"
                         required
                         getOptionLabel={(option) => option.username}
                         options={users ? users : []}
@@ -77,7 +80,7 @@ const AddMemberDialog = ({ projectId, open, onClose, classes }) => {
                     </Link>
                     <Button
                         disabled={!canBeAdded()}
-                        className={clsx(classes.action, classes.deleteButton)}
+                        className={classes.action}
                         size="small"
                         variant="contained"
                         color="primary"
@@ -91,4 +94,4 @@ const AddMemberDialog = ({ projectId, open, onClose, classes }) => {
     );
 }
 
-export default withStyles(styles)(AddMemberDialog);
+export default AddMemberDialog;

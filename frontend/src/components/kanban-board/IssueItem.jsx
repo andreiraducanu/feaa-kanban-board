@@ -21,22 +21,15 @@ const useStyles = makeStyles({
     }
 });
 
-const IssueItem = (props) => {
-    const { task, index } = props;
+const IssueItem = ({ issue, index }) => {
 
     const classes = useStyles();
-
-    const issue = {
-        title: 'Test',
-        type: 'EPIC',
-        priority: 'HIGH'
-    }
 
     const type = ISSUE_TYPES[issue.type];
     const priority = ISSUE_PRIORITIES[issue.priority];
 
     return (
-        <Draggable draggableId={task.id} index={index}>
+        <Draggable draggableId={issue.id} index={index}>
             {(provided, { isDragging }) => (
                 <Paper
                     variant='outlined'
@@ -48,7 +41,7 @@ const IssueItem = (props) => {
                     <Grid container direction='column' spacing={1}>
                         <Grid item>
                             <Typography variant="body2">
-                                {task.content}
+                                {issue.title}
                             </Typography>
                         </Grid>
                         <Grid item container justify='space-between'>
@@ -61,8 +54,8 @@ const IssueItem = (props) => {
                                 </Tooltip>
                             </Grid>
                             <Grid item>
-                                PJ
-                        </Grid>
+                                {issue.assignee.firstname.charAt(0).toUpperCase() + issue.assignee.lastname.charAt(0).toUpperCase()}
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Paper>

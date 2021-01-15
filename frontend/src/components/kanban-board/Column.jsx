@@ -35,15 +35,13 @@ const useStyles = makeStyles({
 });
 
 
-const Column = (props) => {
-    const { column, tasks, isDragging } = props;
-
+const Column = ({ column, issues, isDragging }) => {
     const classes = useStyles();
 
     return (
         <Paper variant='outlined' className={classes.container}>
             <Typography className={classes.header} variant="subtitle2">
-                {column.title}
+                {column.name}
             </Typography>
             <Droppable droppableId={column.id}>
                 {(provided, { isDraggingOver }) => (
@@ -56,8 +54,8 @@ const Column = (props) => {
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                     >
-                        {tasks.map((task, index) =>
-                            <IssueItem key={task.id} task={task} index={index} />
+                        {issues.map((issue, index) =>
+                            <IssueItem key={issue.id} issue={issue} index={index} />
                         )}
                         {provided.placeholder}
                     </div>

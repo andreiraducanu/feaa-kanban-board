@@ -8,6 +8,7 @@ export {
     projectAdded as projectAddedAction,
     projectDeleted as projectDeletedAction,
     projectUpdated as projectUpdatedAction,
+    projectSelected as projectSelectedAction,
     projectsLoading as projectsLoadingAction,
     projectsLoaded as projectsLoadedAction,
 } from './slices/projectsSlice';

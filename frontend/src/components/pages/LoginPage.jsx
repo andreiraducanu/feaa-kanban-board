@@ -4,7 +4,6 @@ import { login } from '../../api/userApi';
 import { createStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
@@ -85,7 +84,6 @@ const LoginPage = ({ classes }) => {
 
     return (
         <React.Fragment>
-            <CssBaseline />
             <div className={classes.root}>
                 <div className={classes.header}>
                     <BrandLogo className={classes.logo} />

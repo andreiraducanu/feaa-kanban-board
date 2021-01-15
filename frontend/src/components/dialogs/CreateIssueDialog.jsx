@@ -15,12 +15,9 @@ import { EpicIcon, StoryIcon, TaskIcon, BugIcon, SubtaskIcon } from '../../asset
 import { HighestIcon, HighIcon, MediumIcon, LowIcon, LowestIcon } from '../../assets/svg/issue-priority';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
-import { createIssue } from '../../api/issueApi'
+import { createIssue } from '../../api/projectsApi'
 
 const useStyles = makeStyles(theme => ({
-    dialogPaper: {
-        height: '80vh'
-    },
     content: {
         display: 'flex',
         flexDirection: 'column'
@@ -97,6 +94,7 @@ const CreateIssueDialog = ({ projectId, members, open, onClose }) => {
     const onCreateButton = (event) => {
         event.preventDefault();
         dispatch(createIssue(projectId, title, type, priority, assigneeUsername));
+        onClose();
     }
 
     return (
@@ -106,7 +104,6 @@ const CreateIssueDialog = ({ projectId, members, open, onClose }) => {
             fullWidth
             maxWidth='md'
             scroll='paper'
-            classes={{ paper: classes.dialogPaper }}
         >
             <DialogTitle>Create issue</DialogTitle>
             <DialogContent dividers>
