@@ -3,7 +3,6 @@ package com.kanbanboard.backend.service;
 import com.kanbanboard.backend.dto.*;
 import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.exception.ServerException;
-import com.kanbanboard.backend.model.WorkLog;
 
 public interface IssueService {
 
@@ -17,7 +16,7 @@ public interface IssueService {
 
     IssueDto addChild(String idIssue, IssueAddChildDto issueAddChildDto) throws EntityNotFoundException, ServerException;
 
-    IssueDto removeChild(String idIssue, IssueRemoveChildDto issueRemoveChildDto) throws EntityNotFoundException, ServerException;
+    IssueDto removeChild(String idIssue, String idChild) throws EntityNotFoundException, ServerException;
 
     WorkLogDto addWorkLog(String idIssue, WorkLogCreateDto workLogCreateDto) throws EntityNotFoundException, ServerException;
 

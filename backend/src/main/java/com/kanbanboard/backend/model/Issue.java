@@ -43,6 +43,8 @@ public class Issue {
 
     private Date creationDate;
 
+    private int index;
+
     public void update(Issue issue) {
         title = issue.getTitle();
         description = issue.getDescription();

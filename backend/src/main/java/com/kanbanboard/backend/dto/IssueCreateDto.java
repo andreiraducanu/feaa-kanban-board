@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -22,21 +21,14 @@ public class IssueCreateDto {
     @NotEmpty
     private String title;
 
-    @NotEmpty
-    private String description;
-
     @NotNull
     private IssueType type;
 
     @NotNull
     private IssuePriority priority;
 
-    private String reporterUsername;
-
+    @NotEmpty
     private String assigneeUsername;
-
-    @PositiveOrZero
-    private int totalWorkTime;
 
     @JsonIgnore
     private Date creationDate = Calendar.getInstance().getTime();

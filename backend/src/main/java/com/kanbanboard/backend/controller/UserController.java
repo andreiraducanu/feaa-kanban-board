@@ -1,7 +1,7 @@
 package com.kanbanboard.backend.controller;
 
-import com.kanbanboard.backend.dto.JwtDto;
-import com.kanbanboard.backend.dto.UserLoginDto;
+import com.kanbanboard.backend.dto.*;
+import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.model.User;
 import com.kanbanboard.backend.service.UserService;
 import com.kanbanboard.backend.util.JwtUtil;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 
 @RestController
-@RequestMapping("/user")
 public class UserController {
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -40,43 +40,59 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    @GetMapping("/users")
+    ResponseEntity<List<UserDto>> getNonMembers(@RequestParam(name = "projectId", required = false) String projectId) throws EntityNotFoundException {
+        return new ResponseEntity<>(userService.getNonMembers(projectId), HttpStatus.OK);
+    }
+
+    @GetMapping("/users/all")
+    ResponseEntity<List<UserDto>> getAll() throws EntityNotFoundException {
+        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
+    }
+
+    @PostMapping("/users/signup")
+    public ResponseEntity<?> register(@RequestBody User user) {
+        UserRegisterResponseDto userRegisterResponseDto = new UserRegisterResponseDto();
+
         if (userService.checkIfUserExists(user.getUsername())) {
-            return new ResponseEntity<>("Choose another username! It already exists!", HttpStatus.CONFLICT);
+            userRegisterResponseDto.setMessage("Choose another username! It already exists!");
+            userRegisterResponseDto.setStatus("409");
+            return new ResponseEntity<>(userRegisterResponseDto, HttpStatus.CONFLICT);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userService.saveNewUser(user);
 
-        return new ResponseEntity<>("ok", HttpStatus.OK);
+        userRegisterResponseDto.setMessage("The account was created");
+        userRegisterResponseDto.setStatus("200");
+
+        return new ResponseEntity<>(userRegisterResponseDto, HttpStatus.OK);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/users/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserLoginDto userLoginDto) throws Exception {
         try {
-            logger.info(userLoginDto.getUsername());
-            logger.info("aici in controller user/login");
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userLoginDto.getUsername(), userLoginDto.getPassword())
             );
         } catch (BadCredentialsException e) {
-            throw new Exception("Incorrect username or password");
+            UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto();
+            userLoginResponseDto.setMessage("Bad username/password");
+            userLoginResponseDto.setStatus("401");
+            return new ResponseEntity<>(userLoginResponseDto, HttpStatus.CONFLICT);
         }
 
         final UserDetails userDetails = userService.loadUserByUsername(userLoginDto.getUsername());
 
         final String jwt = jwtUtil.generateToken(userDetails);
 
-        return new ResponseEntity<>(new JwtDto(jwt), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginDto(jwt, userService.get(userLoginDto.getUsername())), HttpStatus.OK);
     }
 
-    @GetMapping("/test")
+    @GetMapping("/users/test")
     public String testRoute(@RequestBody String test, Principal principal) {
         logger.info(principal.getName());
         return test;
     }
-
-
 }

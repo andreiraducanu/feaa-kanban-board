@@ -6,9 +6,12 @@ import com.kanbanboard.backend.exception.ServerException;
 import com.kanbanboard.backend.model.*;
 import com.kanbanboard.backend.repository.*;
 import com.kanbanboard.backend.service.IssueService;
+import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class IssueServiceImpl implements IssueService {
@@ -40,13 +43,13 @@ public class IssueServiceImpl implements IssueService {
         if (project == null)
             throw new EntityNotFoundException("No project found");
 
-        User reporter = null;
-        if (issueCreateDto.getReporterUsername() != null) {
-            // Get the reporter
-            reporter = userRepository.findByUsername(issueCreateDto.getReporterUsername());
-            if (reporter == null)
-                throw new EntityNotFoundException("No such reporter");
-        }
+//        User reporter = null;
+//        if (issueCreateDto.getReporterUsername() != null) {
+//            // Get the reporter
+//            reporter = userRepository.findByUsername(issueCreateDto.getReporterUsername());
+//            if (reporter == null)
+//                throw new EntityNotFoundException("No such reporter");
+//        }
 
         User assignee = null;
         if (issueCreateDto.getAssigneeUsername() != null) {
@@ -56,10 +59,12 @@ public class IssueServiceImpl implements IssueService {
                 throw new EntityNotFoundException("No such assignee");
         }
 
-        // Convert DTO to model
-        Issue issue = modelMapper.map(issueCreateDto, Issue.class);
-
-        issue.setReporter(reporter);
+        // Creat issue model
+        Issue issue = new Issue();
+        issue.setTitle(issueCreateDto.getTitle());
+        issue.setType(issueCreateDto.getType());
+        issue.setPriority(issueCreateDto.getPriority());
+        issue.setCreationDate(issueCreateDto.getCreationDate());
         issue.setAssignee(assignee);
 
         // Save the issue
@@ -73,6 +78,8 @@ public class IssueServiceImpl implements IssueService {
 
         // Save the column
         saveOrUpdateColumn(backlogColumn);
+        System.out.println(project);
+        projectRepository.save(project);
 
         return convertIssueToDto(issue);
     }
@@ -140,14 +147,14 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public IssueDto removeChild(String idIssue, IssueRemoveChildDto issueRemoveChildDto) throws EntityNotFoundException, ServerException {
+    public IssueDto removeChild(String idIssue, String idChild) throws EntityNotFoundException, ServerException {
         // Get the issue
         Issue issue = findIssueById(idIssue);
         if (issue == null)
             throw new EntityNotFoundException("No issue found");
 
         // Get the child issue
-        Issue childIssue = findIssueById(issueRemoveChildDto.getChildId());
+        Issue childIssue = findIssueById(idChild);
         if (childIssue == null)
             throw new EntityNotFoundException("No child issue found");
 

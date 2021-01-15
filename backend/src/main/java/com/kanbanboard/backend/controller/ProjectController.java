@@ -1,9 +1,6 @@
 package com.kanbanboard.backend.controller;
 
-import com.kanbanboard.backend.dto.ProjectAddMemberDto;
-import com.kanbanboard.backend.dto.ProjectCreateDto;
-import com.kanbanboard.backend.dto.ProjectDto;
-import com.kanbanboard.backend.dto.ProjectUpdateDto;
+import com.kanbanboard.backend.dto.*;
 import com.kanbanboard.backend.exception.EntityNotFoundException;
 import com.kanbanboard.backend.exception.ServerException;
 import com.kanbanboard.backend.service.ProjectService;
@@ -26,12 +23,12 @@ public class ProjectController {
     }
 
     @PostMapping("/projects")
-    ResponseEntity<ProjectDto> createProject(@Valid @RequestBody ProjectCreateDto projectCreateDto) throws EntityNotFoundException {
+    ResponseEntity<ProjectItemDto> createProject(@Valid @RequestBody ProjectCreateDto projectCreateDto) throws EntityNotFoundException {
         return new ResponseEntity<>(projectService.create(projectCreateDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/projects")
-    ResponseEntity<List<ProjectDto>> getProjects(@RequestParam(name = "owner", required = false) String ownerFilter) throws EntityNotFoundException {
+    ResponseEntity<List<ProjectItemDto>> getProjects(@RequestParam(name = "owner", required = false) String ownerFilter) throws EntityNotFoundException {
         return new ResponseEntity<>(projectService.getAll(ownerFilter), HttpStatus.OK);
     }
 
@@ -53,5 +50,13 @@ public class ProjectController {
     @PostMapping("/projects/{id}/members")
     ResponseEntity<ProjectDto> addMemberToProject(@PathVariable(name = "id") String idProject, @Valid @RequestBody ProjectAddMemberDto projectAddMemberDto) throws ServerException, EntityNotFoundException {
         return new ResponseEntity<>(projectService.addMember(idProject, projectAddMemberDto), HttpStatus.OK);
+    }
+
+    @PutMapping("/projects/{idProject}/issues/{idIssue}/move")
+    ResponseEntity<ProjectDto> moveIssue(
+            @PathVariable(name = "idProject") String idProject,
+            @PathVariable(name = "idIssue") String idIssue,
+            @Valid @RequestBody IssueMoveDto issueMoveDto) throws EntityNotFoundException {
+        return new ResponseEntity<>(projectService.moveIssue(idProject, idIssue, issueMoveDto), HttpStatus.OK);
     }
 }

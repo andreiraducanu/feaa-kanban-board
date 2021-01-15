@@ -29,6 +29,10 @@ public class Project {
 
     private Date creationDate;
 
+    public List<Column> getColumns() {
+        return columns;
+    }
+
     public void update(Project project) {
         name = project.getName();
         description = project.getDescription();

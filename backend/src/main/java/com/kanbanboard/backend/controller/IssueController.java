@@ -23,7 +23,7 @@ public class IssueController {
 
     @PostMapping("/issues")
     ResponseEntity<IssueDto> createIssue(@Valid @RequestBody IssueCreateDto issueCreateDto) throws ServerException, EntityNotFoundException {
-        return new ResponseEntity<>(issueService.create(issueCreateDto), HttpStatus.OK);
+        return new ResponseEntity<>(issueService.create(issueCreateDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/issues/{id}")
@@ -46,9 +46,9 @@ public class IssueController {
         return new ResponseEntity<>(issueService.addChild(idIssue, issueAddChildDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/issues/{id}/children")
-    ResponseEntity<IssueDto> removeChildFromIssue(@PathVariable(name = "id") String idIssue, @Valid @RequestBody IssueRemoveChildDto issueRemoveChildDto) throws ServerException, EntityNotFoundException {
-        return new ResponseEntity<>(issueService.removeChild(idIssue, issueRemoveChildDto), HttpStatus.OK);
+    @DeleteMapping("/issues/{id}/children/{idChild}")
+    ResponseEntity<IssueDto> removeChildFromIssue(@PathVariable(name = "id") String idIssue, @PathVariable(name = "idChild") String idChild) throws ServerException, EntityNotFoundException {
+        return new ResponseEntity<>(issueService.removeChild(idIssue, idChild), HttpStatus.OK);
     }
 
     @PostMapping("/issues/{id}/worklogs")
